@@ -2,103 +2,108 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use Yii;
+
+/**
+ * This is the model class for table "user".
+ *
+ * @property int $id
+ * @property string|null $firstname
+ * @property string|null $middlename
+ * @property string|null $lastname
+ * @property string|null $birthday
+ * @property string|null $sex
+ * @property string|null $username
+ * @property string|null $password
+ * @property string|null $date_last_login
+ * @property int|null $fk_role
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property int $status
+ * @property string|null $access_token
+ * @property string|null $auth_key
+ *
+ * @property Comment[] $comments
+ * @property Role $fkRole
+ * @property View[] $views
+ */
+class User extends \yii\db\ActiveRecord
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
-
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public static function tableName()
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return 'user';
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function rules()
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return [
+            [['birthday', 'date_last_login', 'created_at', 'updated_at'], 'safe'],
+            [['sex', 'auth_key'], 'string'],
+            [['fk_role', 'status'], 'default', 'value' => null],
+            [['fk_role', 'status'], 'integer'],
+            [['firstname', 'middlename', 'lastname', 'password', 'access_token'], 'string', 'max' => 120],
+            [['username'], 'string', 'max' => 60],
+            [['fk_role'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['fk_role' => 'id']],
+        ];
     }
 
     /**
-     * Finds user by username
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'firstname' => 'Firstname',
+            'middlename' => 'Middlename',
+            'lastname' => 'Lastname',
+            'birthday' => 'Birthday',
+            'sex' => 'Sex',
+            'username' => 'Username',
+            'password' => 'Password',
+            'date_last_login' => 'Date Last Login',
+            'fk_role' => 'Fk Role',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'status' => 'Status',
+            'access_token' => 'Access Token',
+            'auth_key' => 'Auth Key',
+        ];
+    }
+
+    /**
+     * Gets query for [[Comments]].
      *
-     * @param string $username
-     * @return static|null
+     * @return \yii\db\ActiveQuery
      */
-    public static function findByUsername($username)
+    public function getComments()
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return $this->hasMany(Comment::className(), ['fk_user' => 'id']);
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
-
-    /**
-     * Validates password
+     * Gets query for [[FkRole]].
      *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
+     * @return \yii\db\ActiveQuery
      */
-    public function validatePassword($password)
+    public function getFkRole()
     {
-        return $this->password === $password;
+        return $this->hasOne(Role::className(), ['id' => 'fk_role']);
+    }
+
+    /**
+     * Gets query for [[Views]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getViews()
+    {
+        return $this->hasMany(View::className(), ['fk_user' => 'id']);
     }
 }
