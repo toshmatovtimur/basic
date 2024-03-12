@@ -52,12 +52,12 @@ class User extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'firstname' => 'Firstname',
-            'middlename' => 'Middlename',
-            'lastname' => 'Lastname',
-            'birthday' => 'Birthday',
-            'sex' => 'Sex',
+            'id' => 'Код',
+            'firstname' => 'Фамилия',
+            'middlename' => 'Имя',
+            'lastname' => 'Отчество',
+            'birthday' => 'Дата рождения',
+            'sex' => 'Пол',
             'username' => 'Username',
             'password' => 'Password',
             'date_last_login' => 'Date Last Login',
