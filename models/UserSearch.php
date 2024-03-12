@@ -10,9 +10,7 @@ use yii\data\ActiveDataProvider;
  */
 class UserSearch extends User
 {
-	// Для поиска по роли и прочих действий
 	public $role;
-
     public function rules()
     {
         return [

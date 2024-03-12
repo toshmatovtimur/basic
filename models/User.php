@@ -23,7 +23,7 @@ use yii\db\ActiveRecord;
  * @property int $status
  * @property string|null $access_token
  * @property string|null $auth_key
- *
+
  * @property Comment[] $comments
  * @property Role $fkRole
  * @property View[] $views
@@ -64,6 +64,7 @@ class User extends ActiveRecord
             'date_last_login' => 'Последний вход',
             'fk_role' => 'Роль',
             'role.role_user' => 'Роль',
+            'role' => 'Роль',
             'created_at' => 'Дата создания аккаунта',
             'updated_at' => 'Дата обновления аккаунта',
             'status' => 'Статус',
