@@ -45,6 +45,7 @@ class User extends ActiveRecord
             [['fk_role', 'status'], 'integer'],
             [['firstname', 'middlename', 'lastname', 'password', 'access_token'], 'string', 'max' => 120],
             [['username'], 'string', 'max' => 60],
+            [['username'], 'unique'],
             [['fk_role'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['fk_role' => 'id']],
         ];
     }
@@ -58,13 +59,13 @@ class User extends ActiveRecord
             'lastname' => 'Отчество',
             'birthday' => 'Дата рождения',
             'sex' => 'Пол',
-            'username' => 'Username',
-            'password' => 'Password',
-            'date_last_login' => 'Date Last Login',
-            'fk_role' => 'Fk Role',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'status' => 'Status',
+            'username' => 'Логин',
+            'password' => 'Пароль',
+            'date_last_login' => 'Последний вход',
+            'fk_role' => 'Роль',
+            'created_at' => 'Дата создания аккаунта',
+            'updated_at' => 'Дата обновления аккаунта',
+            'status' => 'Статус',
             'access_token' => 'Access Token',
             'auth_key' => 'Auth Key',
         ];
@@ -86,7 +87,7 @@ class User extends ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFkRole()
+    public function getRole()
     {
         return $this->hasOne(Role::className(), ['id' => 'fk_role']);
     }

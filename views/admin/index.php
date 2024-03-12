@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Users';
+$this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить пользователя', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -39,7 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
             //'username',
             //'password',
             'date_last_login',
-            'fk_role',
+	        [
+		        'attribute' => 'fk_role',
+		        'value' => 'role.role_user'
+	        ],
             //'created_at',
             //'updated_at',
             //'status',

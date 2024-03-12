@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -12,6 +13,9 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+	/**
+	 * Правила SiteController
+	 */
     public function behaviors()
     {
         return [
@@ -35,6 +39,9 @@ class SiteController extends Controller
         ];
     }
 
+	/**
+	 * actions SiteController
+	 */
     public function actions()
     {
         return [
@@ -48,13 +55,20 @@ class SiteController extends Controller
         ];
     }
 
+	/**
+	 * go homePage-index-SiteController
+	 */
     public function actionIndex()
     {
         return $this->render('index');
     }
 
+	/**
+	 * Авторизация
+	 */
     public function actionLogin()
     {
+		// Если пользователь не гость, то отправляю на главную страницу
         if (!Yii::$app->user->isGuest) 
         {
             return $this->goHome();
@@ -63,6 +77,12 @@ class SiteController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login())
         {
+			// Обновляю пользователю последнюю дату входа
+	        $username = Yii::$app->request->post("LoginForm")["username"];
+			$user = User::findOne(['username' => $username]);
+			$user->date_last_login = date("Y-m-d H:i:s");
+			$user->save();
+
             return $this->goBack();
         }
 
@@ -72,6 +92,10 @@ class SiteController extends Controller
         ]);
     }
 
+
+	/**
+	 * Выход
+	 */
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -79,6 +103,9 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+	/**
+	 * Контакты
+	 */
     public function actionContact()
     {
         $model = new ContactForm();
@@ -87,11 +114,15 @@ class SiteController extends Controller
             Yii::$app->session->setFlash('contactFormSubmitted');
             return $this->refresh();
         }
+
         return $this->render('contact', [
             'model' => $model,
         ]);
     }
 
+	/**
+	 * О нас
+	 */
     public function actionAbout()
     {
         return $this->render('about');
