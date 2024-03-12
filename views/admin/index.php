@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'password',
             'date_last_login',
 	        [
-		        'attribute' => 'fk_role',
+		        'attribute' => 'role',
 		        'value' => 'role.role_user'
 	        ],
             //'created_at',
