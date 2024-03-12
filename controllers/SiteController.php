@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\SignupForm;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
@@ -92,7 +93,6 @@ class SiteController extends Controller
         ]);
     }
 
-
 	/**
 	 * Выход
 	 */
@@ -102,6 +102,41 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
+	/**
+	 * action Регистрация
+	 */
+	public function actionSignup()
+	{
+		$model = new SignupForm();
+
+		if($model->load(Yii::$app->request->post()))
+		{
+			$user = new User();
+			$user->firstname = Yii::$app->request->post("SignupForm")["firstname"];
+			$user->middlename = Yii::$app->request->post("SignupForm")["middlename"];
+			$user->lastname = Yii::$app->request->post("SignupForm")["lastname"];
+			$user->birthday = Yii::$app->request->post("SignupForm")["birthday"];
+			$user->sex = Yii::$app->request->post("SignupForm")["sex"];
+			$user->username = Yii::$app->request->post("SignupForm")["username"];
+			$user->password = md5(Yii::$app->request->post('SignupForm')["password"]);
+			$user->created_at = date("Y-m-d");
+			$user->fk_role = 1;
+			$user->status = 10;
+
+			if (!$user->save())
+			{
+				Yii::debug(VarDumper::dumpAsString($user->getErrors()));
+			}
+			else
+			{
+				return $this->render('login');
+			}
+
+		}
+
+		return $this->render('signup', compact('model'));
+	}
 
 	/**
 	 * Контакты
