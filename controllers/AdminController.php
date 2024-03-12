@@ -96,7 +96,6 @@ class AdminController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $role = Role::findAll();
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save())
         {

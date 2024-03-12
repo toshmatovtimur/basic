@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'date_last_login')->textInput() ?>
 
-    <?= $form->field($model, 'fk_role')->dropDownList(['1' => '1', '2' => '2',], ['prompt' => 'Выберите роль']) ?>
+    <?= $form->field($model, 'fk_role')->dropDownList(['1' => 'Пользователь', '2' => 'Администратор']) ?>
 
     <?= $form->field($model, 'created_at')->textInput() ?>
 

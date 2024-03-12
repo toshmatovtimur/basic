@@ -14,8 +14,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'fk_role', 'status'], 'integer'],
-            [['firstname', 'middlename', 'lastname', 'birthday', 'sex', 'username', 'password', 'date_last_login', 'created_at', 'updated_at', 'access_token', 'auth_key'], 'safe'],
+            [['id', 'status'], 'integer'],
+            [['firstname', 'middlename', 'lastname', 'birthday', 'sex', 'username', 'password', 'role.role_user', 'date_last_login', 'created_at', 'updated_at', 'access_token', 'auth_key'], 'safe'],
         ];
     }
 
@@ -35,6 +35,15 @@ class UserSearch extends User
             'query' => $query,
         ]);
 
+	    $dataProvider->sort->attributes['role'] = [
+		    // The tables are the ones our relation are configured to
+		    // in my case they are prefixed with "tbl_"
+		    'asc' => ['role.role_user' => SORT_ASC],
+		    'desc' => ['role.role_user' => SORT_DESC],
+	    ];
+
+
+
         $this->load($params);
 
         if (!$this->validate())
@@ -49,6 +58,7 @@ class UserSearch extends User
             'id' => $this->id,
             'birthday' => $this->birthday,
             'date_last_login' => $this->date_last_login,
+            //'role.role_user' => $this->getRole(),
             'fk_role' => $this->fk_role,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
@@ -63,6 +73,8 @@ class UserSearch extends User
             ->andFilterWhere(['ilike', 'password', $this->password])
             ->andFilterWhere(['ilike', 'access_token', $this->access_token])
             ->andFilterWhere(['ilike', 'auth_key', $this->auth_key]);
+	        //->andFilterWhere(['like', 'role.role_user', $this->getRole()])
+	        //->andFilterWhere(['like', 'role.role_user', $this->getRole()]);
 
         return $dataProvider;
     }

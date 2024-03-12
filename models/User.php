@@ -63,6 +63,7 @@ class User extends ActiveRecord
             'password' => 'Пароль',
             'date_last_login' => 'Последний вход',
             'fk_role' => 'Роль',
+            'role.role_user' => 'Роль',
             'created_at' => 'Дата создания аккаунта',
             'updated_at' => 'Дата обновления аккаунта',
             'status' => 'Статус',
