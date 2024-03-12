@@ -30,17 +30,12 @@ use yii\db\ActiveRecord;
  */
 class User extends ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
+
     public static function tableName()
     {
         return 'user';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -54,9 +49,6 @@ class User extends ActiveRecord
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -78,6 +70,7 @@ class User extends ActiveRecord
         ];
     }
 
+    #region Связи с таблицами
     /**
      * Gets query for [[Comments]].
      *
@@ -107,4 +100,5 @@ class User extends ActiveRecord
     {
         return $this->hasMany(View::className(), ['fk_user' => 'id']);
     }
+    #endregion
 }
