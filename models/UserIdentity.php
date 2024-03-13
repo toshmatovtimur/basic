@@ -16,6 +16,22 @@ class UserIdentity extends User implements IdentityInterface
         return static::findOne(['access_token' => $token]);
     }
 
+    /**
+     * Вернет admin если пользователь Админ, иначе user;
+     */
+    public static function isAdmin()
+    {
+        if(!\Yii::$app->user->isGuest)
+        {
+            if(\Yii::$app->user->identity->fk_role === 2)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function findByUsername($username)
     {
 	    return static::findOne(['username' => $username]);
@@ -40,4 +56,5 @@ class UserIdentity extends User implements IdentityInterface
     {
         return $this->password === md5($password);
     }
+
 }

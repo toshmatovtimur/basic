@@ -4,7 +4,9 @@ namespace app\controllers;
 
 use app\models\Role;
 use app\models\User;
+use app\models\UserIdentity;
 use app\models\UserSearch;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -30,6 +32,10 @@ class AdminController extends Controller
                         'actions' => ['create', 'index', 'update', 'view'],
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function($rule, $action)
+                                           {
+                                                return UserIdentity::isAdmin();
+                                           }
                     ],
                 ],
             ],
@@ -115,6 +121,15 @@ class AdminController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Тестовый
+     */
+    public function actionTest()
+    {
+        $model = User::isAdmin(Yii::$app->user->id);
+        return $this->render('test', ['model' => $model,]);
     }
 
     /**

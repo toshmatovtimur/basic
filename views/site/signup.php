@@ -2,7 +2,7 @@
 
 	/** @var yii\web\View $this */
 	/** @var yii\bootstrap5\ActiveForm $form */
-	/** @var app\models\Users $model */
+	/** @var app\models\User $model */
 
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
@@ -40,7 +40,7 @@
 
 			<?= $form->field($model, 'sex')->dropDownList(['Male' => 'Мужской', 'Female' => 'Женский']) ?>
 
-			<?= $form->field($model, 'username')->input('email')->textInput(['placeholder' => 'Email']) ?>
+			<?= $form->field($model, 'username')->textInput(['placeholder' => 'Логин']) ?>
 
 			<?= $form->field($model, 'password')->passwordInput() ?>
 

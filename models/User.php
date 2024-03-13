@@ -74,6 +74,7 @@ class User extends ActiveRecord
     }
 
     #region Связи с таблицами
+
     /**
      * Gets query for [[Comments]].
      *
@@ -103,5 +104,6 @@ class User extends ActiveRecord
     {
         return $this->hasMany(View::className(), ['fk_user' => 'id']);
     }
+
     #endregion
 }
