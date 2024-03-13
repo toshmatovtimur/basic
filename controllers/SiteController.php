@@ -129,7 +129,6 @@ class SiteController extends Controller
 			{
 				$error = VarDumper::dumpAsString($user->getErrors());
 				return $this->render('signup', compact('model', 'error'));
-				//return 'Возможно пользователь с таким логином существует';
 			}
 			else
 			{
