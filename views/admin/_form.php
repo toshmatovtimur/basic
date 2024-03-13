@@ -19,15 +19,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'birthday')->textInput() ?>
+    <?= $form->field($model, 'birthday')->input('date') ?>
 
-    <?= $form->field($model, 'sex')->dropDownList([ 'Male' => 'Male', 'Female' => 'Female', 'Undefined' => 'Undefined', ], ['prompt' => '']) ?>
+    <?= $form->field($model, 'sex')->dropDownList(['Undefined' => 'Неизвестно', 'Male' => 'Мужской', 'Female' => 'Женский',]) ?>
 
     <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'date_last_login')->textInput() ?>
 
     <?= $form->field($model, 'fk_role')->dropDownList(['1' => 'Пользователь', '2' => 'Администратор']) ?>
 
@@ -35,14 +33,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'updated_at')->input('date') ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'access_token')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'auth_key')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList(['10' => 'Активен', '0' => 'Удален']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

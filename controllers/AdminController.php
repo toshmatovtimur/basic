@@ -81,9 +81,14 @@ class AdminController extends Controller
 
         if ($this->request->isPost)
         {
-            if ($model->load($this->request->post()) && $model->save())
+            if ($model->load($this->request->post()))
             {
-                return $this->redirect(['view', 'id' => $model->id]);
+				$model->created_at = date("Y-m-d");
+				if($model->save())
+				{
+					return $this->redirect(['view', 'id' => $model->id]);
+				}
+
             }
         }
         else
@@ -102,10 +107,15 @@ class AdminController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save())
+	    $model->updated_at = date("Y-m-d");
+        if ($this->request->isPost && $model->load($this->request->post()))
         {
-            return $this->redirect(['view', 'id' => $model->id]);
+			// Обновить дату обновления аккаунта
+	        $model->updated_at = date("Y-m-d");
+			if($model->save())
+			{
+				return $this->redirect(['view', 'id' => $model->id]);
+			}
         }
 
         return $this->render('update', [
@@ -128,7 +138,7 @@ class AdminController extends Controller
      */
     public function actionTest()
     {
-        $model = User::isAdmin(Yii::$app->user->id);
+        $model = UserIdentity::isAdmin(Yii::$app->user->id);
         return $this->render('test', ['model' => $model,]);
     }
 

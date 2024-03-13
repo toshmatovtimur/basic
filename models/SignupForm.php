@@ -24,6 +24,8 @@
 		public $password;
 
 		public $confirm;
+
+		public $updated_at;
 		public $verifyCode;
 
 		/**
@@ -33,7 +35,7 @@
 		{
 			return
 			[
-				[['password', 'username', 'firstname', 'middlename', 'birthday', 'sex', 'confirm'], 'required' ],
+				[['password', 'username', 'firstname', 'middlename', 'birthday', 'sex', 'confirm', 'updated_at'], 'required' ],
 				[['password', 'username', 'firstname', 'middlename', 'birthday', 'confirm'], 'trim' ],
 				['password', 'string', 'min' => 6],
 				['confirm', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
