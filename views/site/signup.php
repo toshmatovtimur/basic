@@ -53,6 +53,11 @@
 					<?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
             </div>
+            <div>
+                <?php echo debug($error)  ?>
+            </div>
+
+
 			<?php ActiveForm::end(); ?>
         </div>
     </div>

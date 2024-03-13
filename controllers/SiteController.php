@@ -6,6 +6,7 @@ use app\models\SignupForm;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -126,11 +127,13 @@ class SiteController extends Controller
 
 			if (!$user->save())
 			{
-				Yii::debug(VarDumper::dumpAsString($user->getErrors()));
+				$error = VarDumper::dumpAsString($user->getErrors());
+				return $this->render('signup', compact('model', 'error'));
+				//return 'Возможно пользователь с таким логином существует';
 			}
 			else
 			{
-				return $this->render('login');
+				return $this->goBack();
 			}
 
 		}

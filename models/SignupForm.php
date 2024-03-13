@@ -35,7 +35,7 @@
 		{
 			return
 			[
-				[['password', 'username', 'firstname', 'middlename', 'birthday', 'sex', 'confirm', 'updated_at'], 'required' ],
+				[['password', 'username', 'firstname', 'middlename'], 'required' ],
 				[['password', 'username', 'firstname', 'middlename', 'birthday', 'confirm'], 'trim' ],
 				['password', 'string', 'min' => 6],
 				['confirm', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
@@ -50,17 +50,17 @@
 		public function attributeLabels()
 		{
 			return
-				[
-					'firstname' => 'Фамилия',
-					'middlename' => 'Имя',
-					'lastname' => 'Отчество',
-					'birthday' => 'Дата рождения',
-					'sex' => 'Пол',
-					'username' => 'Логин',
-					'password' => 'Пароль',
-					'confirm' => 'Повторите пароль',
-					'verifyCode' => 'Напечатайте слово',
-				];
+			[
+				'firstname' => 'Фамилия',
+				'middlename' => 'Имя',
+				'lastname' => 'Отчество',
+				'birthday' => 'Дата рождения',
+				'sex' => 'Пол',
+				'username' => 'Логин',
+				'password' => 'Пароль',
+				'confirm' => 'Повторите пароль',
+				'verifyCode' => 'Напечатайте слово',
+			];
 		}
 
 	}

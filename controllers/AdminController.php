@@ -84,6 +84,7 @@ class AdminController extends Controller
             if ($model->load($this->request->post()))
             {
 				$model->created_at = date("Y-m-d");
+				$model->password = md5($model->password);
 				if($model->save())
 				{
 					return $this->redirect(['view', 'id' => $model->id]);
@@ -107,15 +108,20 @@ class AdminController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-	    $model->updated_at = date("Y-m-d");
         if ($this->request->isPost && $model->load($this->request->post()))
         {
 			// Обновить дату обновления аккаунта
 	        $model->updated_at = date("Y-m-d");
+
+			// Зашифровать пароль
+			$md5 = md5($model->password);
+	        $model->password = $md5;
+
 			if($model->save())
 			{
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
+
         }
 
         return $this->render('update', [
