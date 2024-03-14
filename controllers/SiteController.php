@@ -70,15 +70,15 @@ class SiteController extends Controller
 	 */
     public function actionLogin()
     {
+
+
 		// Если пользователь не гость, то отправляю на главную страницу
-        if (!Yii::$app->user->isGuest) 
-        {
+        if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login())
-        {
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
 			// Обновляю пользователю последнюю дату входа
 	        $username = Yii::$app->request->post("LoginForm")["username"];
 			$user = User::findOne(['username' => $username]);
@@ -111,8 +111,7 @@ class SiteController extends Controller
 	{
 		$model = new SignupForm();
 
-		if($model->load(Yii::$app->request->post()))
-        {
+		if($model->load(Yii::$app->request->post())) {
 			$user = new User();
 			$user->firstname = Yii::$app->request->post("SignupForm")["firstname"];
 			$user->middlename = Yii::$app->request->post("SignupForm")["middlename"];
@@ -125,13 +124,10 @@ class SiteController extends Controller
 			$user->fk_role = 1;
 			$user->status = 10;
 
-			if (!$user->save())
-            {
+			if (!$user->save()) {
 				$error = VarDumper::dumpAsString($user->getErrors());
 				return $this->render('signup', compact('model', 'error'));
-			}
-            else
-            {
+			} else {
 				return $this->goBack();
 			}
 
