@@ -14,7 +14,9 @@
 ?>
 <div class="site-registration">
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <div>
+        <?php echo debug($error)  ?>
+    </div>
     <p>Пожалуйста заполните поля ниже для регистрации:</p>
 
     <div class="row">
@@ -53,10 +55,6 @@
 					<?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
             </div>
-            <div>
-                <?php echo debug($error)  ?>
-            </div>
-
 
 			<?php ActiveForm::end(); ?>
         </div>
