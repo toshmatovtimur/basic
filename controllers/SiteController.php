@@ -71,7 +71,6 @@ class SiteController extends Controller
     public function actionLogin()
     {
 
-
 		// Если пользователь не гость, то отправляю на главную страницу
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
