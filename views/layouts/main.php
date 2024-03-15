@@ -43,13 +43,19 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Главная', 'url' => ['/site/index']],
             ['label' => 'О мне', 'url' => ['/site/about']],
 //            ['label' => 'Contact', 'url' => ['/site/contact']],
+
             UserIdentity::isAdmin()
                 ?  ['label' => 'Admin', 'url' => ['/admin/index']]
                 : '<p></p>',
+
             UserIdentity::isAdmin()
                 ?  ['label' => 'Посты', 'url' => ['/post/index']]
                 : '<p></p>',
-            ['label' => 'Test', 'url' => ['/admin/test']],
+
+            UserIdentity::isAdmin()
+                ?  ['label' => 'Test', 'url' => ['/admin/test']]
+                : '<p></p>',
+
             Yii::$app->user->isGuest
                 ? ['label' => 'Вход', 'url' => ['/site/login']]
                 : '<li class="nav-item">'

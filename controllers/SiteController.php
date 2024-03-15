@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\PostForm;
 use app\models\SignupForm;
 use app\models\User;
 use Yii;
@@ -23,10 +24,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'index'],
+                'only' => ['logout', 'index', 'about'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'about'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -62,7 +63,10 @@ class SiteController extends Controller
 	 */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new PostForm();
+        return $this->render('index', [
+            'model' => $model,
+        ]);
     }
 
 	/**
