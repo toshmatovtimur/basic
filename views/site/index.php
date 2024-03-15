@@ -25,7 +25,7 @@
 
         <?= $form->field($model, 'text_full')->widget(TinyMce::className(), [
             'options' => ['rows' => 6],
-            'language' => 'es',
+            'language' => 'ru',
             'clientOptions' => [
                 'plugins' => [
                     "advlist autolink lists link charmap print preview anchor",
