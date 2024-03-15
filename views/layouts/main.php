@@ -52,6 +52,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ?  ['label' => 'Посты', 'url' => ['/post/index']]
                 : '<p></p>',
 
+	        UserIdentity::isAdmin()
+		        ?  ['label' => 'Добавить пост', 'url' => ['/post/upload']]
+		        : '<p></p>',
+
             UserIdentity::isAdmin()
                 ?  ['label' => 'Test', 'url' => ['/admin/test']]
                 : '<p></p>',

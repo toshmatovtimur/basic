@@ -1,8 +1,5 @@
 <?php
-
-debug($model);
-
-echo md5('vika');
+    debug($model);
 
 
 

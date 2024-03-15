@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class PostForm extends Model
 {
@@ -13,36 +14,40 @@ class PostForm extends Model
 //* @property Status $fkUserCreate
 //* @property View[] $views
 
-    public $header;
+    public $header; // Заголовок
 
-    public $alias;
-    public $date_create;
-    public $date_publication;
-    public $text_short;
-    public $text_full;
-    public $date_update_content;
+    public $alias; // Алиас - запоминающееся короткое имя
+    public $date_create; // Дата создания - автомат
+    public $date_publication; // Дата публикации - автомат
+    public $text_short; // короткий текст отражающий суть поста
+    public $text_full; // Полный текст поста
+    public $date_update_content; // Дата обновления поста - автомат
 
-    public $tags;
+    public $tags; // Посты на определенные темы
 
-    public $status;
+    public $status; // Автомат
     public $user_create;
     public $nameImage;
-    public $pathImage;
 
-    /**
+	/**
+	 * @var UploadedFile
+	 */
+    public $image;
+
+
+
+	/**
      * rules Валидаторы PostForm
      */
     public function rules()
     {
         return
-            [
-                [['password', 'username', 'firstname', 'middlename'], 'required' ],
-                [['password', 'username', 'firstname', 'middlename', 'birthday', 'confirm'], 'trim' ],
-                ['password', 'string', 'min' => 6],
-                ['confirm', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
-                [ 'username', 'unique'],
-                [ 'verifyCode', 'captcha' ],
-            ];
+        [
+             [['header', 'text_short', 'text_full', 'nameImage'], 'required' ],
+             [['text_full', 'header', 'text_short', 'nameImage'], 'trim' ],
+	         [['image'], 'file', 'extensions' => 'png, jpg, jpeg'],
+
+        ];
     }
 
     /**
@@ -52,16 +57,36 @@ class PostForm extends Model
     {
         return
             [
-                'firstname' => 'Фамилия',
-                'middlename' => 'Имя',
-                'lastname' => 'Отчество',
-                'birthday' => 'Дата рождения',
-                'sex' => 'Пол',
-                'username' => 'Логин',
-                'password' => 'Пароль',
-                'confirm' => 'Повторите пароль',
-                'verifyCode' => 'Напечатайте слово',
+                'header' => 'Заголовок',
+                'alias' => 'Алиас',
+                'date_create' => 'Дата создания',
+                'date_publication' => 'Дата публикации',
+                'text_short' => 'Короткий текст',
+                'text_full' => 'Текст',
+                'date_update_content' => 'Дата обновления контента',
+                'tags' => 'Тэги',
+                'status' => 'Статус',
+                'user_create' => 'Создатель',
+                'image' => 'Картинка',
             ];
     }
+
+	/**
+	 * Загрузка файла
+	 */
+//	public function upload()
+//	{
+//		$this->image->saveAs('uploads/' . $this->image->baseName . '.' . $this->image->extension);
+//		return true;
+////		if ($this->validate())
+////		{
+////			$this->image->saveAs('uploads/' . $this->image->baseName . '.' . $this->image->extension);
+////			return true;
+////		}
+////		else
+////		{
+////			return false;
+////		}
+//	}
 
 }

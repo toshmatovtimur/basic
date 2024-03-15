@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\PostForm;
 use app\models\Role;
 use app\models\User;
 use app\models\UserIdentity;
@@ -11,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * AdminController implements the CRUD actions for User model.
@@ -79,14 +81,11 @@ class AdminController extends Controller
     {
         $model = new User();
 
-        if ($this->request->isPost)
-        {
-            if ($model->load($this->request->post()))
-            {
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post())) {
 				$model->created_at = date("Y-m-d");
 				$model->password = md5($model->password);
-				if($model->save())
-				{
+				if($model->save()) {
 					return $this->redirect(['view', 'id' => $model->id]);
 				}
 
@@ -144,8 +143,8 @@ class AdminController extends Controller
      */
     public function actionTest()
     {
-        $model = UserIdentity::isAdmin(Yii::$app->user->id);
-        return $this->render('test', ['model' => $model,]);
+       $model = UserIdentity::isAdmin(Yii::$app->user->id);
+        return $this->render('test', ['model' => $model]);
     }
 
     /**

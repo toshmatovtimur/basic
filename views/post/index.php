@@ -1,1 +1,2 @@
-<h1>Post Zone</h1>
+<h1>Post Index</h1>
+<p><strong>Здесь будет список постов(контента)</strong></p>
