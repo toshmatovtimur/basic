@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "content".
@@ -25,7 +26,7 @@ use Yii;
  * @property Status $fkUserCreate
  * @property View[] $views
  */
-class Content extends \yii\db\ActiveRecord
+class Content extends ActiveRecord
 {
     /**
      * Имя таблицы

@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\Content;
+use app\models\Contentandfoto;
+use app\models\Foto;
 use app\models\PostForm;
 use app\models\UserIdentity;
 use Yii;
@@ -61,6 +64,16 @@ class PostController extends Controller
 		if ($model->load(Yii::$app->request->post())) {
 			$model->image = UploadedFile::getInstance($model, 'image');
 			$model->image->saveAs("img/imagesPosts/{$model->image->baseName}.{$model->image->extension}");
+
+			// Создание трех таблиц
+			$content = new Content();
+			$contentFoto = new Contentandfoto();
+			$foto = new Foto();
+
+
+			//$content->load()
+
+
 			return $this->render('upload', [
 				'model' => $model,
 			]);
