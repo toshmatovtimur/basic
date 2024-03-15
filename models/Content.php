@@ -28,7 +28,7 @@ use Yii;
 class Content extends \yii\db\ActiveRecord
 {
     /**
-     * {@inheritdoc}
+     * Имя таблицы
      */
     public static function tableName()
     {
@@ -36,7 +36,7 @@ class Content extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * Правила для Контента
      */
     public function rules()
     {
@@ -55,7 +55,7 @@ class Content extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * Лэйблес для Контента
      */
     public function attributeLabels()
     {
@@ -73,6 +73,8 @@ class Content extends \yii\db\ActiveRecord
             'fk_user_create' => 'Fk User Create',
         ];
     }
+
+    #region Связи с таблицами
 
     /**
      * Gets query for [[Comments]].
@@ -99,7 +101,7 @@ class Content extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFkStatus()
+    public function getStatus()
     {
         return $this->hasOne(Role::className(), ['id' => 'fk_status']);
     }
@@ -109,7 +111,7 @@ class Content extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFkUserCreate()
+    public function getUserCreate()
     {
         return $this->hasOne(Status::className(), ['id' => 'fk_user_create']);
     }
@@ -123,4 +125,6 @@ class Content extends \yii\db\ActiveRecord
     {
         return $this->hasMany(View::className(), ['fk_content' => 'id']);
     }
+
+    #endregion
 }

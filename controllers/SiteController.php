@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\PostForm;
 use app\models\SignupForm;
 use app\models\User;
 use Yii;
@@ -23,10 +24,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'index'],
+                'only' => ['logout', 'index', 'about'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'about'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -62,7 +63,10 @@ class SiteController extends Controller
 	 */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new PostForm();
+        return $this->render('index', [
+            'model' => $model,
+        ]);
     }
 
 	/**
@@ -70,19 +74,19 @@ class SiteController extends Controller
 	 */
     public function actionLogin()
     {
+
 		// Если пользователь не гость, то отправляю на главную страницу
-        if (!Yii::$app->user->isGuest)
-		{
+        if (!Yii::$app->user->isGuest) {
+
             return $this->goHome();
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login())
-        {
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
 			// Обновляю пользователю последнюю дату входа
 	        $username = Yii::$app->request->post("LoginForm")["username"];
 			$user = User::findOne(['username' => $username]);
-			$user->date_last_login = date("Y-m-d H:i:s");
+			$user->date_last_login = date("d-m-Y H:i:s");
 			$user->save();
 
             return $this->goBack();
@@ -111,8 +115,7 @@ class SiteController extends Controller
 	{
 		$model = new SignupForm();
 
-		if($model->load(Yii::$app->request->post()))
-		{
+		if($model->load(Yii::$app->request->post())) {
 			$user = new User();
 			$user->firstname = Yii::$app->request->post("SignupForm")["firstname"];
 			$user->middlename = Yii::$app->request->post("SignupForm")["middlename"];
@@ -125,19 +128,17 @@ class SiteController extends Controller
 			$user->fk_role = 1;
 			$user->status = 10;
 
-			if (!$user->save())
-			{
+			if (!$user->save()) {
 				$error = VarDumper::dumpAsString($user->getErrors());
 				return $this->render('signup', compact('model', 'error'));
-			}
-			else
-			{
+			} else {
 				return $this->goBack();
 			}
 
 		}
 
-		return $this->render('signup', compact('model'));
+        $error = '';
+		return $this->render('signup', compact('model', 'error'));
 	}
 
 	/**

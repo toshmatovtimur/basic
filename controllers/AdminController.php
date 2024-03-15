@@ -26,10 +26,10 @@ class AdminController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['create', 'index', 'update', 'view'],
+                'only' => ['create', 'index', 'update', 'view', 'test'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'update', 'view'],
+                        'actions' => ['create', 'index', 'update', 'view', 'test'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function($rule, $action)
