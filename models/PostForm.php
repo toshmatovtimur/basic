@@ -25,8 +25,8 @@ class PostForm extends Model
 
     public $tags; // Посты на определенные темы
 
-    public $status; // Автомат
-    public $user_create;
+    public $fk_status; // Автомат
+    public $fk_user_create;
     public $nameImage;
 
 	/**

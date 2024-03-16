@@ -16,9 +16,9 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
-	/**
-	 * Правила SiteController
-	 */
+    /**
+     * Правила SiteController
+     */
     public function behaviors()
     {
         return [
@@ -42,9 +42,9 @@ class SiteController extends Controller
         ];
     }
 
-	/**
-	 * actions SiteController
-	 */
+    /**
+     * actions SiteController
+     */
     public function actions()
     {
         return [
@@ -58,9 +58,9 @@ class SiteController extends Controller
         ];
     }
 
-	/**
-	 * go homePage-index-SiteController
-	 */
+    /**
+     * go homePage-index-SiteController
+     */
     public function actionIndex()
     {
         $model = new PostForm();
@@ -69,25 +69,24 @@ class SiteController extends Controller
         ]);
     }
 
-	/**
-	 * Авторизация
-	 */
+    /**
+     * Авторизация
+     */
     public function actionLogin()
     {
 
-		// Если пользователь не гость, то отправляю на главную страницу
+        // Если пользователь не гость, то отправляю на главную страницу
         if (!Yii::$app->user->isGuest) {
-
             return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-			// Обновляю пользователю последнюю дату входа
-	        $username = Yii::$app->request->post("LoginForm")["username"];
-			$user = User::findOne(['username' => $username]);
-			$user->date_last_login = date("d-m-Y H:i:s");
-			$user->save();
+            // Обновляю пользователю последнюю дату входа
+            $username = Yii::$app->request->post("LoginForm")["username"];
+            $user = User::findOne(['username' => $username]);
+            $user->date_last_login = date("d-m-Y H:i:s");
+            $user->save();
 
             return $this->goBack();
         }
@@ -98,9 +97,9 @@ class SiteController extends Controller
         ]);
     }
 
-	/**
-	 * Выход
-	 */
+    /**
+     * Выход
+     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -108,47 +107,46 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-	/**
-	 * action Регистрация
-	 */
-	public function actionSignup()
-	{
-		$model = new SignupForm();
+    /**
+     * action Регистрация
+     */
+    public function actionSignup()
+    {
+        $model = new SignupForm();
 
-		if($model->load(Yii::$app->request->post())) {
-			$user = new User();
-			$user->firstname = Yii::$app->request->post("SignupForm")["firstname"];
-			$user->middlename = Yii::$app->request->post("SignupForm")["middlename"];
-			$user->lastname = Yii::$app->request->post("SignupForm")["lastname"];
-			$user->birthday = Yii::$app->request->post("SignupForm")["birthday"];
-			$user->sex = Yii::$app->request->post("SignupForm")["sex"];
-			$user->username = Yii::$app->request->post("SignupForm")["username"];
-			$user->password = md5(Yii::$app->request->post('SignupForm')["password"]);
-			$user->created_at = date("Y-m-d");
-			$user->fk_role = 1;
-			$user->status = 10;
+        if ($model->load(Yii::$app->request->post())) {
+            $user = new User();
+            $user->firstname = Yii::$app->request->post("SignupForm")["firstname"];
+            $user->middlename = Yii::$app->request->post("SignupForm")["middlename"];
+            $user->lastname = Yii::$app->request->post("SignupForm")["lastname"];
+            $user->birthday = Yii::$app->request->post("SignupForm")["birthday"];
+            $user->sex = Yii::$app->request->post("SignupForm")["sex"];
+            $user->username = Yii::$app->request->post("SignupForm")["username"];
+            $user->password = md5(Yii::$app->request->post('SignupForm')["password"]);
+            $user->created_at = date("Y-m-d");
+            $user->fk_role = 1;
+            $user->status = 10;
 
-			if (!$user->save()) {
-				$error = VarDumper::dumpAsString($user->getErrors());
-				return $this->render('signup', compact('model', 'error'));
-			} else {
-				return $this->goBack();
-			}
+            if (!$user->save()) {
+                $error = VarDumper::dumpAsString($user->getErrors());
+                return $this->render('signup', compact('model', 'error'));
+            } else {
+                return $this->goBack();
+            }
 
-		}
+        }
 
         $error = '';
-		return $this->render('signup', compact('model', 'error'));
-	}
+        return $this->render('signup', compact('model', 'error'));
+    }
 
-	/**
-	 * Контакты
-	 */
+    /**
+     * Контакты
+     */
     public function actionContact()
     {
         $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) 
-        {
+        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
             return $this->refresh();
         }
@@ -158,9 +156,9 @@ class SiteController extends Controller
         ]);
     }
 
-	/**
-	 * О нас
-	 */
+    /**
+     * О нас
+     */
     public function actionAbout()
     {
         return $this->render('about');
