@@ -3,124 +3,132 @@
 namespace app\controllers;
 
 use app\models\Content;
-use app\models\Contentandfoto;
-use app\models\Foto;
-use app\models\PostForm;
-use app\models\UserIdentity;
-use Yii;
-use yii\db\Query;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use yii\helpers\FileHelper;
-use yii\helpers\VarDumper;
+use app\models\ContentSearch;
 use yii\web\Controller;
-use yii\web\UploadedFile;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
+/**
+ * PostController implements the CRUD actions for Content model.
+ */
 class PostController extends Controller
 {
-
     /**
-     * Правила для Контроллера
+     * @inheritDoc
      */
     public function behaviors()
     {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => [],
-                'rules' => [
-                    [
-                        'actions' => [],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            return UserIdentity::isAdmin();
-                        }
+        return array_merge(
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
                     ],
                 ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
+            ]
+        );
     }
 
     /**
-     * index for PostController
+     * Lists all Content models.
+     *
+     * @return string
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new ContentSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
-     * upload action / Добавить пост
+     * Displays a single Content model.
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpload()
+    public function actionView($id)
     {
-        $model = new PostForm();
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
-        // Получаю post запрос, если он есть
-        if (Yii::$app->request->isPost) {
-            $model->load(Yii::$app->request->post());
+    /**
+     * Creates a new Content model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return string|\yii\web\Response
+     */
+    public function actionCreate()
+    {
+        $model = new Content();
 
-            // Вставка в таблицу Content
-            $content = new Content();
-            $content->header = Yii::$app->request->post("PostForm")["header"];
-            $content->alias = Yii::$app->request->post("PostForm")["alias"];
-            $content->date_create = date("d-m-Y H:i:s");
-            $content->text_short = Yii::$app->request->post("PostForm")["text_short"];
-            $content->text_full = Yii::$app->request->post("PostForm")["text_full"];
-            $content->tags = Yii::$app->request->post("PostForm")["tags"];
-            $content->fk_status = 1; // Загружен
-            $content->fk_user_create = Yii::$app->user->id;
-
-            if (!$content->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-
-            // Загружаю картинку и получаю id последней записи в таблице Content
-            $model->image = UploadedFile::getInstance($model, 'image');
-
-            $query=new Query();
-            $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
-
-            // Создаю директорию и физически сохраняю файл
-            FileHelper::createDirectory("img/post-{$idContent['id']}");
-            $path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
-            $model->image->saveAs($path);
-
-            // Вставка в таблицу Foto
-            $foto = new Foto();
-            $foto->name_f = "{$model->image->baseName}.{$model->image->extension}";
-            $foto->path_to_foto = $path;
-
-            if (!$foto->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
-            }
-
-            $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
-
-            // Вставка в таблицу Contentandfoto
-            $contentFoto = new Contentandfoto(); // id-шники сохранять
-            $contentFoto->fk_foto = $idFoto['id'];
-            $contentFoto->fk_content = $idContent['id'];
-
-            if (!$contentFoto->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
-            }
-
-            $error = 'Все загружено';
-            return $this->render('upload', compact('model', 'error'));
+        } else {
+            $model->loadDefaultValues();
         }
 
-        $error = '';
-        return $this->render('upload', compact('model', 'error'));
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing Content model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing Content model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param int $id ID
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Content model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param int $id ID
+     * @return Content the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Content::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

@@ -20,7 +20,7 @@ use yii\db\ActiveRecord;
  * @property int|null $fk_role
  * @property string|null $created_at
  * @property string|null $updated_at
- * @property int $fk_status
+ * @property int $status
  * @property string|null $access_token
  * @property string|null $auth_key
 
@@ -41,8 +41,8 @@ class User extends ActiveRecord
         return [
             [['birthday', 'date_last_login', 'created_at', 'updated_at'], 'safe'],
             [['sex', 'auth_key'], 'string'],
-            [['fk_role', 'fk_status'], 'default', 'value' => null],
-            [['fk_role', 'fk_status'], 'integer'],
+            [['fk_role', 'status'], 'default', 'value' => null],
+            [['fk_role', 'status'], 'integer'],
             [['firstname', 'middlename', 'lastname', 'password', 'access_token'], 'string', 'max' => 120],
             [['username'], 'string', 'max' => 60],
             [['username'], 'unique'],
@@ -67,7 +67,7 @@ class User extends ActiveRecord
             'role' => 'Роль',
             'created_at' => 'Дата создания аккаунта',
             'updated_at' => 'Дата обновления аккаунта',
-            'fk_status' => 'Статус',
+            'status' => 'Статус',
             'access_token' => 'Access Token',
             'auth_key' => 'Auth Key',
         ];

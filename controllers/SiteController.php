@@ -125,7 +125,7 @@ class SiteController extends Controller
             $user->password = md5(Yii::$app->request->post('SignupForm')["password"]);
             $user->created_at = date("Y-m-d");
             $user->fk_role = 1;
-            $user->status = 10;
+            $user->fk_status = 10;
 
             if (!$user->save()) {
                 $error = VarDumper::dumpAsString($user->getErrors());

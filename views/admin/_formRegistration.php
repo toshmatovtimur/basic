@@ -29,8 +29,6 @@
 
 	<?= $form->field($model, 'fk_role')->dropDownList(['1' => 'Пользователь', '2' => 'Администратор']) ?>
 
-	<?= $form->field($model, 'created_at')->input('date') ?>
-
 	<?= $form->field($model, 'status')->dropDownList(['10' => 'Активен', '0' => 'Удален']) ?>
 
 	<div class="form-group">
