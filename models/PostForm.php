@@ -8,12 +8,6 @@ use yii\web\UploadedFile;
 class PostForm extends Model
 {
 
-//* @property Comment[] $comments
-//* @property Contentandfoto[] $contentandfotos
-//* @property Role $fkStatus
-//* @property Status $fkUserCreate
-//* @property View[] $views
-
     public $header; // Заголовок
 
     public $alias; // Алиас - запоминающееся короткое имя
@@ -34,8 +28,6 @@ class PostForm extends Model
 	 */
     public $image;
 
-
-
 	/**
      * rules Валидаторы PostForm
      */
@@ -44,8 +36,9 @@ class PostForm extends Model
         return
         [
              [['header', 'text_short', 'text_full', 'nameImage'], 'required' ],
+             [['tags'], 'safe' ],
              [['text_full', 'header', 'text_short', 'nameImage'], 'trim' ],
-	         [['image'], 'file', 'extensions' => 'png, jpg, jpeg'],
+	         [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
 
         ];
     }
@@ -70,23 +63,5 @@ class PostForm extends Model
                 'image' => 'Картинка',
             ];
     }
-
-	/**
-	 * Загрузка файла
-	 */
-//	public function upload()
-//	{
-//		$this->image->saveAs('uploads/' . $this->image->baseName . '.' . $this->image->extension);
-//		return true;
-////		if ($this->validate())
-////		{
-////			$this->image->saveAs('uploads/' . $this->image->baseName . '.' . $this->image->extension);
-////			return true;
-////		}
-////		else
-////		{
-////			return false;
-////		}
-//	}
 
 }

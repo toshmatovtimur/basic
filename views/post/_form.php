@@ -12,9 +12,7 @@
 
 <div class="post-form">
 
-    <?php
-        debug($model);
-    ?>
+    <?= $error ?>
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
@@ -36,6 +34,8 @@
 			'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
 		]
 	]);?>
+
+    <?= $form->field($model, 'tags')->textInput() ?>
 
 	<?= $form->field($model, 'image')->fileInput() ?>
 
