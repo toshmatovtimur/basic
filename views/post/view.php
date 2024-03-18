@@ -38,13 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'text_full:ntext',
             'date_update_content',
             'tags',
+            'user.username',
+            'status.status_name',
             'fk_status',
             'fk_user_create',
-	        [
-		        'attribute' => 'user',
-		        'value' => 'user.username'
-	        ],
-
         ],
     ]) ?>
 
