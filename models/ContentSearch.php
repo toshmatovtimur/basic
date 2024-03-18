@@ -10,20 +10,16 @@ use yii\data\ActiveDataProvider;
  */
 class ContentSearch extends Content
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $user;
+
     public function rules()
     {
         return [
             [['id', 'fk_status', 'fk_user_create'], 'integer'],
-            [['header', 'alias', 'date_create', 'date_publication', 'text_short', 'text_full', 'date_update_content', 'tags'], 'safe'],
+            [['header', 'alias', 'user', 'date_create', 'date_publication', 'text_short', 'text_full', 'date_update_content', 'tags'], 'safe'],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -40,12 +36,23 @@ class ContentSearch extends Content
     public function search($params)
     {
         $query = Content::find();
-
+	    $query->joinWith(['user']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+	        'pagination' => [
+		        'pageSize' => 7,
+	        ],
         ]);
+
+
+	    $dataProvider->sort->attributes['user'] = [
+		    // The tables are the ones our relation are configured to
+		    // in my case they are prefixed with "tbl_"
+		    'asc' => ['username' => SORT_ASC],
+		    'desc' => ['username' => SORT_DESC],
+	    ];
 
         $this->load($params);
 
@@ -63,13 +70,15 @@ class ContentSearch extends Content
             'date_update_content' => $this->date_update_content,
             'fk_status' => $this->fk_status,
             'fk_user_create' => $this->fk_user_create,
+	        'username' => $this->user,
         ]);
 
         $query->andFilterWhere(['ilike', 'header', $this->header])
             ->andFilterWhere(['ilike', 'alias', $this->alias])
             ->andFilterWhere(['ilike', 'text_short', $this->text_short])
             ->andFilterWhere(['ilike', 'text_full', $this->text_full])
-            ->andFilterWhere(['ilike', 'tags', $this->tags]);
+            ->andFilterWhere(['ilike', 'tags', $this->tags])
+            ->andFilterWhere(['ilike', 'username', $this->user]);
 
         return $dataProvider;
     }

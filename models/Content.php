@@ -50,8 +50,8 @@ class Content extends ActiveRecord
             [['alias'], 'string', 'max' => 70],
             [['text_short'], 'string', 'max' => 200],
             [['tags'], 'string', 'max' => 150],
-            [['fk_status'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['fk_status' => 'id']],
-            [['fk_user_create'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['fk_user_create' => 'id']],
+            [['fk_status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['fk_status' => 'id']],
+            [['fk_user_create'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['fk_user_create' => 'id']],
         ];
     }
 
@@ -72,6 +72,7 @@ class Content extends ActiveRecord
             'tags' => 'Тэги',
             'fk_status' => 'Status',
             'fk_user_create' => 'Создатель',
+            'user' => 'Создатель',
         ];
     }
 
@@ -79,8 +80,6 @@ class Content extends ActiveRecord
 
     /**
      * Gets query for [[Comments]].
-     *
-     * @return \yii\db\ActiveQuery
      */
     public function getComment()
     {
@@ -89,8 +88,6 @@ class Content extends ActiveRecord
 
     /**
      * Gets query for [[Contentandfotos]].
-     *
-     * @return \yii\db\ActiveQuery
      */
     public function getContentandfoto()
     {
@@ -99,8 +96,6 @@ class Content extends ActiveRecord
 
     /**
      * Gets query for [[FkStatus]].
-     *
-     * @return \yii\db\ActiveQuery
      */
     public function getStatus()
     {

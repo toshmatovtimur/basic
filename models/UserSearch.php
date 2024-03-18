@@ -33,6 +33,9 @@ class UserSearch extends User
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+	        'pagination' => [
+		        'pageSize' => 5,
+	        ],
         ]);
 
 	    $dataProvider->sort->attributes['role'] = [
