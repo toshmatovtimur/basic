@@ -97,8 +97,7 @@ class PostController extends Controller
         $model = new PostForm();
 
         // Получаю post запрос, если он есть
-        if (Yii::$app->request->isPost) {
-            $model->load(Yii::$app->request->post());
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
 
             // Вставка в таблицу Content
             $content = new Content();
