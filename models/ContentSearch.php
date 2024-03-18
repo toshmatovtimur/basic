@@ -70,7 +70,6 @@ class ContentSearch extends Content
             'date_update_content' => $this->date_update_content,
             'fk_status' => $this->fk_status,
             'fk_user_create' => $this->fk_user_create,
-	        'username' => $this->user,
         ]);
 
         $query->andFilterWhere(['ilike', 'header', $this->header])
