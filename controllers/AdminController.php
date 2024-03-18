@@ -140,6 +140,11 @@ class AdminController extends Controller
         return $this->render('test', ['model' => $model]);
     }
 
+	public function actionAdm()
+	{
+		return $this->render('adm',);
+	}
+
     /**
      *  Запрос на получение записи по id
      */

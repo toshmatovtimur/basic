@@ -82,7 +82,7 @@ class Content extends ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getComments()
+    public function getComment()
     {
         return $this->hasMany(Comment::className(), ['fk_content' => 'id']);
     }
@@ -92,7 +92,7 @@ class Content extends ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getContentandfotos()
+    public function getContentandfoto()
     {
         return $this->hasMany(Contentandfoto::className(), ['fk_content' => 'id']);
     }
@@ -104,7 +104,7 @@ class Content extends ActiveRecord
      */
     public function getStatus()
     {
-        return $this->hasOne(Role::className(), ['id' => 'fk_status']);
+        return $this->hasOne(Status::className(), ['id' => 'fk_status']);
     }
 
     /**
@@ -112,9 +112,9 @@ class Content extends ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUserCreate()
+    public function getUser()
     {
-        return $this->hasOne(Status::className(), ['id' => 'fk_user_create']);
+        return $this->hasOne(User::className(), ['id' => 'fk_user_create']);
     }
 
     /**
@@ -122,7 +122,7 @@ class Content extends ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getViews()
+    public function getView()
     {
         return $this->hasMany(View::className(), ['fk_content' => 'id']);
     }

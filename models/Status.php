@@ -14,9 +14,6 @@ use Yii;
  */
 class Status extends \yii\db\ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'status';
@@ -45,10 +42,8 @@ class Status extends \yii\db\ActiveRecord
 
     /**
      * Gets query for [[Contents]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getContents()
+    public function getContent()
     {
         return $this->hasMany(Content::className(), ['fk_user_create' => 'id']);
     }

@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use yii\base\Exception;
 use yii\base\Model;
+use yii\db\Query;
+use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 class PostForm extends Model
@@ -24,7 +27,7 @@ class PostForm extends Model
     public $nameImage;
 
 	/**
-	 * @var UploadedFile
+	 * @var UploadedFile[]
 	 */
     public $image;
 
@@ -38,8 +41,7 @@ class PostForm extends Model
              [['header', 'text_short', 'text_full', 'nameImage'], 'required' ],
              [['tags'], 'safe' ],
              [['text_full', 'header', 'text_short', 'nameImage'], 'trim' ],
-	         [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
-
+	         [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
         ];
     }
 
@@ -63,5 +65,18 @@ class PostForm extends Model
                 'image' => 'Картинка',
             ];
     }
+
+//	public function upload()
+//	{
+//		$query=new Query();
+//		$idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
+//
+//		// Создаю директорию и физически сохраняю файл
+//		FileHelper::createDirectory("img/post-{$idContent['id']}");
+//		foreach ($this->image as $file) {
+//			$path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
+//			$file->saveAs($path);
+//		}
+//	}
 
 }

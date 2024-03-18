@@ -16,9 +16,6 @@ use Yii;
  */
 class Contentandfoto extends \yii\db\ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'contentandfoto';
@@ -51,20 +48,16 @@ class Contentandfoto extends \yii\db\ActiveRecord
 
     /**
      * Gets query for [[FkContent]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getFkContent()
+    public function getContent()
     {
         return $this->hasOne(Content::className(), ['id' => 'fk_content']);
     }
 
     /**
      * Gets query for [[FkFoto]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getFkFoto()
+    public function getFoto()
     {
         return $this->hasOne(Foto::className(), ['id' => 'fk_foto']);
     }

@@ -77,18 +77,14 @@ class User extends ActiveRecord
 
     /**
      * Gets query for [[Comments]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getComments()
+    public function getComment()
     {
         return $this->hasMany(Comment::className(), ['fk_user' => 'id']);
     }
 
     /**
      * Gets query for [[FkRole]].
-     *
-     * @return \yii\db\ActiveQuery
      */
     public function getRole()
     {
@@ -97,10 +93,8 @@ class User extends ActiveRecord
 
     /**
      * Gets query for [[Views]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getViews()
+    public function getView()
     {
         return $this->hasMany(View::className(), ['fk_user' => 'id']);
     }

@@ -15,9 +15,6 @@ use Yii;
  */
 class Foto extends \yii\db\ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'foto';
@@ -48,10 +45,8 @@ class Foto extends \yii\db\ActiveRecord
 
     /**
      * Gets query for [[Contentandfotos]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getContentandfotos()
+    public function getContentandfoto()
     {
         return $this->hasMany(Contentandfoto::className(), ['fk_foto' => 'id']);
     }

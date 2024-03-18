@@ -8,6 +8,7 @@ use app\models\ContentSearch;
 use app\models\Foto;
 use app\models\PostForm;
 use Yii;
+use yii\base\Exception;
 use yii\db\Query;
 use yii\helpers\FileHelper;
 use yii\helpers\VarDumper;
@@ -92,12 +93,17 @@ class PostController extends Controller
         ]);
     }
 
-    public function actionUpload()
+	/**
+	 * @throws Exception
+	 */
+	public function actionUpload()
     {
         $model = new PostForm();
 
         // Получаю post запрос, если он есть
-        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isPost) {
+
+	        $model->load(Yii::$app->request->post());
 
             // Вставка в таблицу Content
             $content = new Content();
@@ -123,8 +129,9 @@ class PostController extends Controller
 
             // Создаю директорию и физически сохраняю файл
             FileHelper::createDirectory("img/post-{$idContent['id']}");
-            $path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
-            $model->image->saveAs($path);
+
+			$path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
+			$model->image->saveAs($path);
 
             // Вставка в таблицу Foto
             $foto = new Foto();

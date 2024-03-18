@@ -15,9 +15,6 @@ use Yii;
  */
 class Role extends \yii\db\ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'role';
@@ -46,20 +43,16 @@ class Role extends \yii\db\ActiveRecord
 
     /**
      * Gets query for [[Contents]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getContents()
+    public function getContent()
     {
         return $this->hasMany(Content::className(), ['fk_status' => 'id']);
     }
 
     /**
      * Gets query for [[Users]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getUsers()
+    public function getUser()
     {
         return $this->hasMany(User::className(), ['fk_role' => 'id']);
     }

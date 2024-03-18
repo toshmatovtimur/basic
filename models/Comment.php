@@ -18,9 +18,6 @@ use Yii;
  */
 class Comment extends \yii\db\ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'comment';
@@ -57,20 +54,16 @@ class Comment extends \yii\db\ActiveRecord
 
     /**
      * Gets query for [[FkContent]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getFkContent()
+    public function getContent()
     {
         return $this->hasOne(Content::className(), ['id' => 'fk_content']);
     }
 
     /**
      * Gets query for [[FkUser]].
-     *
-     * @return \yii\db\ActiveQuery
      */
-    public function getFkUser()
+    public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'fk_user']);
     }
