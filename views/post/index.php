@@ -30,12 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+
             'header',
-            'alias',
+            'text_short',
             'date_create',
-            'date_publication',
-            //'text_short',
+            //  'id',
+            //  'alias',
+            // 'date_publication',
             //'text_full:ntext',
             //'date_update_content',
             //'tags',
@@ -43,9 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
             //'fk_user_create',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Content $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'urlCreator' => function ($action, Content $model, $key, $index, $column)
+                                {
+                                     return Url::toRoute([$action, 'id' => $model->id]);
+                                }
             ],
         ],
     ]); ?>

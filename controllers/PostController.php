@@ -3,10 +3,18 @@
 namespace app\controllers;
 
 use app\models\Content;
+use app\models\Contentandfoto;
 use app\models\ContentSearch;
+use app\models\Foto;
+use app\models\PostForm;
+use Yii;
+use yii\db\Query;
+use yii\helpers\FileHelper;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * PostController implements the CRUD actions for Content model.
@@ -46,25 +54,14 @@ class PostController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
-    /**
-     * Displays a single Content model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    
     public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
-
-    /**
-     * Creates a new Content model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
+    
     public function actionCreate()
     {
         $model = new Content();
@@ -81,14 +78,7 @@ class PostController extends Controller
             'model' => $model,
         ]);
     }
-
-    /**
-     * Updates an existing Content model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -102,13 +92,69 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Content model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    public function actionUpload()
+    {
+        $model = new PostForm();
+
+        // Получаю post запрос, если он есть
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+
+            // Вставка в таблицу Content
+            $content = new Content();
+            $content->header = Yii::$app->request->post("PostForm")["header"];
+            $content->alias = Yii::$app->request->post("PostForm")["alias"];
+            $content->date_create = date("d-m-Y H:i:s");
+            $content->text_short = Yii::$app->request->post("PostForm")["text_short"];
+            $content->text_full = Yii::$app->request->post("PostForm")["text_full"];
+            $content->tags = Yii::$app->request->post("PostForm")["tags"];
+            $content->fk_status = 1; // Загружен
+            $content->fk_user_create = Yii::$app->user->id;
+
+            if (!$content->save()) {
+                $error = VarDumper::dumpAsString($content->getErrors());
+                return $this->render('upload', compact('model', 'error'));
+            }
+
+            // Загружаю картинку и получаю id последней записи в таблице Content
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            $query=new Query();
+            $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
+
+            // Создаю директорию и физически сохраняю файл
+            FileHelper::createDirectory("img/post-{$idContent['id']}");
+            $path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
+            $model->image->saveAs($path);
+
+            // Вставка в таблицу Foto
+            $foto = new Foto();
+            $foto->name_f = "{$model->image->baseName}.{$model->image->extension}";
+            $foto->path_to_foto = $path;
+
+            if (!$foto->save()) {
+                $error = VarDumper::dumpAsString($content->getErrors());
+                return $this->render('upload', compact('model', 'error'));
+            }
+
+            $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
+
+            // Вставка в таблицу Contentandfoto
+            $contentFoto = new Contentandfoto(); // id-шники сохранять
+            $contentFoto->fk_foto = $idFoto['id'];
+            $contentFoto->fk_content = $idContent['id'];
+
+            if (!$contentFoto->save()) {
+                $error = VarDumper::dumpAsString($content->getErrors());
+                return $this->render('upload', compact('model', 'error'));
+            }
+
+        }
+
+        $error = '';
+        return $this->render('upload', compact('model', 'error'));
+    }
+    
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -116,13 +162,6 @@ class PostController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Content model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Content the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Content::findOne(['id' => $id])) !== null) {

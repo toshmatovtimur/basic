@@ -61,17 +61,17 @@ class Content extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'header' => 'Header',
-            'alias' => 'Alias',
-            'date_create' => 'Date Create',
-            'date_publication' => 'Date Publication',
-            'text_short' => 'Text Short',
-            'text_full' => 'Text Full',
-            'date_update_content' => 'Date Update Content',
-            'tags' => 'Tags',
-            'fk_status' => 'Fk Status',
-            'fk_user_create' => 'Fk User Create',
+            'id' => 'Код',
+            'header' => 'Заголовок',
+            'alias' => 'Алиас',
+            'date_create' => 'Дата создания',
+            'date_publication' => 'Опубликовано',
+            'text_short' => 'Короткий текст',
+            'text_full' => 'Полный текст',
+            'date_update_content' => 'Дата обновления поста',
+            'tags' => 'Тэги',
+            'fk_status' => 'Status',
+            'fk_user_create' => 'Создатель',
         ];
     }
 

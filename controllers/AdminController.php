@@ -34,10 +34,9 @@ class AdminController extends Controller
                         'actions' => ['create', 'index', 'update', 'view', 'test'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function($rule, $action)
-                                           {
-                                                return UserIdentity::isAdmin();
-                                           }
+                        'matchCallback' => function ($rule, $action) {
+                            return UserIdentity::isAdmin();
+                        }
                     ],
                 ],
             ],
@@ -81,18 +80,14 @@ class AdminController extends Controller
     {
         $model = new User();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post())) {
-				$model->created_at = date("Y-m-d");
-				$model->password = md5($model->password);
-				if($model->save()) {
-					return $this->redirect(['view', 'id' => $model->id]);
-				}
-
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->created_at = date("Y-m-d");
+            $model->password = md5($model->password);
+            if ($model->save())
+            {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-        }
-        else
-        {
+        } else {
             $model->loadDefaultValues();
         }
 
@@ -107,19 +102,17 @@ class AdminController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($this->request->isPost && $model->load($this->request->post()))
-        {
-			// Обновить дату обновления аккаунта
-	        $model->updated_at = date("Y-m-d");
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            // Обновить дату обновления аккаунта
+            $model->updated_at = date("Y-m-d");
 
-			// Зашифровать пароль
-			$md5 = md5($model->password);
-	        $model->password = $md5;
+            // Зашифровать пароль
+            $md5 = md5($model->password);
+            $model->password = $md5;
 
-			if($model->save())
-			{
-				return $this->redirect(['view', 'id' => $model->id]);
-			}
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
 
         }
 
@@ -143,7 +136,7 @@ class AdminController extends Controller
      */
     public function actionTest()
     {
-       $model = UserIdentity::isAdmin(Yii::$app->user->id);
+        $model = UserIdentity::isAdmin(Yii::$app->user->id);
         return $this->render('test', ['model' => $model]);
     }
 
@@ -152,8 +145,7 @@ class AdminController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne(['id' => $id])) !== null)
-        {
+        if (($model = User::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
