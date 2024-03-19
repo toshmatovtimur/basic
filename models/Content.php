@@ -70,9 +70,9 @@ class Content extends ActiveRecord
             'text_full' => 'Полный текст',
             'date_update_content' => 'Дата обновления поста',
             'tags' => 'Тэги',
-            'fk_status' => 'Status',
+            'status.status_name' => 'Статус',
             'fk_user_create' => 'Создатель',
-            'user' => 'Создатель',
+            'user.username' => 'Создатель',
         ];
     }
 
@@ -104,8 +104,6 @@ class Content extends ActiveRecord
 
     /**
      * Gets query for [[FkUserCreate]].
-     *
-     * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {

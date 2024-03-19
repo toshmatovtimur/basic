@@ -22,9 +22,7 @@ use yii\web\UploadedFile;
  */
 class PostController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
+
     public function behaviors()
     {
         return array_merge(
@@ -94,6 +92,7 @@ class PostController extends Controller
     }
 
 	/**
+     * Загрузка Контента
 	 * @throws Exception
 	 */
 	public function actionUpload()
@@ -126,11 +125,11 @@ class PostController extends Controller
 
             $model->upload(); // Загружаю файл(ы)
 
+            // Получаю id последнего загруженного поста
             $query=new Query();
             $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
 
             // Вставка в таблицу Foto
-
             foreach ($model->image as $file) {
                 $path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
                 $foto = new Foto();
@@ -155,22 +154,16 @@ class PostController extends Controller
                         return $this->render('upload', compact('model', 'error'));
                     }
                 }
-
-
             }
-
-
-
-
-
-
-
         }
 
         $error = '';
         return $this->render('upload', compact('model', 'error'));
     }
-    
+
+    /**
+     * Удалить контент
+     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
