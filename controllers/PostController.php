@@ -22,9 +22,7 @@ use yii\web\UploadedFile;
  */
 class PostController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
+
     public function behaviors()
     {
         return array_merge(
@@ -94,6 +92,7 @@ class PostController extends Controller
     }
 
 	/**
+     * Загрузка Контента
 	 * @throws Exception
 	 */
 	public function actionUpload()
@@ -122,45 +121,49 @@ class PostController extends Controller
             }
 
             // Загружаю картинку и получаю id последней записи в таблице Content
-            $model->image = UploadedFile::getInstance($model, 'image');
+            $model->image = UploadedFile::getInstances($model, 'image');
 
+            $model->upload(); // Загружаю файл(ы)
+
+            // Получаю id последнего загруженного поста
             $query=new Query();
             $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
 
-            // Создаю директорию и физически сохраняю файл
-            FileHelper::createDirectory("img/post-{$idContent['id']}");
-
-			$path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
-			$model->image->saveAs($path);
-
             // Вставка в таблицу Foto
-            $foto = new Foto();
-            $foto->name_f = "{$model->image->baseName}.{$model->image->extension}";
-            $foto->path_to_foto = $path;
+            foreach ($model->image as $file) {
+                $path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
+                $foto = new Foto();
+                $foto->name_f = "{$file->baseName}.{$file->extension}";
+                $foto->path_to_foto = $path;
+                if (!$foto->save())
+                {
+                    $error = VarDumper::dumpAsString($content->getErrors());
+                    return $this->render('upload', compact('model', 'error'));
+                }
+                else
+                {
+                    $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
 
-            if (!$foto->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
+                    // Вставка в таблицу Contentandfoto
+                    $contentFoto = new Contentandfoto(); // id-шники сохранять
+                    $contentFoto->fk_foto = $idFoto['id'];
+                    $contentFoto->fk_content = $idContent['id'];
+
+                    if (!$contentFoto->save()) {
+                        $error = VarDumper::dumpAsString($content->getErrors());
+                        return $this->render('upload', compact('model', 'error'));
+                    }
+                }
             }
-
-            $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
-
-            // Вставка в таблицу Contentandfoto
-            $contentFoto = new Contentandfoto(); // id-шники сохранять
-            $contentFoto->fk_foto = $idFoto['id'];
-            $contentFoto->fk_content = $idContent['id'];
-
-            if (!$contentFoto->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
-            }
-
         }
 
         $error = '';
         return $this->render('upload', compact('model', 'error'));
     }
-    
+
+    /**
+     * Удалить контент
+     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();

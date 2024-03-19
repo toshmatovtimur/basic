@@ -50,7 +50,7 @@ class Content extends ActiveRecord
             [['alias'], 'string', 'max' => 70],
             [['text_short'], 'string', 'max' => 200],
             [['tags'], 'string', 'max' => 150],
-            [['fk_status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['fk_status' => 'id']],
+            [['fk_status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['fk_status' => 'id']],
             [['fk_user_create'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['fk_user_create' => 'id']],
         ];
     }
@@ -70,8 +70,9 @@ class Content extends ActiveRecord
             'text_full' => 'Полный текст',
             'date_update_content' => 'Дата обновления поста',
             'tags' => 'Тэги',
-            'fk_status' => 'Status',
+            'status.status_name' => 'Статус',
             'fk_user_create' => 'Создатель',
+            'user.username' => 'Создатель',
             'user' => 'Создатель',
         ];
     }
@@ -104,8 +105,6 @@ class Content extends ActiveRecord
 
     /**
      * Gets query for [[FkUserCreate]].
-     *
-     * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {

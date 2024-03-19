@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+	use yii\web\YiiAsset;
+	use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Content $model */
@@ -9,7 +10,7 @@ use yii\widgets\DetailView;
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Contents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="content-view">
 
@@ -32,15 +33,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'header',
             'alias',
-            'date_create',
-            'date_publication',
+            'date_create:datetime',
+            'date_publication:date',
             'text_short',
-            'text_full:ntext',
-            'date_update_content',
+            'text_full:html',
+            'date_update_content:datetime',
             'tags',
             'user.username',
             'status.status_name',
-            '',
+//	        [
+//		        'attribute'=>'photo',
+//		        'value'=> function ($model) {
+//			        $html = '';
+//			        foreach ($images as $img) {
+//				        $html .= Html::img($img, ['width' => '100px', 'height' => '100px'])
+//               }
+//			        return $html;
+//		        },
+//		        'format' => 'raw',
+//	        ],
         ],
     ]) ?>
 

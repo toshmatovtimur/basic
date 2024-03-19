@@ -15,7 +15,7 @@ class ContentSearch extends Content
     public function rules()
     {
         return [
-            [['id', 'fk_status', 'fk_user_create'], 'integer'],
+            [['id'], 'integer'],
             [['header', 'alias', 'user', 'date_create', 'date_publication', 'text_short', 'text_full', 'date_update_content', 'tags'], 'safe'],
         ];
     }
@@ -37,6 +37,10 @@ class ContentSearch extends Content
     {
         $query = Content::find();
 	    $query->joinWith(['user']);
+        // Сюда еще таблицы
+        // Сюда еще таблицы
+
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
