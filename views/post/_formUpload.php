@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'text_short')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'text_full')->widget(TinyMce::className(), [
+    <?= $form->field($model, 'text_full')->widget(TinyMce::class, [
         'options' => ['rows' => 6],
         'language' => 'ru',
         'clientOptions' => [

@@ -51,7 +51,7 @@ class Content extends ActiveRecord
             [['text_short'], 'string', 'max' => 200],
             [['tags'], 'string', 'max' => 150],
             [['fk_status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['fk_status' => 'id']],
-            [['fk_user_create'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['fk_user_create' => 'id']],
+            [['fk_user_create'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['fk_user_create' => 'id']],
         ];
     }
 
@@ -70,6 +70,7 @@ class Content extends ActiveRecord
             'text_full' => 'Полный текст',
             'date_update_content' => 'Дата обновления поста',
             'tags' => 'Тэги',
+            'fk_status' => 'Статус',
             'status.status_name' => 'Статус',
             'fk_user_create' => 'Создатель',
             'user.username' => 'Создатель',

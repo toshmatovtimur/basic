@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\ContentSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Contents';
+$this->title = 'Посты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="content-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Content', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить Пост', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'fk_status',
             //'fk_user_create',
             [
-                'class' => ActionColumn::className(),
+                'class' => ActionColumn::class,
                 'urlCreator' => function ($action, Content $model, $key, $index, $column)
                                 {
                                      return Url::toRoute([$action, 'id' => $model->id]);

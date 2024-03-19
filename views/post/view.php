@@ -7,7 +7,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Content $model */
 
-$this->title = $model->id;
+
+$this->title = $model->header;
 $this->params['breadcrumbs'][] = ['label' => 'Contents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
@@ -43,11 +44,13 @@ YiiAsset::register($this);
             'status.status_name',
 //	        [
 //		        'attribute'=>'photo',
-//		        'value'=> function ($model) {
+//		        'value'=> function ($model)
+//                {
 //			        $html = '';
-//			        foreach ($images as $img) {
-//				        $html .= Html::img($img, ['width' => '100px', 'height' => '100px'])
-//               }
+//			        foreach ($images as $img)
+//                    {
+//				        $html .= Html::img($img, ['width' => '100px', 'height' => '100px']);
+//                    }
 //			        return $html;
 //		        },
 //		        'format' => 'raw',
