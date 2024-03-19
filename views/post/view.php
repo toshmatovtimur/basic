@@ -40,8 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'tags',
             'user.username',
             'status.status_name',
-            'fk_status',
-            'fk_user_create',
+            '',
         ],
     ]) ?>
 
