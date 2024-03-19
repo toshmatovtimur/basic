@@ -124,38 +124,46 @@ class PostController extends Controller
             // Загружаю картинку и получаю id последней записи в таблице Content
             $model->image = UploadedFile::getInstances($model, 'image');
 
-            $model->upload();
+            $model->upload(); // Загружаю файл(ы)
 
-//            $query=new Query();
-//            $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
-//
-//            // Создаю директорию и физически сохраняю файл
-//            FileHelper::createDirectory("img/post-{$idContent['id']}");
-//
-//			$path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
-//			$model->image->saveAs($path);
+            $query=new Query();
+            $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
 
             // Вставка в таблицу Foto
-            $foto = new Foto();
-            $foto->name_f = "{$model->image->baseName}.{$model->image->extension}";
-            $foto->path_to_foto = $path;
 
-            if (!$foto->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
+            foreach ($model->image as $file) {
+                $path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
+                $foto = new Foto();
+                $foto->name_f = "{$file->baseName}.{$file->extension}";
+                $foto->path_to_foto = $path;
+                if (!$foto->save())
+                {
+                    $error = VarDumper::dumpAsString($content->getErrors());
+                    return $this->render('upload', compact('model', 'error'));
+                }
+                else
+                {
+                    $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
+
+                    // Вставка в таблицу Contentandfoto
+                    $contentFoto = new Contentandfoto(); // id-шники сохранять
+                    $contentFoto->fk_foto = $idFoto['id'];
+                    $contentFoto->fk_content = $idContent['id'];
+
+                    if (!$contentFoto->save()) {
+                        $error = VarDumper::dumpAsString($content->getErrors());
+                        return $this->render('upload', compact('model', 'error'));
+                    }
+                }
+
+
             }
 
-            $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
 
-            // Вставка в таблицу Contentandfoto
-            $contentFoto = new Contentandfoto(); // id-шники сохранять
-            $contentFoto->fk_foto = $idFoto['id'];
-            $contentFoto->fk_content = $idContent['id'];
 
-            if (!$contentFoto->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
-            }
+
+
+
 
         }
 
