@@ -37,6 +37,10 @@ class ContentSearch extends Content
     {
         $query = Content::find();
 	    $query->joinWith(['user']);
+        // Сюда еще таблицы
+        // Сюда еще таблицы
+
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

@@ -37,7 +37,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'tags')->textInput() ?>
 
-    <?= $form->field($model, 'image')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+    <?= $form->field($model, 'image[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Загрузить пост', ['class' => 'btn btn-success']) ?>

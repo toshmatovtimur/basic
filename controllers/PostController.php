@@ -122,16 +122,18 @@ class PostController extends Controller
             }
 
             // Загружаю картинку и получаю id последней записи в таблице Content
-            $model->image = UploadedFile::getInstance($model, 'image');
+            $model->image = UploadedFile::getInstances($model, 'image');
 
-            $query=new Query();
-            $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
+            $model->upload();
 
-            // Создаю директорию и физически сохраняю файл
-            FileHelper::createDirectory("img/post-{$idContent['id']}");
-
-			$path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
-			$model->image->saveAs($path);
+//            $query=new Query();
+//            $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
+//
+//            // Создаю директорию и физически сохраняю файл
+//            FileHelper::createDirectory("img/post-{$idContent['id']}");
+//
+//			$path = "img/post-{$idContent['id']}/{$model->image->baseName}.{$model->image->extension}";
+//			$model->image->saveAs($path);
 
             // Вставка в таблицу Foto
             $foto = new Foto();
