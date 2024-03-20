@@ -65,11 +65,14 @@ class PostController extends Controller
     {
         $model = new Content();
 
-        if ($this->request->isPost) {
+        if ($this->request->isPost)
+		{
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
+        }
+		else
+		{
             $model->loadDefaultValues();
         }
 
@@ -93,7 +96,6 @@ class PostController extends Controller
 
 	/**
      * Загрузка Контента
-	 * @throws Exception
 	 */
 	public function actionUpload()
     {
@@ -101,60 +103,80 @@ class PostController extends Controller
 
         // Получаю post запрос, если он есть
         if (Yii::$app->request->isPost) {
-
 	        $model->load(Yii::$app->request->post());
 
-            // Вставка в таблицу Content
-            $content = new Content();
-            $content->header = Yii::$app->request->post("PostForm")["header"];
-            $content->alias = Yii::$app->request->post("PostForm")["alias"];
-            $content->date_create = date("d-m-Y H:i:s");
-            $content->text_short = Yii::$app->request->post("PostForm")["text_short"];
-            $content->text_full = Yii::$app->request->post("PostForm")["text_full"];
-            $content->tags = Yii::$app->request->post("PostForm")["tags"];
-            $content->fk_status = 1; // Загружен
-            $content->fk_user_create = Yii::$app->user->id;
+	        // Вставка в таблицу Content
+	        $content = new Content();
+	        $content->header = Yii::$app->request->post("PostForm")["header"];
+	        $content->alias = Yii::$app->request->post("PostForm")["alias"];
+	        $content->date_create = date("d-m-Y H:i:s");
+	        $content->text_short = Yii::$app->request->post("PostForm")["text_short"];
+	        $content->text_full = Yii::$app->request->post("PostForm")["text_full"];
+	        $content->tags = Yii::$app->request->post("PostForm")["tags"];
+	        $content->fk_status = 1; // Загружен
+	        $content->fk_user_create = Yii::$app->user->id;
 
-            if (!$content->save()) {
-                $error = VarDumper::dumpAsString($content->getErrors());
-                return $this->render('upload', compact('model', 'error'));
-            }
 
-            // Загружаю картинку и получаю id последней записи в таблице Content
-            $model->image = UploadedFile::getInstances($model, 'image');
+	        $db = Yii::$app->getDb();
 
-            $model->upload(); // Загружаю файл(ы)
+	        $transaction = $db->beginTransaction();
 
-            // Получаю id последнего загруженного поста
-            $query=new Query();
-            $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
+	        try
+	        {
 
-            // Вставка в таблицу Foto
-            foreach ($model->image as $file) {
-                $path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
-                $foto = new Foto();
-                $foto->name_f = "{$file->baseName}.{$file->extension}";
-                $foto->path_to_foto = $path;
-                if (!$foto->save())
-                {
-                    $error = VarDumper::dumpAsString($content->getErrors());
-                    return $this->render('upload', compact('model', 'error'));
-                }
-                else
-                {
-                    $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
+		        if (!$content->save()) {
+			        $error = VarDumper::dumpAsString($content->getErrors());
+			        return $this->render('upload', compact('model', 'error'));
+		        }
 
-                    // Вставка в таблицу Contentandfoto
-                    $contentFoto = new Contentandfoto(); // id-шники сохранять
-                    $contentFoto->fk_foto = $idFoto['id'];
-                    $contentFoto->fk_content = $idContent['id'];
+		        // Загружаю картинку и получаю id последней записи в таблице Content
+		        $model->image = UploadedFile::getInstances($model, 'image');
 
-                    if (!$contentFoto->save()) {
-                        $error = VarDumper::dumpAsString($content->getErrors());
-                        return $this->render('upload', compact('model', 'error'));
-                    }
-                }
-            }
+		        $model->upload(); // Загружаю файл(ы)
+
+		        // Получаю id последнего загруженного поста
+		        $query=new Query();
+		        $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
+
+		        // Вставка в таблицу Foto
+		        foreach ($model->image as $file) {
+			        $path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
+			        $foto = new Foto();
+			        $foto->name_f = "{$file->baseName}.{$file->extension}";
+			        $foto->path_to_foto = $path;
+			        if (!$foto->save())
+			        {
+				        $error = VarDumper::dumpAsString($content->getErrors());
+				        return $this->render('upload', compact('model', 'error'));
+			        }
+			        else
+			        {
+				        $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
+
+				        // Вставка в таблицу Contentandfoto
+				        $contentFoto = new Contentandfoto(); // id-шники сохранять
+				        $contentFoto->fk_foto = $idFoto['id'];
+				        $contentFoto->fk_content = $idContent['id'];
+
+				        if (!$contentFoto->save()) {
+					        $error = VarDumper::dumpAsString($content->getErrors());
+					        return $this->render('upload', compact('model', 'error'));
+				        }
+			        }
+		        }
+
+
+		        $transaction->commit();
+	        }
+			catch (\Exception $e)
+			{
+		        $transaction->rollBack();
+	        }
+			catch (\Throwable $e)
+			{
+		        $transaction->rollBack();
+	        }
+
         }
 
         $error = '';

@@ -1,6 +1,7 @@
 <?php
 
-use yii\helpers\Html;
+	use app\models\Foto;
+	use yii\helpers\Html;
 	use yii\web\YiiAsset;
 	use yii\widgets\DetailView;
 
@@ -12,7 +13,7 @@ $this->title = $model->header;
 $this->params['breadcrumbs'][] = ['label' => 'Contents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
-?>
+//?>
 <div class="content-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -28,6 +29,7 @@ YiiAsset::register($this);
         ]) ?>
     </p>
 
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -42,20 +44,26 @@ YiiAsset::register($this);
             'tags',
             'user.username',
             'status.status_name',
-//	        [
-//		        'attribute'=>'photo',
-//		        'value'=> function ($model)
-//                {
-//			        $html = '';
-//			        foreach ($images as $img)
-//                    {
-//				        $html .= Html::img($img, ['width' => '100px', 'height' => '100px']);
-//                    }
-//			        return $html;
-//		        },
-//		        'format' => 'raw',
-//	        ],
         ],
     ]) ?>
 
+
+
 </div>
+
+<?php
+
+	$request = Yii::$app->request;
+	$id = $request->get('id');
+    debug($id);
+
+	$images = Foto::find()
+->select(['path_to_foto'])
+->innerJoinWith('contentandfoto')
+ ->where(['contentandfoto.fk_content' => 1])
+->all();
+
+
+foreach ($images as $item) {
+echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
+}
