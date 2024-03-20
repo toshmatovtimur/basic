@@ -2,26 +2,34 @@
 
 	use app\models\Content;
 	use app\models\Contentandfoto;
-
-
-//	$test = Content::find()
-//			->joinWith('contentandfoto')
-//			->where(['order.status' => Order::STATUS_ACTIVE])
-//			->all();
-
-	$model = Contentandfoto::find()
-		->innerJoinWith('content', 'content.id = contentandfoto.fk_content')
-		->innerJoinWith('foto', 'foto.id = contentandfoto.fk_foto')
-		->all();
-	debug($model);
-
-foreach(Images::model()->findAll() as $image)
-{
-    echo CHtml::image('/images/upload/'.$image->filename);
-}
+	use app\models\Foto;
+	use yii\helpers\Html;
 
 
 
+	$model = Foto::find()
+		->select(['path_to_foto'])
+		->innerJoinWith('contentandfoto')
+       // ->where(['contentandfoto.fk_content' => 1])
+        ->all();
+
+    if($model !== null) {
+	    foreach ($model as $item) {
+		    echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
+	    }
+    }
+
+
+
+    //debug($model);
+
+//foreach(Images::model()->findAll() as $image)
+//{
+//    echo Html::img('/images/upload/'.$image->filename);
+//}
+//
+//	Html::img(Yii::getAlias('@web') . '/tpu.jpg', ['alt' => 'image', 'width' => 600]); ?>
+<!---->
 
 
 

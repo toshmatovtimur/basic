@@ -51,7 +51,7 @@ class Contentandfoto extends \yii\db\ActiveRecord
      */
     public function getContent()
     {
-        return $this->hasOne(Content::className(), ['id' => 'fk_content']);
+        return $this->hasOne(Content::class, ['id' => 'fk_content']);
     }
 
     /**
@@ -59,6 +59,6 @@ class Contentandfoto extends \yii\db\ActiveRecord
      */
     public function getFoto()
     {
-        return $this->hasOne(Foto::className(), ['id' => 'fk_foto']);
+        return $this->hasOne(Foto::class, ['id' => 'fk_foto']);
     }
 }
