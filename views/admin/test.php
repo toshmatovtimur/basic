@@ -15,6 +15,11 @@
 		->all();
 	debug($model);
 
+foreach(Images::model()->findAll() as $image)
+{
+    echo CHtml::image('/images/upload/'.$image->filename);
+}
+
 
 
 

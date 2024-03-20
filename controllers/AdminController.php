@@ -31,7 +31,7 @@ class AdminController extends Controller
                 'only' => ['create', 'index', 'update', 'view', 'test'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'index', 'update', 'view', 'test'],
+                        'actions' => ['create', 'index', 'update', 'view'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -41,7 +41,7 @@ class AdminController extends Controller
 	                [
 		                'actions' => ['test'],
 		                'allow' => true,
-		                'roles' => ['?'],
+		                'roles' => ['@'],
 	                ],
                 ],
             ],
