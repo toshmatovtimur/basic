@@ -73,10 +73,13 @@ class PostForm extends Model
 
 		// Создаю директорию и физически сохраняю файл
 		FileHelper::createDirectory("img/post-{$idContent['id']}");
-		foreach ($this->image as $file) {
-			$path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
-			$file->saveAs($path);
+		if ($this->validate()) {
+			foreach ($this->image as $file) {
+				$path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
+				$file->saveAs($path);
+			}
 		}
+
 	}
 
 }

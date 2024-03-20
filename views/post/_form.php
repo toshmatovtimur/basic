@@ -2,7 +2,7 @@
 
 	use dosamigos\tinymce\TinyMce;
 	use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+    use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\Content $model */
@@ -36,6 +36,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'fk_status')->dropDownList(['1' => 'Создан', '2' => 'Опубликован', '3' => 'Архивирован',]) ?>
 
+<!--	--><?php //= $form->field($model, 'image[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

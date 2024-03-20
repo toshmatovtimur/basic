@@ -56,11 +56,20 @@ class PostController extends Controller
     
     public function actionView($id)
     {
+	    $images = Foto::find()->select(['path_to_foto'])
+		    ->innerJoinWith('contentandfoto')
+		    ->where(['contentandfoto.fk_content' => $id])
+		    ->all();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'images' => $images,
         ]);
     }
-    
+
+	/**
+	 * Не нужен пока что, создание поста, есть уже добавление поста
+	 */
     public function actionCreate()
     {
         $model = new Content();
@@ -80,14 +89,20 @@ class PostController extends Controller
             'model' => $model,
         ]);
     }
-    
+
+	/**
+	 * Обновление поста
+	 */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+
 
         return $this->render('update', [
             'model' => $model,
