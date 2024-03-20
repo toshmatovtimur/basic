@@ -54,7 +54,10 @@ class UserIdentity extends User implements IdentityInterface
 
     public function validatePassword($password)
     {
-        return $this->password === md5($password);
+        // Подключаю файл php с массивом
+        $params = require '../config/params.php';
+
+        return $this->password === md5($password) . $params['sol'];
     }
 
 }

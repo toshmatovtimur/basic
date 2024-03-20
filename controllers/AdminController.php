@@ -87,7 +87,10 @@ class AdminController extends Controller
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $model->created_at = date("Y-m-d");
-            $model->password = md5($model->password);
+
+            // Подключаю файл php с массивом
+            $params = require '../config/params.php';
+            $model->password = md5($model->password) . $params['sol'];
             if ($model->save())
             {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -113,7 +116,10 @@ class AdminController extends Controller
 
             // Зашифровать пароль
             $md5 = md5($model->password);
-            $model->password = $md5;
+
+            // Подключаю файл php с массивом
+            $params = require '../config/params.php';
+            $model->password = $md5 . $params['sol'];
 
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);

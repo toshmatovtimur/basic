@@ -122,7 +122,11 @@ class SiteController extends Controller
             $user->birthday = Yii::$app->request->post("SignupForm")["birthday"];
             $user->sex = Yii::$app->request->post("SignupForm")["sex"];
             $user->username = Yii::$app->request->post("SignupForm")["username"];
-            $user->password = md5(Yii::$app->request->post('SignupForm')["password"]);
+
+            // Подключаю файл php с массивом
+            $params = require '../config/params.php';
+
+            $user->password = md5(Yii::$app->request->post('SignupForm')["password"]) . $params['sol'];
             $user->created_at = date("Y-m-d");
             $user->fk_role = 1;
             $user->status = 10;
