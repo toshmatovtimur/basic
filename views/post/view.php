@@ -51,7 +51,14 @@ YiiAsset::register($this);
 
 </div>
 
+<h4>Изображения</h4>
+
 <?php
-     foreach ($images as $item) {
-         echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
-     }
+
+    if($images) {
+        foreach ($images as $item) {
+            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
+        }
+    } else {
+        echo 'Изображений нет.';
+    }

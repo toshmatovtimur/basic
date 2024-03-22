@@ -66,19 +66,22 @@ class PostForm extends Model
             ];
     }
 
-	public function upload()
+    /**
+     * @throws Exception
+     */
+    public function upload()
 	{
 		$query=new Query();
 		$idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
 
 		// Создаю директорию и физически сохраняю файл
 		FileHelper::createDirectory("img/post-{$idContent['id']}");
-		if ($this->validate()) {
+
 			foreach ($this->image as $file) {
 				$path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
 				$file->saveAs($path);
 			}
-		}
+
 
 	}
 
