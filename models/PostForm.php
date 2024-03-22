@@ -82,7 +82,6 @@ class PostForm extends Model
 				$file->saveAs($path);
 			}
 
-
 	}
 
 }

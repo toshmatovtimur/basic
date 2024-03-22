@@ -6,7 +6,7 @@ use dosamigos\tinymce\TinyMce;
     use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\PostForm $model */
+/** @var app\models\Content $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
