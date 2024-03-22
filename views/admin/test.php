@@ -5,16 +5,37 @@
 	use app\models\Foto;
 	use yii\helpers\Html;
 
-	$foto = Contentandfoto::find()
-		->select(['fk_foto'])
-		->where(['fk_content' => 30])
-		->all();
+//	$foto = Contentandfoto::find()
+//		->select(['fk_foto'])
+//		->where(['fk_content' => 30])
+//		->all();
+//
+//	foreach ($foto as $item) {
+//		echo $item->fk_foto;
+//		echo '<br>';
+//	}
 
-	foreach ($foto as $item) {
-		echo $item->fk_foto;
-		echo '<br>';
-	}
 
+//	$foto = Contentandfoto::find()
+//		->select(['fk_foto'])
+//		->where(['contentandfoto.fk_content' => 36])
+//		->all();
+//
+//	foreach ($foto as $item) {
+//		echo $item->fk_foto;
+//		echo '<br>';
+//	}
+
+
+
+
+
+
+
+//	$path = "img/post-34";
+//	if (is_dir($path)) {
+//		rmdir($path);
+//	}
 
 
 
@@ -33,11 +54,3 @@
 //        echo 'Картинок нету';
 //    }
 //
-
-
-
-
-
-
-
-

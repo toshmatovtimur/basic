@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="post-form">
+<div class="post-form upload">
 
     <?= $error ?>
 

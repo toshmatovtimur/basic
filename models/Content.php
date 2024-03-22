@@ -32,6 +32,12 @@ use yii\web\UploadedFile;
  */
 class Content extends ActiveRecord
 {
+
+
+	/**
+	 * @var UploadedFile[]
+	 */
+	public $imageContent;
     /**
      * Имя таблицы
      */
@@ -54,6 +60,7 @@ class Content extends ActiveRecord
             [['alias'], 'string', 'max' => 70],
             [['text_short'], 'string', 'max' => 200],
             [['tags'], 'string', 'max' => 150],
+	        [['imageContent'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 10],
             [['fk_status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['fk_status' => 'id']],
             [['fk_user_create'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['fk_user_create' => 'id']],
         ];

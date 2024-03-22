@@ -106,59 +106,70 @@ class PostController extends Controller
 	        try
 	        {
 				$model->date_update_content = date("d-m-Y H:i:s");
-
+				$model->imageContent = null;
 	            if(!$model->save()) {
 					$error = VarDumper::dumpAsString($model->getErrors());
-					return $this->render('update', compact('model', 'error'));
+					return $this->render('update', compact('model', 'error',));
 				}
 
 		        // Загружаю картинку(и)
-		        $model->image = UploadedFile::getInstances($model, 'image');
+		            $model->imageContent = UploadedFile::getInstances($model, 'imageContent');
 
-				if ($model) {
 
 					#region Удаление фоток из БД
-					$foto = Contentandfoto::find()
-						->select(['path_to_foto'])
-						->innerJoinWith('contentandfoto')
-						->where(['contentandfoto.fk_content' => $model->id])
-						->all();
+		            $files = [];
+		            $foto = Contentandfoto::find()
+			                ->select(['fk_foto'])
+			                ->where(['contentandfoto.fk_content' => $model->id])
+			                ->all();
+
+		            Contentandfoto::deleteAll(['fk_content' => $model->id]);
 
 					foreach ($foto as $item) {
 						$fotka = Foto::findOne($item->fk_foto);
+						$files[] = $fotka->path_to_foto;
 						$fotka->delete();
 					}
 
-					Contentandfoto::deleteAll(['fk_content' => $model->id]);
+		            // Удаляю директорию со старыми фото на чистом PHP - не выполняется
+		            $path = "img/post-{$model->id}";
+		            if(!count(scandir($path))==2) {
+			            if($files != null) {
+				            foreach ($files as $item) {
+					            unlink($item);
+				            }
+			            }
+		            }
+
+					if (is_dir($path)) {
+			             rmdir($path);
+					}
+
 					#endregion
 
-					// Удаляю директорию со старыми фото на чистом PHP
-					$path = "img/post-{$model->id}";
-					if (is_dir($path)) {
-						rmdir($path);
-					}
 
 					// Сохраняю фотки физически в новую старую папку
 					// Создаю директорию и физически сохраняю файл
 					FileHelper::createDirectory("img/post-{$model->id}");
 
-					foreach ($this->image as $file) {
-						$path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
+					// До сюда все хорошо
+					foreach ($model->imageContent as $file) {
+						$path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
 						$file->saveAs($path);
 					}
 
 					$query=new Query();
 
 					// Вставка в таблицу Foto
-					foreach ($model->image as $file) {
+					foreach ($model->imageContent as $file) {
 						$path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
 						$foto = new Foto();
 						$foto->name_f = "{$file->baseName}.{$file->extension}";
 						$foto->path_to_foto = $path;
 						if (!$foto->save())
 						{
-							$error = VarDumper::dumpAsString($foto->getErrors());
-							return $this->render('upload', compact('model', 'error'));
+							$error = '';
+							return $this->render('upload', compact('model', 'error',));
 						}
 						else
 						{
@@ -167,15 +178,15 @@ class PostController extends Controller
 							// Вставка в таблицу Contentandfoto
 							$contentFoto = new Contentandfoto(); // id-шники сохранять
 							$contentFoto->fk_foto = $idFoto['id'];
-							$contentFoto->fk_content = $idContent['id'];
+							$contentFoto->fk_content = $model->id;
 
 							if (!$contentFoto->save()) {
-								$error = VarDumper::dumpAsString($content->getErrors());
-								return $this->render('upload', compact('model', 'error'));
+								$error = VarDumper::dumpAsString($contentFoto->getErrors());
+								return $this->render('upload', compact('model', 'error',));
 							}
 						}
 					}
-				}
+
 
 		        $transaction->commit();
 	        }
@@ -191,8 +202,9 @@ class PostController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+
 		$error = '';
-        return $this->render('update', compact('model', 'error'));
+        return $this->render('update', compact('model', 'error',));
     }
 
 	/**

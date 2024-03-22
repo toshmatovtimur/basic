@@ -37,7 +37,7 @@ use dosamigos\tinymce\TinyMce;
 
     <?= $form->field($model, 'fk_status')->dropDownList(['1' => 'Создан', '2' => 'Опубликован', '3' => 'Архивирован',]) ?>
 
-<!--    --><?php //= $form->field($model, 'image[]')->fileInput(['multiple' => true, 'accept' => '@web/img/*']) ?>
+    <?= $form->field($model, 'imageContent[]')->fileInput(['multiple' => true, 'accept' => '@web/img/*']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
