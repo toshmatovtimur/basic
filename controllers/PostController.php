@@ -112,28 +112,12 @@ class PostController extends Controller
 					return $this->render('update', compact('model', 'error'));
 				}
 
-		        // Загружаю картинку и получаю id последней записи в таблице Content
+		        // Загружаю картинку(и)
 		        $model->image = UploadedFile::getInstances($model, 'image');
-
-		        $foto = Foto::find()
-			        ->select(['fk_foto'])
-			        ->where(['fk_content' => $model->id])
-			        ->all();
-
-		        $foto = Contentandfoto::find()
-			        ->select(['path_to_foto'])
-			        ->innerJoinWith('contentandfoto')
-			        ->where(['contentandfoto.fk_content' => $model->id])
-			        ->all();
-
-
-
-
-
 
 				if ($model) {
 
-					#region Удаление фоток
+					#region Удаление фоток из БД
 					$foto = Contentandfoto::find()
 						->select(['path_to_foto'])
 						->innerJoinWith('contentandfoto')
@@ -147,39 +131,51 @@ class PostController extends Controller
 
 					Contentandfoto::deleteAll(['fk_content' => $model->id]);
 					#endregion
-					
 
-
-
-
-					// Если загружаю картинки, то старые удаляю на чистом PHP
+					// Удаляю директорию со старыми фото на чистом PHP
 					$path = "img/post-{$model->id}";
 					if (is_dir($path)) {
 						rmdir($path);
 					}
 
-					//$foto = Foto::findOne(100);
+					// Сохраняю фотки физически в новую старую папку
+					// Создаю директорию и физически сохраняю файл
+					FileHelper::createDirectory("img/post-{$model->id}");
 
+					foreach ($this->image as $file) {
+						$path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
+						$file->saveAs($path);
+					}
 
+					$query=new Query();
 
+					// Вставка в таблицу Foto
+					foreach ($model->image as $file) {
+						$path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
+						$foto = new Foto();
+						$foto->name_f = "{$file->baseName}.{$file->extension}";
+						$foto->path_to_foto = $path;
+						if (!$foto->save())
+						{
+							$error = VarDumper::dumpAsString($foto->getErrors());
+							return $this->render('upload', compact('model', 'error'));
+						}
+						else
+						{
+							$idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
 
+							// Вставка в таблицу Contentandfoto
+							$contentFoto = new Contentandfoto(); // id-шники сохранять
+							$contentFoto->fk_foto = $idFoto['id'];
+							$contentFoto->fk_content = $idContent['id'];
 
-				} else {
-					return ;
+							if (!$contentFoto->save()) {
+								$error = VarDumper::dumpAsString($content->getErrors());
+								return $this->render('upload', compact('model', 'error'));
+							}
+						}
+					}
 				}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		        $transaction->commit();
 	        }
@@ -191,8 +187,6 @@ class PostController extends Controller
 	        {
 		        $transaction->rollBack();
 	        }
-
-
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -253,7 +247,7 @@ class PostController extends Controller
 			        $foto->path_to_foto = $path;
 			        if (!$foto->save())
 			        {
-				        $error = VarDumper::dumpAsString($content->getErrors());
+				        $error = VarDumper::dumpAsString($foto->getErrors());
 				        return $this->render('upload', compact('model', 'error'));
 			        }
 			        else
@@ -266,7 +260,7 @@ class PostController extends Controller
 				        $contentFoto->fk_content = $idContent['id'];
 
 				        if (!$contentFoto->save()) {
-					        $error = VarDumper::dumpAsString($content->getErrors());
+					        $error = VarDumper::dumpAsString($contentFoto->getErrors());
 					        return $this->render('upload', compact('model', 'error'));
 				        }
 			        }

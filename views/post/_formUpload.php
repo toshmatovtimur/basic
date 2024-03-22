@@ -1,7 +1,6 @@
 <?php
 
 use dosamigos\tinymce\TinyMce;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 

@@ -32,11 +32,6 @@ use yii\web\UploadedFile;
  */
 class Content extends ActiveRecord
 {
-
-    /**
-     * @var UploadedFile[]
-     */
-    public $image;
     /**
      * Имя таблицы
      */
@@ -59,7 +54,6 @@ class Content extends ActiveRecord
             [['alias'], 'string', 'max' => 70],
             [['text_short'], 'string', 'max' => 200],
             [['tags'], 'string', 'max' => 150],
-            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 10],
             [['fk_status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['fk_status' => 'id']],
             [['fk_user_create'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['fk_user_create' => 'id']],
         ];
@@ -86,24 +80,6 @@ class Content extends ActiveRecord
             'user.username' => 'Создатель',
             'user' => 'Создатель',
         ];
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function upload()
-    {
-        $query=new Query();
-        $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
-
-        // Создаю директорию и физически сохраняю файл
-        FileHelper::createDirectory("img/post-{$idContent['id']}");
-
-        foreach ($this->image as $file) {
-            $path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
-            $file->saveAs($path);
-        }
-
     }
 
     #region Связи с таблицами
