@@ -5,22 +5,34 @@
 	use app\models\Foto;
 	use yii\helpers\Html;
 
+	$foto = Contentandfoto::find()
+		->select(['fk_foto'])
+		->where(['fk_content' => 30])
+		->all();
+
+	foreach ($foto as $item) {
+		echo $item->fk_foto;
+		echo '<br>';
+	}
 
 
-	$model = Foto::find()
-		->select(['path_to_foto'])
-		->innerJoinWith('contentandfoto')
-        ->where(['contentandfoto.fk_content' => $id])
-        ->all();
 
-    if ($model) {
-        foreach ($model as $item) {
-            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
-        }
-    } else {
-        echo 'Картинок нету';
-    }
 
+
+//	$model = Foto::find()
+//		->select(['path_to_foto'])
+//		->innerJoinWith('contentandfoto')
+//        ->where(['contentandfoto.fk_content' => $id])
+//        ->all();
+//
+//    if ($model) {
+//        foreach ($model as $item) {
+//            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
+//        }
+//    } else {
+//        echo 'Картинок нету';
+//    }
+//
 
 
 

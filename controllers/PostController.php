@@ -97,19 +97,108 @@ class PostController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
 
-            
+	        $db = Yii::$app->getDb();
 
+	        $transaction = $db->beginTransaction();
+
+	        try
+	        {
+				$model->date_update_content = date("d-m-Y H:i:s");
+
+	            if(!$model->save()) {
+					$error = VarDumper::dumpAsString($model->getErrors());
+					return $this->render('update', compact('model', 'error'));
+				}
+
+		        // Загружаю картинку и получаю id последней записи в таблице Content
+		        $model->image = UploadedFile::getInstances($model, 'image');
+
+		        $foto = Foto::find()
+			        ->select(['fk_foto'])
+			        ->where(['fk_content' => $model->id])
+			        ->all();
+
+		        $foto = Contentandfoto::find()
+			        ->select(['path_to_foto'])
+			        ->innerJoinWith('contentandfoto')
+			        ->where(['contentandfoto.fk_content' => $model->id])
+			        ->all();
+
+
+
+
+
+
+				if ($model) {
+
+					#region Удаление фоток
+					$foto = Contentandfoto::find()
+						->select(['path_to_foto'])
+						->innerJoinWith('contentandfoto')
+						->where(['contentandfoto.fk_content' => $model->id])
+						->all();
+
+					foreach ($foto as $item) {
+						$fotka = Foto::findOne($item->fk_foto);
+						$fotka->delete();
+					}
+
+					Contentandfoto::deleteAll(['fk_content' => $model->id]);
+					#endregion
+					
+
+
+
+
+					// Если загружаю картинки, то старые удаляю на чистом PHP
+					$path = "img/post-{$model->id}";
+					if (is_dir($path)) {
+						rmdir($path);
+					}
+
+					//$foto = Foto::findOne(100);
+
+
+
+
+
+				} else {
+					return ;
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		        $transaction->commit();
+	        }
+	        catch (\Exception $e)
+	        {
+		        $transaction->rollBack();
+	        }
+	        catch (\Throwable $e)
+	        {
+		        $transaction->rollBack();
+	        }
 
 
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+		$error = '';
+        return $this->render('update', compact('model', 'error'));
     }
 
 	/**
@@ -200,7 +289,6 @@ class PostController extends Controller
         $error = '';
         return $this->render('upload', compact('model', 'error'));
     }
-
     /**
      * Удалить контент
      */

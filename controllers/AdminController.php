@@ -147,8 +147,8 @@ class AdminController extends Controller
      */
     public function actionTest()
     {
-        $model = UserIdentity::isAdmin(Yii::$app->user->id);
-        return $this->render('test', ['model' => $model]);
+        //$model = UserIdentity::isAdmin(Yii::$app->user->id);
+        return $this->render('test');
     }
 
 	public function actionAdm()
