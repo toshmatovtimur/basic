@@ -71,16 +71,6 @@ class SiteController extends Controller
                                            ->where(['fk_status' => 2]) // Опубликован (Активен)
                                            ->asArray()->all();
 
-//    if ($model) {
-//        foreach ($model as $item) {
-//            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
-//        }
-//    } else {
-//        echo 'Картинок нету';
-//    }
-
-
-
         return $this->render('index', [
             'model' => $model,
             'posts' => $posts,
