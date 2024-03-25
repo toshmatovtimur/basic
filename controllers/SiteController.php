@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Contentandfoto;
 use app\models\PostForm;
 use app\models\SignupForm;
 use app\models\User;
@@ -59,13 +60,31 @@ class SiteController extends Controller
     }
 
     /**
-     * go homePage-index-SiteController
+     * Работаем
      */
     public function actionIndex()
     {
         $model = new PostForm();
+
+	    	$posts = Contentandfoto::find()
+										   ->innerJoinWith('content')
+										   ->innerJoinWith('foto')
+                                           ->where(['fk_status' => 2]) // Опубликован (Активен)
+                                           ->asArray()->all();
+
+//    if ($model) {
+//        foreach ($model as $item) {
+//            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
+//        }
+//    } else {
+//        echo 'Картинок нету';
+//    }
+
+
+
         return $this->render('index', [
             'model' => $model,
+            'posts' => $posts,
         ]);
     }
 
