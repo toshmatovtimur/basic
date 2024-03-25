@@ -133,7 +133,7 @@ class PostController extends Controller
 
 		            // Удаляю директорию со старыми фото на чистом PHP
 		            $path = "img/post-{$model->id}";
-		            if(!count(scandir($path))==2) {
+		            if(count(scandir($path)) !== 2) {
 			            if($files != null) {
 				            foreach ($files as $item) {
 					            unlink($item);
