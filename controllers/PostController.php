@@ -131,7 +131,7 @@ class PostController extends Controller
 						$fotka->delete();
 					}
 
-		            // Удаляю директорию со старыми фото на чистом PHP - не выполняется
+		            // Удаляю директорию со старыми фото на чистом PHP
 		            $path = "img/post-{$model->id}";
 		            if(!count(scandir($path))==2) {
 			            if($files != null) {
@@ -152,7 +152,6 @@ class PostController extends Controller
 					// Создаю директорию и физически сохраняю файл
 					FileHelper::createDirectory("img/post-{$model->id}");
 
-					// До сюда все хорошо
 					foreach ($model->imageContent as $file) {
 						$path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
 						$file->saveAs($path);
