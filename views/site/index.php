@@ -9,15 +9,12 @@
 ?>
 
     <?php
-//        if (!empty($posts)) {
-//            foreach ($posts as $post) {
-//                echo $post['fk_foto'];
-////	            echo Html::img('@web/' . $post->path_to_foto, ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
-//            }
-//        }
-    debug($posts);
-
-
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                echo '<br>';
+	            echo Html::img('@web/' . $post['foto']['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
+            }
+        }
 
     ?>
 

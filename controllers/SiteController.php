@@ -66,8 +66,7 @@ class SiteController extends Controller
     {
         $model = new PostForm();
 
-	    	$posts = Contentandfoto::find()
-										   ->innerJoinWith('content')
+	    	$posts = Contentandfoto::find()->innerJoinWith('content')
 										   ->innerJoinWith('foto')
                                            ->where(['fk_status' => 2]) // Опубликован (Активен)
                                            ->asArray()->all();
