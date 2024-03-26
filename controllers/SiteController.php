@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Content;
 use app\models\Contentandfoto;
 use app\models\PostForm;
 use app\models\SignupForm;
@@ -9,6 +10,7 @@ use app\models\User;
 use reketaka\comments\widgets\CommentFormWidget;
 use Yii;
 use yii\data\Pagination;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
@@ -67,13 +69,21 @@ class SiteController extends Controller
     public function actionIndex()
     {
 
-	    $posts = Contentandfoto::find()->innerJoinWith('content')
+		$contents = Content::find()->select(['id'])->asArray()->all();
+
+	    $posts = Contentandfoto::find()->select(['fk_foto', 'fk_content', 'header', 'alias', 'text_short', 'fk_status', 'path_to_foto'])
+		                               ->innerJoinWith('content')
 		                               ->innerJoinWith('foto')
 		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
-		                               ->asArray()->all();
+		                               ->andWhere(['in', 'fk_content', $contents]) // IN
+		                               ->asArray()
+	                                   ->all();
+
+
 
         return $this->render('index', [
             'posts' => $posts,
+            'contents' => $contents,
         ]);
     }
 

@@ -48,6 +48,6 @@ class Foto extends \yii\db\ActiveRecord
      */
     public function getContentandfoto()
     {
-        return $this->hasMany(Contentandfoto::className(), ['fk_foto' => 'id']);
+        return $this->hasMany(Contentandfoto::class, ['fk_foto' => 'id']);
     }
 }
