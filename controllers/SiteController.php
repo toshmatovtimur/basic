@@ -8,6 +8,7 @@ use app\models\SignupForm;
 use app\models\User;
 use reketaka\comments\widgets\CommentFormWidget;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
@@ -65,19 +66,27 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $model = new PostForm();
-        $comment = new CommentFormWidget();
-	    	$posts = Contentandfoto::find()->innerJoinWith('content')
-										   ->innerJoinWith('foto')
-                                           ->where(['fk_status' => 2]) // Опубликован (Активен)
-                                           ->asArray()->all();
+
+	    $posts = Contentandfoto::find()->innerJoinWith('content')
+		    ->innerJoinWith('foto')
+		    ->where(['fk_status' => 2]) // Опубликован (Активен)
+		    ->where(['content.id' => 34]) // Одну запись
+		    ->asArray()->all();
 
         return $this->render('index', [
-            'model' => $model,
             'posts' => $posts,
-            'comment' => $comment,
         ]);
     }
+
+	/***
+	 * Просмотр поста
+	 */
+	public function actionView($id)
+	{
+		return $this->render('view', [
+			'id' => $id,
+		]);
+	}
 
     /**
      * Авторизация

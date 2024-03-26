@@ -2,27 +2,29 @@
 
 /** @var yii\web\View $this */
 
- use reketaka\comments\widgets\CommentListWidget;
  use yii\bootstrap5\ActiveForm;
  use yii\helpers\Html;
 
  $this->title = 'Корпоративный сайт';
+ $image = null;
 ?>
 
-    <?php
-//        if (!empty($posts)) {
-//            foreach ($posts as $post) {
-//                echo '<br>';
-//	            echo Html::img('@web/' . $post['foto']['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
-//            }
-//        }
-
-    ?>
-
- <?=CommentListWidget::widget([
-     'comment' => $comment
- ])?>
-
+    <div style="right: auto">
+	    <?php if (!empty($posts)): ?>
+		    <?php foreach ($posts as $post): ?>
+                <div class="content-grid">
+                    <div class="content-grid-info">
+                        <?php if($image === null) { $image = '@web/' . $post['foto']['path_to_foto'];} ?>
+					    <?= Html::img($image, ['alt' => 'фотка', 'width' => 600, 'class' => 'img-responsive']);?>
+                        <div class="post-info">
+                            <h4><a href="<?= yii\helpers\Url::to(['view', 'id' => $post['content']['id']]) ?>"><?= $post['content']['header'] ?></a></h4>
+                            <p><?= $post['content']['text_short'] ?></p>
+                        </div>
+                    </div>
+                </div>
+		    <?php endforeach; ?>
+	    <?php endif; ?>
+    </div>
 
 
 

@@ -294,6 +294,7 @@ class PostController extends Controller
         $error = '';
         return $this->render('upload', compact('model', 'error'));
     }
+
     /**
      * Удалить контент
      */
