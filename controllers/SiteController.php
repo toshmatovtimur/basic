@@ -68,10 +68,9 @@ class SiteController extends Controller
     {
 
 	    $posts = Contentandfoto::find()->innerJoinWith('content')
-		    ->innerJoinWith('foto')
-		    ->where(['fk_status' => 2]) // Опубликован (Активен)
-		    ->where(['content.id' => 34]) // Одну запись
-		    ->asArray()->all();
+		                               ->innerJoinWith('foto')
+		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
+		                               ->asArray()->all();
 
         return $this->render('index', [
             'posts' => $posts,
