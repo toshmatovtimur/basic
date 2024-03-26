@@ -6,6 +6,7 @@ use app\models\Contentandfoto;
 use app\models\PostForm;
 use app\models\SignupForm;
 use app\models\User;
+use reketaka\comments\widgets\CommentFormWidget;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
@@ -65,7 +66,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $model = new PostForm();
-
+        $comment = new CommentFormWidget();
 	    	$posts = Contentandfoto::find()->innerJoinWith('content')
 										   ->innerJoinWith('foto')
                                            ->where(['fk_status' => 2]) // Опубликован (Активен)
@@ -74,6 +75,7 @@ class SiteController extends Controller
         return $this->render('index', [
             'model' => $model,
             'posts' => $posts,
+            'comment' => $comment,
         ]);
     }
 

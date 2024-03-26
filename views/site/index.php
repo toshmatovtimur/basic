@@ -2,6 +2,7 @@
 
 /** @var yii\web\View $this */
 
+ use reketaka\comments\widgets\CommentListWidget;
  use yii\bootstrap5\ActiveForm;
  use yii\helpers\Html;
 
@@ -9,14 +10,18 @@
 ?>
 
     <?php
-        if (!empty($posts)) {
-            foreach ($posts as $post) {
-                echo '<br>';
-	            echo Html::img('@web/' . $post['foto']['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
-            }
-        }
+//        if (!empty($posts)) {
+//            foreach ($posts as $post) {
+//                echo '<br>';
+//	            echo Html::img('@web/' . $post['foto']['path_to_foto'], ['alt' => 'фотка', 'width' => 300, 'class' => 'img-responsive']);
+//            }
+//        }
 
     ?>
+
+ <?=CommentListWidget::widget([
+     'comment' => $comment
+ ])?>
 
 
 
