@@ -21,6 +21,7 @@ use yii\web\UploadedFile;
  * @property string|null $text_full
  * @property string|null $date_update_content
  * @property string|null $tags
+ * @property string|null $mainImage
  * @property int|null $fk_status
  * @property int|null $fk_user_create
  *
@@ -52,7 +53,7 @@ class Content extends ActiveRecord
     public function rules()
     {
         return [
-            [['date_create', 'date_publication', 'date_update_content'], 'safe'],
+            [['date_create', 'date_publication', 'date_update_content', 'mainImage'], 'safe'],
             [['text_full'], 'string'],
             [['fk_status', 'fk_user_create'], 'default', 'value' => null],
             [['fk_status', 'fk_user_create'], 'integer'],
@@ -86,6 +87,7 @@ class Content extends ActiveRecord
             'fk_user_create' => 'Создатель',
             'user.username' => 'Создатель',
             'user' => 'Создатель',
+            'mainImage' => 'Картинка',
         ];
     }
 
@@ -96,7 +98,7 @@ class Content extends ActiveRecord
      */
     public function getComment()
     {
-        return $this->hasMany(Comment::className(), ['fk_content' => 'id']);
+        return $this->hasMany(Comment::class, ['fk_content' => 'id']);
     }
 
     /**
@@ -104,7 +106,7 @@ class Content extends ActiveRecord
      */
     public function getContentandfoto()
     {
-        return $this->hasMany(Contentandfoto::className(), ['fk_content' => 'id']);
+        return $this->hasMany(Contentandfoto::class, ['fk_content' => 'id']);
     }
 
     /**
@@ -112,7 +114,7 @@ class Content extends ActiveRecord
      */
     public function getStatus()
     {
-        return $this->hasOne(Status::className(), ['id' => 'fk_status']);
+        return $this->hasOne(Status::class, ['id' => 'fk_status']);
     }
 
     /**
@@ -120,7 +122,7 @@ class Content extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'fk_user_create']);
+        return $this->hasOne(User::class, ['id' => 'fk_user_create']);
     }
 
     /**
@@ -130,7 +132,7 @@ class Content extends ActiveRecord
      */
     public function getView()
     {
-        return $this->hasMany(View::className(), ['fk_content' => 'id']);
+        return $this->hasMany(View::class, ['fk_content' => 'id']);
     }
 
     #endregion

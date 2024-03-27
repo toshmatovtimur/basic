@@ -115,7 +115,6 @@ class PostController extends Controller
 		        // Загружаю картинку(и)
 		            $model->imageContent = UploadedFile::getInstances($model, 'imageContent');
 
-
 					#region Удаление фоток из БД
 		            $files = [];
 		            $foto = Contentandfoto::find()
@@ -124,6 +123,7 @@ class PostController extends Controller
 			                ->all();
 
 		            Contentandfoto::deleteAll(['fk_content' => $model->id]);
+
 
 					foreach ($foto as $item) {
 						$fotka = Foto::findOne($item->fk_foto);
@@ -186,6 +186,10 @@ class PostController extends Controller
 						}
 					}
 
+					// Добавление главной фотки в Content
+		            $model = $this->findModel($id);
+		            $model->mainImage = $files[0];
+					$model->save();
 
 		        $transaction->commit();
 	        }

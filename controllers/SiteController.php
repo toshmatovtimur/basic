@@ -68,22 +68,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
-		$contents = Content::find()->select(['id'])->asArray()->all();
-
-	    $posts = Contentandfoto::find()->select(['fk_foto', 'fk_content', 'header', 'alias', 'text_short', 'fk_status', 'path_to_foto'])
-		                               ->innerJoinWith('content')
-		                               ->innerJoinWith('foto')
-		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
-		                               ->andWhere(['in', 'fk_content', $contents]) // IN
-		                               ->asArray()
+	    $posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])
+//		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
+			                           ->groupBy(["id"])
 	                                   ->all();
-
-
 
         return $this->render('index', [
             'posts' => $posts,
-            'contents' => $contents,
         ]);
     }
 
