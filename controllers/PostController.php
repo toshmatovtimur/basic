@@ -253,20 +253,22 @@ class PostController extends Controller
 		        // Получаю id последнего загруженного поста
 		        $query=new Query();
 		        $idContent= $query->from('content')->orderBy(['id' => SORT_DESC])->one();
-
+		        $imageMain = "";
 		        // Вставка в таблицу Foto
 		        foreach ($model->image as $file) {
 			        $path = "img/post-{$idContent['id']}/{$file->baseName}.{$file->extension}";
 			        $foto = new Foto();
 			        $foto->name_f = "{$file->baseName}.{$file->extension}";
 			        $foto->path_to_foto = $path;
-			        if (!$foto->save())
-			        {
+
+					if ($imageMain === "") {
+						$imageMain = $path;
+					}
+
+			        if (!$foto->save()) {
 				        $error = VarDumper::dumpAsString($foto->getErrors());
 				        return $this->render('upload', compact('model', 'error'));
-			        }
-			        else
-			        {
+			        } else {
 				        $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
 
 				        // Вставка в таблицу Contentandfoto
@@ -278,9 +280,15 @@ class PostController extends Controller
 					        $error = VarDumper::dumpAsString($contentFoto->getErrors());
 					        return $this->render('upload', compact('model', 'error'));
 				        }
+
+
+
 			        }
 		        }
 
+		        $content = Content::findOne($idContent);
+		        $content->mainImage = $imageMain;
+		        $content->save();
 
 		        $transaction->commit();
 	        }
