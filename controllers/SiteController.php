@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Content;
 use app\models\Contentandfoto;
+use app\models\Foto;
 use app\models\PostForm;
 use app\models\SignupForm;
 use app\models\User;
@@ -64,7 +65,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Работаем
+     * Главное окно
      */
     public function actionIndex()
     {
@@ -83,8 +84,16 @@ class SiteController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$model = Content::find()->where(['id' => $id])->one();
+
+		$images = Foto::find()->select(['path_to_foto'])
+							  ->innerJoinWith('contentandfoto')
+							  ->where(['contentandfoto.fk_content' => $id])
+							  ->all();
+
 		return $this->render('view', [
-			'id' => $id,
+			'images' => $images,
+			'model' => $model,
 		]);
 	}
 
