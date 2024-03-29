@@ -4,16 +4,17 @@
 
 use yii\helpers\Html;
 
-$this->title = 'О мне';
+$this->title = 'Личный кабинет';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <br>
+    <p><?php echo Html::img('@web/avatar/img.png', ['alt' => 'фотка', 'width' => 200, 'class' => 'img-responsive']); ?></p>
+    <p>Лазарев Лис Лисович</p>
+    <p>29 лет</p>
+    <p>Роль: Пользователь</p>
+    <button>Редактировать профиль</button><br><br>
+    <button>Удалить профиль профиль</button>
 
-    <p>
-       Практикант
-    </p>
-
-
-    <p>Задавайте вопросы на электронную почту:  <a href="mailto:kamentimur1991@gmail.com"> kamentimur1991@gmail.com</a></p>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><p>Задавайте вопросы на электронную почту:  <a href="mailto:kamentimur1991@gmail.com"> kamentimur1991@gmail.com</a></p>
 </div>
