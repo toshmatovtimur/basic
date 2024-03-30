@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "contentandfoto".
@@ -14,7 +15,7 @@ use Yii;
  * @property Content $fkContent
  * @property Foto $fkFoto
  */
-class Contentandfoto extends \yii\db\ActiveRecord
+class Contentandfoto extends ActiveRecord
 {
     public static function tableName()
     {

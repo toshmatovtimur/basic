@@ -312,7 +312,32 @@ class PostController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+
+        try {
+
+            $foto = Contentandfoto::find()
+                ->select(['fk_foto'])
+                ->where(['contentandfoto.fk_content' => $id])
+                ->all();
+
+            Contentandfoto::deleteAll(['fk_content' => $id]);
+
+            foreach ($foto as $item) {
+                $fotka = Foto::findOne($item->fk_foto);
+                $fotka->delete();
+            }
+
+            $this->findModel($id)->delete();
+
+            $transaction->commit();
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+        }
 
         return $this->redirect(['index']);
     }
