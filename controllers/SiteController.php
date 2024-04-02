@@ -8,7 +8,6 @@ use app\models\Foto;
 use app\models\PostForm;
 use app\models\SignupForm;
 use app\models\User;
-use reketaka\comments\widgets\CommentFormWidget;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Query;
@@ -22,6 +21,7 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+
     /**
      * Правила SiteController
      */
@@ -189,10 +189,23 @@ class SiteController extends Controller
     }
 
     /**
-     * О нас
+     * Личный кабинет
      */
     public function actionAbout()
     {
-        return $this->render('about');
+		$model = User::findOne(['user.id' => Yii::$app->user->id]);
+        return $this->render('about', compact('model',));
     }
+
+	public function actionUpdate()
+	{
+		$model = User::findOne(['user.id' => Yii::$app->user->id]);
+
+		if ($this->request->isPost) {
+			
+		}
+
+
+		return $this->render('update', compact('model'));
+	}
 }

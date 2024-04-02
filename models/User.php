@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "user".
@@ -23,6 +24,7 @@ use yii\db\ActiveRecord;
  * @property int $status
  * @property string|null $access_token
  * @property string|null $auth_key
+ * @property string|null $avatar
 
  * @property Comment[] $comments
  * @property Role $fkRole
@@ -30,6 +32,11 @@ use yii\db\ActiveRecord;
  */
 class User extends ActiveRecord
 {
+
+	/**
+	 * @var UploadedFile
+	 */
+	public $avatarImage;
 
     public static function tableName()
     {
@@ -40,13 +47,14 @@ class User extends ActiveRecord
     {
         return [
             [['birthday', 'date_last_login', 'created_at', 'updated_at'], 'safe'],
-            [['sex', 'auth_key'], 'string'],
+            [['sex', 'auth_key', 'avatar'], 'string'],
+	        [['avatarImage'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
             [['fk_role', 'status'], 'default', 'value' => null],
             [['fk_role', 'status'], 'integer'],
             [['firstname', 'middlename', 'lastname', 'password', 'access_token'], 'string', 'max' => 120],
             [['username'], 'string', 'max' => 60],
             [['username'], 'unique'],
-            [['fk_role'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['fk_role' => 'id']],
+            [['fk_role'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['fk_role' => 'id']],
         ];
     }
 
@@ -70,6 +78,7 @@ class User extends ActiveRecord
             'status' => 'Статус',
             'access_token' => 'Access Token',
             'auth_key' => 'Auth Key',
+            'avatarImage' => 'Аватарка-> ',
         ];
     }
 
@@ -80,7 +89,7 @@ class User extends ActiveRecord
      */
     public function getComment()
     {
-        return $this->hasMany(Comment::className(), ['fk_user' => 'id']);
+        return $this->hasMany(Comment::class, ['fk_user' => 'id']);
     }
 
     /**
@@ -88,7 +97,7 @@ class User extends ActiveRecord
      */
     public function getRole()
     {
-        return $this->hasOne(Role::className(), ['id' => 'fk_role']);
+        return $this->hasOne(Role::class, ['id' => 'fk_role']);
     }
 
     /**
@@ -96,7 +105,7 @@ class User extends ActiveRecord
      */
     public function getView()
     {
-        return $this->hasMany(View::className(), ['fk_user' => 'id']);
+        return $this->hasMany(View::class, ['fk_user' => 'id']);
     }
 
     #endregion

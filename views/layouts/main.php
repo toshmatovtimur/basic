@@ -41,7 +41,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
-            ['label' => 'Личный кабинет', 'url' => ['/site/about']],
+             !Yii::$app->user->isGuest
+            ? ['label' => 'Личный кабинет', 'url' => ['/site/about']] : '<p></p>',
 //            ['label' => 'Contact', 'url' => ['/site/contact']],
 
             UserIdentity::isAdmin()
