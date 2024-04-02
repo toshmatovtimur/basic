@@ -201,9 +201,31 @@ class SiteController extends Controller
 	{
 		$model = User::findOne(['user.id' => Yii::$app->user->id]);
 
-		if ($this->request->isPost) {
-			
-		}
+//		if ($this->request->isPost && $model->load($this->request->post())) {
+//
+//			$model->date_update_content = date("d-m-Y H:i:s");
+//			$model->password = md5($this-);
+//
+//			if($model->avatarImage)
+//
+//			$path = "avatar/user-{$model->id}";
+//			if (is_dir($path)) {
+//				if(count(scandir($path)) !== 2) {
+//					if($files != null) {
+//						foreach ($files as $item) {
+//							unlink($item);
+//						}
+//					}
+//				}
+//			}
+//
+//
+//			if (is_dir($path)) {
+//				rmdir($path);
+//			}
+//
+//
+//		}
 
 
 		return $this->render('update', compact('model'));
