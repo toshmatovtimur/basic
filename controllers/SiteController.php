@@ -9,6 +9,7 @@ use app\models\PostForm;
 use app\models\SignupForm;
 use app\models\User;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\db\Query;
 use yii\filters\AccessControl;
@@ -247,8 +248,15 @@ class SiteController extends Controller
 	 */
 	public function actionPosts()
 	{
+        $dataProvider = new ActiveDataProvider([
+            'query' => Content::find()->where(['fk_user_create' => Yii::$app->user->id]),
+            'pagination' => [
+                'pageSize' => 5,
+            ],
+        ]);
 
-		return $this->render('posts');
+		return $this->render('posts', [
+                            'dataProvider' => $dataProvider]);
 	}
 
 	/***

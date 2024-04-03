@@ -66,9 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         .box .post{
             display: block;
-            font-size: 15px;
+            font-size: 20px;
             color: #fff;
-            text-transform: capitalize;
             padding: 8px 0 15px;
         }
         @media only screen and (max-width: 990px){
@@ -85,7 +84,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	                    <?= Html::img('@web/task.png', ['alt' => '', 'width' => 100, 'height' => 200]) ?>
                         <div class="boxContent">
                             <h3 class="title">Редактировать профиль</h3>
+                            <p class="post">Редактирование или удаление своего профиля</p>
                         </div>
+
                     </a>
 
                 </div>
@@ -99,6 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	                    <?= Html::img('@web/content1.png', ['alt' => '', 'width' => 100, 'height' => 200]) ?>
                         <div class="boxContent">
                             <h3 class="title">Мои посты</h3>
+                            <p class="post">Редактирование, просмотр или удаление своих постов</p>
                         </div>
                     </a>
 
