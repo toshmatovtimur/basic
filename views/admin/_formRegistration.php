@@ -1,6 +1,5 @@
 <?php
 
-	use yii\helpers\ArrayHelper;
 	use yii\helpers\Html;
 	use yii\widgets\ActiveForm;
 
@@ -30,6 +29,8 @@
 	<?= $form->field($model, 'fk_role')->dropDownList(['1' => 'Пользователь', '2' => 'Администратор']) ?>
 
 	<?= $form->field($model, 'status')->dropDownList(['10' => 'Активен', '0' => 'Удален']) ?>
+
+    <?= $form->field($model, 'avatarImage')->fileInput() ?>
 
 	<div class="form-group">
 		<?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>

@@ -8,7 +8,9 @@ use app\models\User;
 use app\models\UserIdentity;
 use app\models\UserSearch;
 use Yii;
+use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -86,15 +88,48 @@ class AdminController extends Controller
         $model = new User();
 
         if ($this->request->isPost && $model->load($this->request->post())) {
+
+            $db = Yii::$app->db;
+            $transaction = $db->beginTransaction();
+
             $model->created_at = date("Y-m-d");
 
             // Подключаю файл php с массивом
             $params = require '../config/params.php';
             $model->password = md5($model->password) . $params['sol'];
-            if ($model->save())
-            {
-                return $this->redirect(['view', 'id' => $model->id]);
+
+            try {
+
+
+//                $model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
+//
+//                $query=new Query();
+//                $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
+//                $int = $idUser['id'] + 1;
+//
+//                // Создаю директорию и физически сохраняю файл
+//                FileHelper::createDirectory( "avatar/user-{$int}");
+//                $path = "avatar/user-{$int}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
+//
+//                $model->avatarImage->saveAs($path);
+
+                //$model->avatar = $path;
+
+                if ($model->save()) {
+
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
+                $transaction->commit();
+
+            } catch(\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch(\Throwable $e) {
+                $transaction->rollBack();
             }
+
+
         } else {
             $model->loadDefaultValues();
         }

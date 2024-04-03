@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
+use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -80,6 +82,20 @@ class User extends ActiveRecord
             'auth_key' => 'Auth Key',
             'avatarImage' => 'Аватарка-> ',
         ];
+    }
+
+    public function upload()
+    {
+        $query=new Query();
+        $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
+        $int = $idUser['id'] + 1;
+
+        // Создаю директорию и физически сохраняю файл
+        FileHelper::createDirectory("avatar/user-{$int}");
+
+        $this->avatarImage->saveAs("avatar/user-{$int}/{$this->avatarImage->baseName}.{$this->avatarImage->extension}");
+
+        return "avatar/user-{$int}/{$this->avatarImage->baseName}.{$this->avatarImage->extension}";
     }
 
     #region Связи с таблицами
