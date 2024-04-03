@@ -81,6 +81,7 @@ class User extends ActiveRecord
             'access_token' => 'Access Token',
             'auth_key' => 'Auth Key',
             'avatarImage' => 'Аватарка-> ',
+            'avatar' => 'Изображение',
         ];
     }
 

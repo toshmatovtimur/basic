@@ -42,6 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             'updated_at',
             'status',
+	        [
+		        'attribute'=>'avatar',
+		        'value'=> '@web/' . $model->avatar,
+		        'format' => ['image',['width'=>'100','height'=>'100']],
+	        ],
 //            'access_token',
 //            'auth_key',
         ],

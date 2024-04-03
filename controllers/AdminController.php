@@ -113,18 +113,12 @@ class AdminController extends Controller
                 $path = "avatar/user-{$int}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
 
                 $model->avatarImage->saveAs($path, false);
-
                 $model->avatar = $path;
 	            $model->save();
-
-//                if ($model->save()) {
-//                    return $this->redirect(['view', 'id' => $int]);
-//                }
 
                 $transaction->commit();
 
 	            return $this->redirect(['view', 'id' => $int]);
-
 
             } catch(\Exception $e) {
                 $transaction->rollBack();
