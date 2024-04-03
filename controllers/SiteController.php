@@ -247,7 +247,7 @@ class SiteController extends Controller
 	 */
 	public function actionPosts()
 	{
-		
+
 		return $this->render('posts');
 	}
 
