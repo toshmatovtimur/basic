@@ -82,7 +82,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Создание a new User model.
+     * Добавить пользователя
      */
     public function actionCreate()
     {
@@ -138,25 +138,65 @@ class AdminController extends Controller
     }
 
     /**
-     *  Обновление User model.
+     *  Обновление пользователя
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
         if ($this->request->isPost && $model->load($this->request->post())) {
-            // Обновить дату обновления аккаунта
-            $model->updated_at = date("Y-m-d");
 
-            // Зашифровать пароль
-            $md5 = md5($model->password);
+	        $db = Yii::$app->db;
+	        $transaction = $db->beginTransaction();
 
-            // Подключаю файл php с массивом
-            $params = require '../config/params.php';
-            $model->password = $md5 . $params['sol'];
+	        try {
 
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+		        // Обновить дату обновления аккаунта
+		        $model->updated_at = date("Y-m-d");
+
+		        // Зашифровать пароль
+		        $md5 = md5($model->password);
+
+		        // Подключаю файл php с массивом
+		        $params = require '../config/params.php';
+		        $model->password = $md5 . $params['sol'];
+
+		        $model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
+
+				// Если загружена картинка
+				if($model->avatarImage !== null) {
+
+					// Удаляю директорию со старым фото на чистом PHP
+					$path = "avatar/user-{$model->id}";
+
+					if (is_dir($path)) {
+						if(count(scandir($path)) !== 2) {
+							unlink($model->avatar);
+						}
+
+						rmdir($path);
+					}
+
+					// Создаю директорию и физически сохраняю файл
+					FileHelper::createDirectory( "avatar/user-{$model->id}");
+
+					$path = "avatar/user-{$model->id}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
+
+					$model->avatarImage->saveAs($path, false);
+					$model->avatar = $path;
+				}
+
+		        $model->save();
+
+		        $transaction->commit();
+
+		        return $this->redirect(['view', 'id' => $model->id]);
+
+	        } catch(\Exception $e) {
+		        $transaction->rollBack();
+		        throw $e;
+	        } catch(\Throwable $e) {
+		        $transaction->rollBack();
+	        }
 
         }
 
@@ -170,9 +210,39 @@ class AdminController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+	    $db = Yii::$app->db;
+	    $transaction = $db->beginTransaction();
 
-        return $this->redirect(['index']);
+	    try {
+
+		    $this->findModel($id)->delete();
+
+		    // Удаляю директорию со старым фото на чистом PHP
+		    $path = "avatar/user-{$this->id}";
+
+		    if (is_dir($path)) {
+			    if(count(scandir($path)) !== 2) {
+				    unlink($this->avatar);
+			    }
+
+			    rmdir($path);
+		    }
+
+
+
+		    $transaction->commit();
+
+		    return $this->redirect(['index']);
+
+	    } catch(\Exception $e) {
+		    $transaction->rollBack();
+		    throw $e;
+	    } catch(\Throwable $e) {
+		    $transaction->rollBack();
+	    }
+
+
+
     }
 
     /**

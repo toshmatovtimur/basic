@@ -29,14 +29,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'fk_role')->dropDownList(['1' => 'Пользователь', '2' => 'Администратор']) ?>
 
-    <?= $form->field($model, 'created_at')->input('date') ?>
-
-    <?= $form->field($model, 'updated_at')->input('date') ?>
-
     <?= $form->field($model, 'status')->dropDownList(['10' => 'Активен', '0' => 'Удален']) ?>
 
+	<?= $form->field($model, 'avatarImage')->fileInput() ?>
+
     <div class="form-group">
-        <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Обновить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
