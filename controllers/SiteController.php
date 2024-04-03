@@ -12,12 +12,14 @@ use Yii;
 use yii\data\Pagination;
 use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\helpers\FileHelper;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -37,6 +39,11 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+	                [
+		                'actions' => ['index'],
+		                'allow' => true,
+		                'roles' => ['?'],
+	                ],
                 ],
             ],
             'verbs' => [
@@ -95,6 +102,44 @@ class SiteController extends Controller
 			'images' => $images,
 			'model' => $model,
 		]);
+	}
+
+	/***
+	 *  Удалить свой профиль
+	 */
+	public function actionDelete()
+	{
+		$db = Yii::$app->db;
+		$transaction = $db->beginTransaction();
+		$id = Yii::$app->user->id;
+		try {
+
+			$model = User::findOne(['id' => $id]);
+			$model->delete();
+
+			// Удаляю директорию со старым фото на чистом PHP
+			$path = "avatar/user-{$id}";
+
+			if (is_dir($path)) {
+				if(count(scandir($path)) !== 2) {
+					unlink($model->avatar);
+				}
+
+				rmdir($path);
+			}
+			Yii::$app->user->logout();
+
+			$transaction->commit();
+
+			return $this->redirect(['index']);
+
+		} catch(\Exception $e) {
+			$transaction->rollBack();
+			throw $e;
+		} catch(\Throwable $e) {
+			$transaction->rollBack();
+		}
+
 	}
 
     /**
@@ -193,40 +238,81 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-		$model = User::findOne(['user.id' => Yii::$app->user->id]);
-        return $this->render('about', compact('model',));
+		$model = User::findOne(['id' => Yii::$app->user->id]);
+        return $this->render('about', compact('model'));
     }
 
+	/**
+	 * Мои посты в личном кабинете
+	 */
+	public function actionPosts()
+	{
+		return $this->render('posts');
+	}
+
+	/***
+	 *  Обновление личного профиля
+	 */
 	public function actionUpdate()
 	{
-		$model = User::findOne(['user.id' => Yii::$app->user->id]);
+		$model = User::findOne(['id' => Yii::$app->user->id]);
 
-//		if ($this->request->isPost && $model->load($this->request->post())) {
-//
-//			$model->date_update_content = date("d-m-Y H:i:s");
-//			$model->password = md5($this-);
-//
-//			if($model->avatarImage)
-//
-//			$path = "avatar/user-{$model->id}";
-//			if (is_dir($path)) {
-//				if(count(scandir($path)) !== 2) {
-//					if($files != null) {
-//						foreach ($files as $item) {
-//							unlink($item);
-//						}
-//					}
-//				}
-//			}
-//
-//
-//			if (is_dir($path)) {
-//				rmdir($path);
-//			}
-//
-//
-//		}
+		if ($this->request->isPost && $model->load($this->request->post())) {
 
+			$db = Yii::$app->db;
+			$transaction = $db->beginTransaction();
+
+			try {
+
+				// Обновить дату обновления аккаунта
+				$model->updated_at = date("Y-m-d");
+
+				// Зашифровать пароль
+				$md5 = md5($model->password);
+
+				// Подключаю файл php с массивом
+				$params = require '../config/params.php';
+				$model->password = $md5 . $params['sol'];
+
+				$model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
+
+				// Если загружена картинка
+				if($model->avatarImage !== null) {
+
+					// Удаляю директорию со старым фото на чистом PHP
+					$path = "avatar/user-{$model->id}";
+
+					if (is_dir($path)) {
+						if(count(scandir($path)) !== 2) {
+							unlink($model->avatar);
+						}
+
+						rmdir($path);
+					}
+
+					// Создаю директорию и физически сохраняю файл
+					FileHelper::createDirectory( "avatar/user-{$model->id}");
+
+					$path = "avatar/user-{$model->id}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
+
+					$model->avatarImage->saveAs($path, false);
+					$model->avatar = $path;
+				}
+
+				$model->save();
+
+				$transaction->commit();
+
+				return $this->redirect(['about']);
+
+			} catch(\Exception $e) {
+				$transaction->rollBack();
+				throw $e;
+			} catch(\Throwable $e) {
+				$transaction->rollBack();
+			}
+
+		}
 
 		return $this->render('update', compact('model'));
 	}

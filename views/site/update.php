@@ -12,7 +12,11 @@
 	$this->params['breadcrumbs'][] = $this->title;
 
 ?>
-    <br>
+<br><br>
+    <p>
+	    <?= Html::a('Удалить профиль', ['delete'], ['class' => 'btn btn-success']) ?>
+    </p>
+
 
 	<?php $form = ActiveForm::begin(); ?>
 

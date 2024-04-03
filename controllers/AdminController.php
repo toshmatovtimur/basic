@@ -118,7 +118,7 @@ class AdminController extends Controller
 
                 $transaction->commit();
 
-	            return $this->redirect(['view', 'id' => $int]);
+
 
             } catch(\Exception $e) {
                 $transaction->rollBack();
@@ -127,6 +127,9 @@ class AdminController extends Controller
                 $transaction->rollBack();
             }
 
+	        $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
+	        $int = $idUser['id'];
+	        return $this->redirect(['view', 'id' => $int]);
 
         } else {
             $model->loadDefaultValues();
@@ -227,8 +230,6 @@ class AdminController extends Controller
 
 			    rmdir($path);
 		    }
-
-
 
 		    $transaction->commit();
 
