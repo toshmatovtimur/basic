@@ -21,6 +21,7 @@ use yii\web\UploadedFile;
  */
 class AdminController extends Controller
 {
+
     /**
      * Правила для Контроллера
      */
@@ -92,35 +93,38 @@ class AdminController extends Controller
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
 
-            $model->created_at = date("Y-m-d");
-
-            // Подключаю файл php с массивом
-            $params = require '../config/params.php';
-            $model->password = md5($model->password) . $params['sol'];
 
             try {
 
+	            $model->created_at = date("Y-m-d");
 
-//                $model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
-//
-//                $query=new Query();
-//                $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
-//                $int = $idUser['id'] + 1;
-//
-//                // Создаю директорию и физически сохраняю файл
-//                FileHelper::createDirectory( "avatar/user-{$int}");
-//                $path = "avatar/user-{$int}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
-//
-//                $model->avatarImage->saveAs($path);
+	            // Подключаю файл php с массивом
+	            $params = require '../config/params.php';
+	            $model->password = md5($model->password) . $params['sol'];
 
-                //$model->avatar = $path;
+	            $model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
 
-                if ($model->save()) {
+                $query=new Query();
+                $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
+                $int = $idUser['id'] + 1;
 
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
+                // Создаю директорию и физически сохраняю файл
+                FileHelper::createDirectory( "avatar/user-{$int}");
+                $path = "avatar/user-{$int}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
+
+                $model->avatarImage->saveAs($path, false);
+
+                $model->avatar = $path;
+	            $model->save();
+
+//                if ($model->save()) {
+//                    return $this->redirect(['view', 'id' => $int]);
+//                }
 
                 $transaction->commit();
+
+	            return $this->redirect(['view', 'id' => $int]);
+
 
             } catch(\Exception $e) {
                 $transaction->rollBack();
@@ -186,6 +190,9 @@ class AdminController extends Controller
         return $this->render('test');
     }
 
+	/***
+	 * Админка
+	 */
 	public function actionAdm()
 	{
 		return $this->render('adm',);

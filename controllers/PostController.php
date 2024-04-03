@@ -107,7 +107,9 @@ class PostController extends Controller
 	        {
 				$model->date_update_content = date("d-m-Y H:i:s");
 				$model->imageContent = null;
-	            if(!$model->save()) {
+
+	            if(!$model->save())
+				{
 					$error = VarDumper::dumpAsString($model->getErrors());
 					return $this->render('update', compact('model', 'error',));
 				}
@@ -125,7 +127,8 @@ class PostController extends Controller
 		            Contentandfoto::deleteAll(['fk_content' => $model->id]);
 
 
-					foreach ($foto as $item) {
+					foreach ($foto as $item)
+					{
 						$fotka = Foto::findOne($item->fk_foto);
 						$files[] = $fotka->path_to_foto;
 						$fotka->delete();
@@ -133,9 +136,12 @@ class PostController extends Controller
 
 		            // Удаляю директорию со старыми фото на чистом PHP
 		            $path = "img/post-{$model->id}";
-		            if(count(scandir($path)) !== 2) {
-			            if($files != null) {
-				            foreach ($files as $item) {
+		            if(count(scandir($path)) !== 2)
+					{
+			            if($files != null)
+						{
+				            foreach ($files as $item)
+							{
 					            unlink($item);
 				            }
 			            }
