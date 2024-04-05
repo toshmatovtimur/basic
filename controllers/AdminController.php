@@ -93,8 +93,8 @@ class AdminController extends Controller
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
 
-
-            try {
+            try
+            {
 
 	            $model->created_at = date("Y-m-d");
 
@@ -104,21 +104,41 @@ class AdminController extends Controller
 
 	            $model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
 
+                $model->save();
+
                 $query=new Query();
                 $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
-                $int = $idUser['id'] + 1;
+                $int = $idUser['id'];
 
                 // Создаю директорию и физически сохраняю файл
                 FileHelper::createDirectory( "avatar/user-{$int}");
-                $path = "avatar/user-{$int}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
 
-                $model->avatarImage->saveAs($path, false);
-                $model->avatar = $path;
-	            $model->save();
+                if($model->avatarImage === null) {
+
+                    $file = 'avatar/default1.png';
+                    $newfile = "avatar/user-{$int}/default1.png";
+
+                    if (!copy($file, $newfile)) {
+                        echo "failed to copy $file...\n";
+                    }
+
+                    $image = User::findOne(['id' => $int]);
+                    $image->avatar = $newfile;
+                    $image->save();
+
+
+                }
+                else
+                {
+                    $image = User::findOne(['id' => $int]);
+                    $path = "avatar/user-{$int}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
+                    $model->avatarImage->saveAs($path, false);
+
+                    $image->avatar = $path;
+                    $image->save();
+                }
 
                 $transaction->commit();
-
-
 
             } catch(\Exception $e) {
                 $transaction->rollBack();
@@ -186,7 +206,20 @@ class AdminController extends Controller
 
 					$model->avatarImage->saveAs($path, false);
 					$model->avatar = $path;
-				}
+				} elseif ($model->avatarImage === null) {
+                    $file = 'avatar/default1.png';
+                    $newfile = "avatar/user-{$model->id}/default1.png";
+
+                    // Создаю директорию и физически сохраняю файл
+                    FileHelper::createDirectory( "avatar/user-{$model->id}");
+
+                    if (!copy($file, $newfile)) {
+                        echo "failed to copy $file...\n";
+                    }
+
+                    $model->avatar = $newfile;
+                }
+
 
 		        $model->save();
 
