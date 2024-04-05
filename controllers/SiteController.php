@@ -343,4 +343,9 @@ class SiteController extends Controller
 
 		return $this->render('update', compact('model'));
 	}
+
+	public function actionSearch()
+	{
+		return $this->render('search');
+	}
 }

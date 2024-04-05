@@ -62,14 +62,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     )
                     . Html::endForm()
                     . '</li>',
-             '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
-             Html::textInput('downloadSourceCode',"",['id'=>'downloadSourceCode', 'placeholder' => 'Поиск'] )
-
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+        Html::beginForm(['site/search']),
+	    Html::textInput('downloadSourceCode',"123445",['id'=>'downloadSourceCode', 'placeholder' => 'Поиск'] ),
+	    Html::endForm(),
         ]
     ]);
     NavBar::end();
-    ?>
 
+    ?>
+<!--    --><?php //=Html::beginForm(['site/search'], 'post', ['enctype' => 'multipart/form-data'])?>
+<!--    --><?php //=Html::textInput('downloadSourceCode',"",['id'=>'downloadSourceCode', 'placeholder' => 'Поиск'] )?>
+<!--    --><?php //= Html::endForm() ?>
 </header>
 
 <form method="get" action="<?= \yii\helpers\Url::to(['site/search']) ?>">
