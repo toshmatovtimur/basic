@@ -319,7 +319,7 @@ class SiteController extends Controller
 					}
 
 					$model->avatar = $newfile;
-					
+
 				} elseif ($model->avatarImage === null && $model->avatar != null) {
 					$model->save();
 

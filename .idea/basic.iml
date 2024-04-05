@@ -92,6 +92,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/yiisoft/yii2-gii" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/yiisoft/yii2-symfonymailer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/reketaka/yii2-comments" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/kartik-v/yii2-widget-typeahead" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pozitronik/yii2-searchwidget" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yiisoft/yii2-elasticsearch" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

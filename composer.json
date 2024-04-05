@@ -21,7 +21,9 @@
         "himiklab/yii2-recaptcha-widget" : "*",
         "kartik-v/yii2-widget-select2": "@dev",
         "2amigos/yii2-tinymce-widget": "~1.1",
-        "reketaka/yii2-comments": "*"
+        "reketaka/yii2-comments": "*",
+        "pozitronik/yii2-searchwidget": "dev-master",
+        "yiisoft/yii2-elasticsearch": "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

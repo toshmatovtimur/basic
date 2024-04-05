@@ -10,6 +10,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\widgets\ActiveForm;
 
 AppAsset::register($this);
 
@@ -49,9 +50,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ?  ['label' => 'Admin', 'url' => ['/admin/adm']]
                 : '<p></p>',
 
-
            ['label' => 'Test', 'url' => ['/admin/test']],
-
 
             Yii::$app->user->isGuest
                 ? ['label' => 'Вход', 'url' => ['/site/login']]
@@ -62,13 +61,20 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
-                    . '</li>'
+                    . '</li>',
+             '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+             Html::textInput('downloadSourceCode',"",['id'=>'downloadSourceCode', 'placeholder' => 'Поиск'] )
+
         ]
     ]);
     NavBar::end();
     ?>
+
 </header>
 
+<form method="get" action="<?= \yii\helpers\Url::to(['site/search']) ?>">
+
+</form>
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">
         <?php if (!empty($this->params['breadcrumbs'])): ?>

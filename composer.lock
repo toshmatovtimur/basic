@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f55aaca70ab82783aaa360ae6d2d3b34",
+    "content-hash": "199f75ecfee96bbfab58b6111900a117",
     "packages": [
         {
             "name": "2amigos/yii2-tinymce-widget",
@@ -606,6 +606,63 @@
             "time": "2023-06-22T07:43:31+00:00"
         },
         {
+            "name": "kartik-v/yii2-widget-typeahead",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-widget-typeahead.git",
+                "reference": "7b7041a3cbbeb2db0a608e9f6c9b3f4f63b0069d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-typeahead/zipball/7b7041a3cbbeb2db0a608e9f6c9b3f4f63b0069d",
+                "reference": "7b7041a3cbbeb2db0a608e9f6c9b3f4f63b0069d",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\typeahead\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Enhanced Yii2 wrapper for the Twitter Typeahead plugin (sub repo split from yii2-widgets).",
+            "homepage": "https://github.com/kartik-v/yii2-widget-typeahead",
+            "keywords": [
+                "dropdown",
+                "extension",
+                "form",
+                "jquery",
+                "plugin",
+                "typeahead",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/kartik-v/yii2-widget-typeahead/issues",
+                "source": "https://github.com/kartik-v/yii2-widget-typeahead/tree/master"
+            },
+            "time": "2019-05-29T12:06:56+00:00"
+        },
+        {
             "name": "paragonie/random_compat",
             "version": "v9.99.100",
             "source": {
@@ -654,6 +711,60 @@
                 "source": "https://github.com/paragonie/random_compat"
             },
             "time": "2020-10-15T08:29:30+00:00"
+        },
+        {
+            "name": "pozitronik/yii2-searchwidget",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pozitronik/yii2-searchwidget.git",
+                "reference": "e3f6b5a709c331cd55e4b98cb0ad58724a902cef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pozitronik/yii2-searchwidget/zipball/e3f6b5a709c331cd55e4b98cb0ad58724a902cef",
+                "reference": "e3f6b5a709c331cd55e4b98cb0ad58724a902cef",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-widget-typeahead": "*",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "codeception/codeception": "^4.0",
+                "codeception/module-asserts": "*",
+                "codeception/module-filesystem": "*",
+                "codeception/module-phpbrowser": "*",
+                "codeception/module-rest": "^1.3.1",
+                "codeception/module-yii2": "*",
+                "fakerphp/faker": "^1.20",
+                "vlucas/phpdotenv": "^5.5",
+                "yiisoft/yii2": "dev-master",
+                "yiisoft/yii2-bootstrap4": "^2.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "pozitronik\\widgets\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Pozitronik",
+                    "email": "antikillerxxl@gmial.com"
+                }
+            ],
+            "description": "Quick search widget",
+            "support": {
+                "issues": "https://github.com/pozitronik/yii2-searchwidget/issues",
+                "source": "https://github.com/pozitronik/yii2-searchwidget/tree/0.8.1"
+            },
+            "time": "2022-11-16T16:01:06+00:00"
         },
         {
             "name": "psr/container",
@@ -2015,6 +2126,78 @@
                 }
             ],
             "time": "2020-06-24T00:04:01+00:00"
+        },
+        {
+            "name": "yiisoft/yii2-elasticsearch",
+            "version": "2.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-elasticsearch.git",
+                "reference": "4d92af4e95c47fb633fb4a1018dd7a23ee285bfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-elasticsearch/zipball/4d92af4e95c47fb633fb4a1018dd7a23ee285bfc",
+                "reference": "4d92af4e95c47fb633fb4a1018dd7a23ee285bfc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "paragonie/random_compat": ">=1",
+                "yiisoft/yii2": "~2.0.14"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.27|~5.7.21|^6.2"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\elasticsearch\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc"
+                }
+            ],
+            "description": "Elasticsearch integration and ActiveRecord for the Yii framework",
+            "keywords": [
+                "active-record",
+                "elasticsearch",
+                "fulltext",
+                "search",
+                "yii2"
+            ],
+            "support": {
+                "forum": "http://www.yiiframework.com/forum/",
+                "irc": "irc://irc.freenode.net/yii",
+                "issues": "https://github.com/yiisoft/yii2-elasticsearch/issues",
+                "source": "https://github.com/yiisoft/yii2-elasticsearch",
+                "wiki": "http://www.yiiframework.com/wiki/"
+            },
+            "funding": [
+                {
+                    "url": "https://opencollective.com/yiisoft",
+                    "type": "open_collective"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/yiisoft/yii2-elasticsearch",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-05-22T21:00:31+00:00"
         },
         {
             "name": "yiisoft/yii2-httpclient",
@@ -6059,7 +6242,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kartik-v/yii2-widget-select2": 20
+        "kartik-v/yii2-widget-select2": 20,
+        "pozitronik/yii2-searchwidget": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -6067,5 +6251,5 @@
         "php": ">=7.4.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }

@@ -107,6 +107,9 @@
       <path value="$PROJECT_DIR$/vendor/tinymce/tinymce" />
       <path value="$PROJECT_DIR$/vendor/2amigos/yii2-tinymce-widget" />
       <path value="$PROJECT_DIR$/vendor/reketaka/yii2-comments" />
+      <path value="$PROJECT_DIR$/vendor/pozitronik/yii2-searchwidget" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-typeahead" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-elasticsearch" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">
