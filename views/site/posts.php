@@ -16,13 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
     echo GridView::widget([
         'dataProvider' => $dataProvider,
-
         'columns' => [
-          ['class' => 'yii\grid\SerialColumn'],
+//          ['class' => 'yii\grid\SerialColumn'],
           'header',
           'date_create',
           'text_short',
-        [
+        [ // Картинка
             'attribute' => 'mainImage',
             'format' => 'html',
             'label' => 'Обложка поста',
@@ -34,11 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
         [
-            'class' => ActionColumn::class,
-            'urlCreator' => function ($action, Content $model, $key, $index, $column)
-                            {
-                                return Url::toRoute([$action, 'id' => $model->id]);
-                            }
+            'class' => 'yii\grid\ActionColumn',
+            'template' => "{view} <br><br> {post/update}",
+            'buttons' =>
+            [
+                'post/update' => function ($url, $model, $key) {
+                    return Html::a('Редактировать', $url);
+                },
+                'view' => function ($url, $model, $key) {
+                    return Html::a('Просмотр', $url);
+                },
+            ]
+
         ],
     ],
 ]);
