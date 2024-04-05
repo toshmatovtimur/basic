@@ -10,7 +10,7 @@
 
 	$this->title = 'Редактирование профиля';
 	$this->params['breadcrumbs'][] = $this->title;
-
+	$model->password = null;
 ?>
 <br><br>
     <p>

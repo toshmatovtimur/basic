@@ -9,6 +9,7 @@ $this->title = $model->firstname . ' ' . $model->middlename;
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->firstname . ' ' . $model->middlename, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Обновить';
+	$model->password = null;
 ?>
 <div class="user-update">
 

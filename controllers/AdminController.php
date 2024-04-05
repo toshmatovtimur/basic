@@ -206,7 +206,7 @@ class AdminController extends Controller
 
 					$model->avatarImage->saveAs($path, false);
 					$model->avatar = $path;
-				} elseif ($model->avatarImage === null) {
+				} elseif ($model->avatarImage === null && $model->avatar == null) {
                     $file = 'avatar/default1.png';
                     $newfile = "avatar/user-{$model->id}/default1.png";
 
@@ -218,11 +218,15 @@ class AdminController extends Controller
                     }
 
                     $model->avatar = $newfile;
-                }
+                } elseif ($model->avatarImage === null && $model->avatar != null) {
+					$model->save();
 
+					$transaction->commit();
+
+					return $this->redirect(['view', 'id' => $model->id]);
+				}
 
 		        $model->save();
-
 		        $transaction->commit();
 
 		        return $this->redirect(['view', 'id' => $model->id]);

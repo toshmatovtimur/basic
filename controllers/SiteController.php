@@ -306,12 +306,30 @@ class SiteController extends Controller
 
 					$model->avatarImage->saveAs($path, false);
 					$model->avatar = $path;
+				} elseif ($model->avatarImage === null && $model->avatar == null) {
+
+					$file = 'avatar/default1.png';
+					$newfile = "avatar/user-{$model->id}/default1.png";
+
+					// Создаю директорию и физически сохраняю файл
+					FileHelper::createDirectory( "avatar/user-{$model->id}");
+
+					if (!copy($file, $newfile)) {
+						echo "failed to copy $file...\n";
+					}
+
+					$model->avatar = $newfile;
+					
+				} elseif ($model->avatarImage === null && $model->avatar != null) {
+					$model->save();
+
+					$transaction->commit();
+
+					return $this->redirect(['about']);
 				}
 
 				$model->save();
-
 				$transaction->commit();
-
 				return $this->redirect(['about']);
 
 			} catch(\Exception $e) {
