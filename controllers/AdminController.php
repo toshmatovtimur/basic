@@ -226,6 +226,7 @@ class AdminController extends Controller
 					return $this->redirect(['view', 'id' => $model->id]);
 				}
 
+
 		        $model->save();
 		        $transaction->commit();
 
