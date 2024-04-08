@@ -332,7 +332,7 @@ class AdminController extends Controller
 			'query' => Content::find()->select(['header', 'date_create', 'COUNT(fk_content) as counts'])
 									  ->innerJoinWith('view')
 								      ->where('date_create' < date('Y/m/d H:i:s'))
-								      ->groupBy(['fk_content', 'header'])
+								      ->groupBy(['fk_content'])
 								      ->orderBy( ['counts' => SORT_DESC])
 								      ->limit(10),
 		]);
