@@ -49,10 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
             //'access_token',
             //'auth_key',
             [
-                'class' => ActionColumn::className(),
+                'class' => ActionColumn::class,
                 'urlCreator' => function ($action, User $model, $key, $index, $column)
                                 {
-                                   return Url::toRoute([$action, 'id' => $model->id]);
+                                    return Url::toRoute([$action, 'id' => $model->id]);
                                 }
             ],
         ],

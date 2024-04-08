@@ -303,7 +303,15 @@ class AdminController extends Controller
 	 */
 	public function actionAdm()
 	{
-		return $this->render('adm',);
+		return $this->render('adm');
+	}
+
+	/***
+	 * Модуль статистики
+	 */
+	public function actionStatistics()
+	{
+		return $this->render('statistics');
 	}
 
     /**
@@ -317,4 +325,5 @@ class AdminController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

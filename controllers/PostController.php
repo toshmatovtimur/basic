@@ -23,6 +23,9 @@ use yii\web\UploadedFile;
 class PostController extends Controller
 {
 
+	/***
+	 * Правила
+	 */
     public function behaviors()
     {
         return array_merge(
@@ -53,7 +56,10 @@ class PostController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-    
+
+	/***
+	 *  Просмотр поста
+	 */
     public function actionView($id)
     {
 	    $images = Foto::find()->select(['path_to_foto'])
@@ -68,7 +74,7 @@ class PostController extends Controller
     }
 
 	/**
-	 * Не нужен пока что, создание поста, есть уже добавление поста
+	 * Создание поста
 	 */
     public function actionCreate()
     {
@@ -345,6 +351,11 @@ class PostController extends Controller
         return $this->redirect(['index']);
     }
 
+	/**
+	 * @param $id
+	 * @return Content|null
+	 * @throws NotFoundHttpException
+	 */
     protected function findModel($id)
     {
         if (($model = Content::findOne(['id' => $id])) !== null) {

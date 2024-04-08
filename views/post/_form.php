@@ -11,7 +11,7 @@ use dosamigos\tinymce\TinyMce;
 ?>
 
 <div class="content-form">
-	<?= $error ?>
+
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'header')->textInput(['maxlength' => true]) ?>

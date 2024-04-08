@@ -344,6 +344,9 @@ class SiteController extends Controller
 		return $this->render('update', compact('model'));
 	}
 
+	/***
+	 * Поиск
+	 */
 	public function actionSearch()
 	{
 
@@ -363,4 +366,5 @@ class SiteController extends Controller
 
 		$this->actionIndex();
 	}
+
 }
