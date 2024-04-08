@@ -2,6 +2,7 @@
 
 	/** @var yii\web\View $this */
 
+	use app\models\View;
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
 	use yii\captcha\Captcha;
@@ -23,4 +24,16 @@
     } else {
         echo 'Картинок нету';
     }
+
+?>
+
+<?php
+    // Статистика просмотра поста
+        $view = new View();
+        $view->fk_content = $model->id;
+        $view->fk_user = Yii::$app->user->id;
+        $view->date_view = date("Y-m-d H:i:s");
+        $view->save();
+
+
 

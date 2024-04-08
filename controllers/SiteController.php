@@ -98,7 +98,7 @@ class SiteController extends Controller
 							  ->innerJoinWith('contentandfoto')
 							  ->where(['contentandfoto.fk_content' => $id])
 							  ->all();
-
+		
 		return $this->render('view', [
 			'images' => $images,
 			'model' => $model,

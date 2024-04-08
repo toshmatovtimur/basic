@@ -7,7 +7,9 @@ use app\models\Role;
 use app\models\User;
 use app\models\UserIdentity;
 use app\models\UserSearch;
+use app\models\View;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
@@ -285,8 +287,6 @@ class AdminController extends Controller
 		    $transaction->rollBack();
 	    }
 
-
-
     }
 
     /**
@@ -311,7 +311,20 @@ class AdminController extends Controller
 	 */
 	public function actionStatistics()
 	{
-		return $this->render('statistics');
+		// Топ 10 проматриваемых страниц
+		$topProvider = new ActiveDataProvider([
+			'query' => View::find()->select(['fk_content', 'COUNT(fk_content) as counts'])
+								   ->groupBy(['fk_content'])
+								   ->orderBy( ['counts' => SORT_DESC])
+								   ->limit(10),
+		]);
+
+
+		return $this->render('statistics', [
+			'topProvider' => $topProvider,
+
+		]);
+
 	}
 
     /**

@@ -17,6 +17,8 @@ use Yii;
  */
 class View extends \yii\db\ActiveRecord
 {
+	public $counts;
+
     public static function tableName()
     {
         return 'view';
