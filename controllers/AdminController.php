@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Content;
 use app\models\PostForm;
 use app\models\Role;
 use app\models\User;
@@ -319,10 +320,27 @@ class AdminController extends Controller
 								   ->limit(10),
 		]);
 
+		// 10 последних созданных страниц
+		$lastCreateProvider = new ActiveDataProvider([
+			'query' => Content::find()->select(['header', 'date_create'])
+									  ->orderBy( ['date_create' => SORT_DESC])
+									  ->limit(10),
+		]);
+
+		// Топ-10 страниц, текст которых обновлялся более 1-месяца назад
+		$mouthUpdateProvider = new ActiveDataProvider([
+			'query' => Content::find()->select(['header', 'date_create', 'COUNT(fk_content) as counts'])
+									  ->innerJoinWith('view')
+								      ->where('date_create' < date('Y/m/d H:i:s'))
+								      ->groupBy(['fk_content', 'header'])
+								      ->orderBy( ['counts' => SORT_DESC])
+								      ->limit(10),
+		]);
 
 		return $this->render('statistics', [
 			'topProvider' => $topProvider,
-
+			'lastCreateProvider' => $lastCreateProvider,
+			'mouthUpdateProvider' => $mouthUpdateProvider,
 		]);
 
 	}

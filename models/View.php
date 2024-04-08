@@ -31,7 +31,7 @@ class View extends \yii\db\ActiveRecord
     {
         return [
             [['fk_content', 'fk_user'], 'default', 'value' => null],
-            [['fk_content', 'fk_user'], 'integer'],
+            [['fk_content', 'fk_user', 'counts'], 'integer'],
             [['date_view'], 'safe'],
             [['fk_content'], 'exist', 'skipOnError' => true, 'targetClass' => Content::className(), 'targetAttribute' => ['fk_content' => 'id']],
             [['fk_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['fk_user' => 'id']],
@@ -48,6 +48,7 @@ class View extends \yii\db\ActiveRecord
             'fk_content' => 'Fk Content',
             'fk_user' => 'Fk User',
             'date_view' => 'Date View',
+            'counts' => 'Количество просмотров',
         ];
     }
 
