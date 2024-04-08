@@ -10,6 +10,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 AppAsset::register($this);
@@ -64,7 +65,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     . '</li>',
             '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
         Html::beginForm(['site/search']),
-	    Html::textInput('downloadSourceCode',"123445",['id'=>'downloadSourceCode', 'placeholder' => 'Поиск'] ),
+	    Html::textInput('search',"",['placeholder' => 'Поиск'] ),
 	    Html::endForm(),
         ]
     ]);
@@ -76,7 +77,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <!--    --><?php //= Html::endForm() ?>
 </header>
 
-<form method="get" action="<?= \yii\helpers\Url::to(['site/search']) ?>">
+<form method="get" action="<?= Url::to(['site/search']) ?>">
 
 </form>
 <main id="main" class="flex-shrink-0" role="main">

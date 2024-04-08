@@ -41,10 +41,15 @@ class AdminController extends Controller
                             return UserIdentity::isAdmin();
                         }
                     ],
+                    [
+                        'actions' => ['test'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
 	                [
 		                'actions' => ['test'],
 		                'allow' => true,
-		                'roles' => ['@'],
+		                'roles' => ['?'],
 	                ],
                 ],
             ],

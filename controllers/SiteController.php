@@ -346,6 +346,20 @@ class SiteController extends Controller
 
 	public function actionSearch()
 	{
-		return $this->render('search');
+        //Table::find()->where(['like', 'name', $_GET['q'] . '%', false]);
+        $posts = Content::find()
+		                        //->where(['fk_status' => 2])// Опубликован (Активен)
+                                ->orFilterWhere(['like', 'header', '%'.$_POST['search'].'%', false])
+                                ->orFilterWhere(['like', 'text_short', '%'.$_POST['search'].'%', false])
+                               ->orFilterWhere(['like', 'text_full', '%'.$_POST['search'].'%', false])
+                               ->groupBy(["id"])
+                                ->all();
+
+        if($posts != null) {
+            return $this->render('index', [
+                'posts' => $posts,
+            ]);
+        }
+
 	}
 }

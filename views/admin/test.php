@@ -5,6 +5,10 @@
 	use app\models\Foto;
 	use yii\helpers\Html;
 
+
+    echo md5('admin');
+
+
 //	$foto = Contentandfoto::find()
 //		->select(['fk_foto'])
 //		->where(['fk_content' => 30])
