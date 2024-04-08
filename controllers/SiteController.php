@@ -346,8 +346,8 @@ class SiteController extends Controller
 
 	public function actionSearch()
 	{
-        //Table::find()->where(['like', 'name', $_GET['q'] . '%', false]);
-        $posts = Content::find()
+
+        $posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])
 		                        //->where(['fk_status' => 2])// Опубликован (Активен)
                                 ->orFilterWhere(['like', 'header', '%'.$_POST['search'].'%', false])
                                 ->orFilterWhere(['like', 'text_short', '%'.$_POST['search'].'%', false])
@@ -361,5 +361,6 @@ class SiteController extends Controller
             ]);
         }
 
+		$this->actionIndex();
 	}
 }

@@ -70,16 +70,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         ]
     ]);
     NavBar::end();
-
     ?>
-<!--    --><?php //=Html::beginForm(['site/search'], 'post', ['enctype' => 'multipart/form-data'])?>
-<!--    --><?php //=Html::textInput('downloadSourceCode',"",['id'=>'downloadSourceCode', 'placeholder' => 'Поиск'] )?>
-<!--    --><?php //= Html::endForm() ?>
 </header>
 
-<form method="get" action="<?= Url::to(['site/search']) ?>">
-
-</form>
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">
         <?php if (!empty($this->params['breadcrumbs'])): ?>
