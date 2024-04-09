@@ -33,16 +33,16 @@
 
 	echo '<br><br>';
 
-	echo '<h3>Топ-10 страниц, текст которых обновлялся более 1-месяца назад</h3>';
-	// Топ 10 проматриваемых страниц
-	echo GridView::widget([
-		'dataProvider' => $mouthUpdateProvider,
-		'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
-			'header',
-			'date_create',
-		],
-	]);
+//	echo '<h3>Топ-10 страниц, текст которых обновлялся более 1-месяца назад</h3>';
+//	// Топ 10 проматриваемых страниц
+//	echo GridView::widget([
+//		'dataProvider' => $mouthUpdateProvider,
+//		'columns' => [
+//			['class' => 'yii\grid\SerialColumn'],
+//			'header',
+//			'date_create',
+//		],
+//	]);
 
 
 

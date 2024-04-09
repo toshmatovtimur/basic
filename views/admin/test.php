@@ -6,7 +6,9 @@
 	use yii\helpers\Html;
 
 
-    echo md5('admin');
+	$datetime = new DateTime();
+
+	var_dump($datetime);
 
 
 //	$foto = Contentandfoto::find()

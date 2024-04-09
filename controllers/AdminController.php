@@ -327,20 +327,30 @@ class AdminController extends Controller
 									  ->limit(10),
 		]);
 
+		// Вычитание дат
+//		$dateNow = new DateTime();
+//		$date2 = new DateTime("2009-06-26");
+//		$interval = $date1->diff($date2);
+//		echo "days difference ".$interval->d." days ";
+//
+//		$subQuery = Content::find()->select('id')->where(['date_update_content' < date('d-m-Y H:i:s')]);
+//		$query = BaseTwitter::find()->where(['not in', 'id', $subQuery]);
+//		$models = $query->all();
+
+
 		// Топ-10 страниц, текст которых обновлялся более 1-месяца назад
-		$mouthUpdateProvider = new ActiveDataProvider([
-			'query' => Content::find()->select(['header', 'date_create', 'COUNT(fk_content) as counts'])
-									  ->innerJoinWith('view')
-								      ->where('date_create' < date('Y/m/d H:i:s'))
-								      ->groupBy(['fk_content'])
-								      ->orderBy( ['counts' => SORT_DESC])
-								      ->limit(10),
-		]);
+//		$mouthUpdateProvider = new ActiveDataProvider([
+//			'query' => Content::find()->select(['header', 'date_create', 'COUNT(fk_content) as counts',])
+//								      ->where('dateup' != null)
+//								      ->groupBy(['fk_content'])
+//								      ->orderBy( ['counts' => SORT_DESC])
+//								      ->limit(10),
+//		]);
 
 		return $this->render('statistics', [
 			'topProvider' => $topProvider,
 			'lastCreateProvider' => $lastCreateProvider,
-			'mouthUpdateProvider' => $mouthUpdateProvider,
+//			'mouthUpdateProvider' => $mouthUpdateProvider,
 		]);
 
 	}

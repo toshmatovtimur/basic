@@ -2,6 +2,7 @@
 
 	/** @var yii\web\View $this */
 
+	use app\models\Content;
 	use app\models\View;
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
@@ -9,7 +10,6 @@
 	use yii\widgets\DetailView;
 
 ?>
-
 
 <h1><?= $model->header; ?> </h1>
 <br>
@@ -25,6 +25,17 @@
         echo 'Картинок нету';
     }
 
+        
+
+
+
+
+
+
+    // Опять запросы
+    $count = View::find()->select(['COUNT(fk_content) as counts'])->where(['fk_content' => $model->id])->one();
+    echo 'Количество просмотров поста: ' . $count->counts;
+    echo "<br>Дата публикации: " . $model->date_publication;
 ?>
 
 <?php
