@@ -7,6 +7,7 @@ use app\models\Contentandfoto;
 use app\models\ContentSearch;
 use app\models\Foto;
 use app\models\PostForm;
+use app\models\View;
 use Yii;
 use yii\base\Exception;
 use yii\db\Query;
@@ -300,6 +301,7 @@ class PostController extends Controller
 		        $content->save();
 
 		        $transaction->commit();
+		        return $this->redirect(['site/posts']);
 	        }
 			catch (\Exception $e)
 			{
@@ -332,6 +334,7 @@ class PostController extends Controller
                 ->all();
 
             Contentandfoto::deleteAll(['fk_content' => $id]);
+			View::deleteAll(['fk_content' => $id]);
 
             foreach ($foto as $item) {
                 $fotka = Foto::findOne($item->fk_foto);

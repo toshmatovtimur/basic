@@ -163,19 +163,13 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])->groupBy(["id"]);
+		$posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])->groupBy(["id"])->all();
 //		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
 
 
-		$pages = new Pagination(['totalCount' => $posts->count()]);
-
-		$models = $posts->offset($pages->offset)
-			->limit($pages->limit)
-			->all();
 
 		return $this->render('index', [
-			'models' => $models,
-			'pages' => $pages,
+			'posts' => $posts,
 		]);
 	}
 

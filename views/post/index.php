@@ -38,7 +38,17 @@ $this->params['breadcrumbs'][] = $this->title;
 		        'attribute' => 'user',
 		        'value' => 'user.username'
 	        ],
+	        [ // Картинка
+		        'attribute' => 'mainImage',
+		        'format' => 'html',
+		        'label' => 'Обложка поста',
+		        'value' => function ($data)
+		        {
+			        return Html::img('@web/' . $data['mainImage'], ['width' => '150px',
+				        'height' => '120px']);
+		        },
 
+	        ],
             //  'alias',
             // 'date_publication',
             //'text_full:ntext',

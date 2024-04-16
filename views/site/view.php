@@ -23,7 +23,9 @@
         echo 'Картинок нету';
     }
 
-    // Опять запросы
+    echo '<br><br><br>';
+
+    // Запрос на получение количества просмотров данного поста
     $count = View::find()->select(['COUNT(fk_content) as counts'])->where(['fk_content' => $model->id])->one();
     echo 'Количество просмотров поста: ' . $count->counts;
     echo "<br>Дата публикации: " . $model->date_publication;
@@ -36,11 +38,11 @@
 
         <h3>Комментарии</h3>
 
-        <?php if (!empty($models)): ?>
-        	<?php foreach ($models as $post): ?>
-
-        	<?php endforeach; ?>
-        <?php endif; ?>
+<!--        --><?php //if (!empty($models)): ?>
+<!--        	--><?php //foreach ($models as $post): ?>
+<!---->
+<!--        	--><?php //endforeach; ?>
+<!--        --><?php //endif; ?>
 
         <?=Html::beginForm(['site/add-comment']);?>
         <?=Html::textInput('search',"",['placeholder' => 'Поиск'] );?>
@@ -54,13 +56,5 @@
         $view->fk_content = $model->id;
         $view->fk_user = Yii::$app->user->id;
         $view->date_view = date("Y-m-d H:i:s");
-<<<<<<< HEAD
-        $view->save();
-=======
         $view->save();
 ?>
-
-
-
-
->>>>>>> 877ffe0002f775a9a9bfca3ce7f5279b2aeec91f
