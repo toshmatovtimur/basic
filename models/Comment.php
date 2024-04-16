@@ -33,8 +33,8 @@ class Comment extends \yii\db\ActiveRecord
             [['fk_content', 'fk_user'], 'integer'],
             [['date_write_comment'], 'safe'],
             [['comment'], 'string'],
-            [['fk_content'], 'exist', 'skipOnError' => true, 'targetClass' => Content::className(), 'targetAttribute' => ['fk_content' => 'id']],
-            [['fk_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['fk_user' => 'id']],
+            [['fk_content'], 'exist', 'skipOnError' => true, 'targetClass' => Content::class, 'targetAttribute' => ['fk_content' => 'id']],
+            [['fk_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['fk_user' => 'id']],
         ];
     }
 
@@ -57,7 +57,7 @@ class Comment extends \yii\db\ActiveRecord
      */
     public function getContent()
     {
-        return $this->hasOne(Content::className(), ['id' => 'fk_content']);
+        return $this->hasOne(Content::class, ['id' => 'fk_content']);
     }
 
     /**
@@ -65,6 +65,6 @@ class Comment extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'fk_user']);
+        return $this->hasOne(User::class, ['id' => 'fk_user']);
     }
 }
