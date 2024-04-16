@@ -11,9 +11,10 @@
 
 ?>
 
-    <h1><?= $model->header; ?> </h1>
-    <br>
-    <?= $model->text_full ?>
+<h1><?= $model->header; ?> </h1>
+<br>
+<?= $model->text_full ?>
+
 <?php
     if ($images) {
         foreach ($images as $item) {
@@ -31,22 +32,22 @@
     echo "<br>Дата публикации: " . $model->date_publication;
 
 ?>
-        <br><br><br>
+<br><br><br>
+<!-- Комментарии -->
+<?php $form= ActiveForm::begin(); ?>
+<?= $form->field($commentForm, 'comment')->textarea(['rows' => 4]) ?>
+    <div class="form-group">
+    	<?= Html::submitButton('Добавить комментарий', ['class' => 'btn btn-primary']) ?>
+    </div>
+<?php ActiveForm::end(); ?>
 
-    <!-- Комментарии -->
 
 
-        <h3>Комментарии</h3>
-
-<!--        --><?php //if (!empty($models)): ?>
-<!--        	--><?php //foreach ($models as $post): ?>
-<!---->
-<!--        	--><?php //endforeach; ?>
-<!--        --><?php //endif; ?>
-
-        <?=Html::beginForm(['site/add-comment']);?>
-        <?=Html::textInput('search',"",['placeholder' => 'Поиск'] );?>
-        <?=Html::endForm();?>
+<?php //foreach ($post->comments as $comment): ?>
+<!--    <div class="comment">-->
+<!--        <p>--><?php //= $comment->text ?><!--</p>-->
+<!--    </div>-->
+<?php //endforeach; ?>
 
 
 

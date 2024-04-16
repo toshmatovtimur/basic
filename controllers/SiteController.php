@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\CommentForm;
 use app\models\Content;
 use app\models\Contentandfoto;
 use app\models\Foto;
@@ -163,14 +164,32 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])->groupBy(["id"])->all();
-//		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
+//		$posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])->groupBy(["id"])->all();
+////		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
+//
+//		return $this->render('index', [
+//			'posts' => $posts,
+//		]);
+
+		$query = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage']);
+		//		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
+
+		$countQuery = clone $query;
+		$pages = new Pagination(['totalCount' => $countQuery->count()]);
+		$posts = $query->offset($pages->offset)
+					   ->limit($pages->limit)
+			           ->all();
 
 
 
+
+		// Добавление сообщения уведомления
+		Yii::$app->session->setFlash('success', 'Комментарий успешно добавлен.');
 		return $this->render('index', [
 			'posts' => $posts,
+			'pages' => $pages,
 		]);
+
 	}
 
 	/***
@@ -185,9 +204,12 @@ class SiteController extends Controller
 			->where(['contentandfoto.fk_content' => $id])
 			->all();
 
+		$commentForm  = new CommentForm();
+
 		return $this->render('view', [
 			'images' => $images,
 			'model' => $model,
+			'commentForm' => $commentForm,
 		]);
 	}
 
@@ -394,7 +416,7 @@ class SiteController extends Controller
 	#endregion
 	#region Комментарии
 
-	public function actionAddComment()
+	public function actionAddComment($id)
 	{
 
 //		return $this->render('index', [
