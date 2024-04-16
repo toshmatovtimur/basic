@@ -23,13 +23,12 @@
         echo 'Картинок нету';
     }
 
-
-
     // Опять запросы
     $count = View::find()->select(['COUNT(fk_content) as counts'])->where(['fk_content' => $model->id])->one();
     echo 'Количество просмотров поста: ' . $count->counts;
     echo "<br>Дата публикации: " . $model->date_publication;
 ?>
+
 
 <?php
     // Статистика просмотра поста
