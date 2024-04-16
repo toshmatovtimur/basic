@@ -13,21 +13,16 @@
 		    <?php foreach ($posts as $post): ?>
                 <div class="content-grid">
                     <div class="content-grid-info">
-<<<<<<< HEAD
-=======
 					    <?= Html::img('@web/' . $post->mainImage, ['alt' => 'фотка', 'width' => 600, 'height' => 400, 'class' => 'img-responsive']);?>
->>>>>>> f32bca0 (Корректировка)
                         <div class="post-info">
-                            <br><h4><a href="<?= yii\helpers\Url::to(['view', 'id' => $post->id]) ?>"><?= $post->header ?></a></h4>
+                            <h4><a href="<?= yii\helpers\Url::to(['view', 'id' => $post->id]) ?>"><?= $post->header ?></a></h4>
+                            <p><?= $post->text_short ?></p>
                         </div>
-	                    <?= Html::img('@web/' . $post->mainImage, ['alt' => 'фотка', 'width' => 600, 'class' => 'img-responsive']);?>
                     </div>
                 </div>
-                <br><br>
+                <br>
 		    <?php endforeach; ?>
 	    <?php endif; ?>
     </div>
-
-
 
 
