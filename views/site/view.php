@@ -11,9 +11,9 @@
 
 ?>
 
-<h1><?= $model->header; ?> </h1>
-<br>
-<?= $model->text_full ?>
+    <h1><?= $model->header; ?> </h1>
+    <br>
+    <?= $model->text_full ?>
 <?php
     if ($images) {
         foreach ($images as $item) {
@@ -25,18 +25,29 @@
         echo 'Картинок нету';
     }
 
-        
-
-
-
-
-
-
     // Опять запросы
     $count = View::find()->select(['COUNT(fk_content) as counts'])->where(['fk_content' => $model->id])->one();
     echo 'Количество просмотров поста: ' . $count->counts;
     echo "<br>Дата публикации: " . $model->date_publication;
+
 ?>
+        <br><br><br>
+
+    <!-- Комментарии -->
+
+
+        <h3>Комментарии</h3>
+
+        <?php if (!empty($models)): ?>
+        	<?php foreach ($models as $post): ?>
+
+        	<?php endforeach; ?>
+        <?php endif; ?>
+
+        <?=Html::beginForm(['site/add-comment']);?>
+        <?=Html::textInput('search',"",['placeholder' => 'Поиск'] );?>
+        <?=Html::endForm();?>
+
 
 <?php
     // Статистика просмотра поста
@@ -45,6 +56,3 @@
         $view->fk_user = Yii::$app->user->id;
         $view->date_view = date("Y-m-d H:i:s");
         $view->save();
-
-
-
