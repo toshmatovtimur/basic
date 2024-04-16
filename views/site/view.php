@@ -4,6 +4,7 @@
 
 	use app\models\Content;
 	use app\models\View;
+	use dosamigos\tinymce\TinyMce;
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
 	use yii\captcha\Captcha;
@@ -35,7 +36,18 @@
 <br><br><br>
 <!-- Комментарии -->
 <?php $form= ActiveForm::begin(); ?>
-<?= $form->field($commentForm, 'comment')->textarea(['rows' => 4]) ?>
+<?= $form->field($commentForm, 'comment')->widget(TinyMce::class, [
+	'options' => ['rows' => 1, 'width' => 400],
+	'language' => 'ru',
+	'clientOptions' => [
+		'plugins' => [
+			"advlist autolink lists link charmap print preview anchor",
+			"searchreplace visualblocks code fullscreen",
+			"insertdatetime media table contextmenu paste"
+		],
+		'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+	]
+]);?>
     <div class="form-group">
     	<?= Html::submitButton('Добавить комментарий', ['class' => 'btn btn-primary']) ?>
     </div>
