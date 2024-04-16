@@ -17,9 +17,7 @@
 <?php
     if ($images) {
         foreach ($images as $item) {
-            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'width' => 200, 'class' => 'img-responsive']);
-            echo '<br>';
-            echo '<br>';
+            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'height' => 180, 'width' => 200, 'class' => 'img-responsive']) . '&nbsp&nbsp&nbsp&nbsp&nbsp';
         }
     } else {
         echo 'Картинок нету';
@@ -45,6 +43,8 @@
         $view->fk_user = Yii::$app->user->id;
         $view->date_view = date("Y-m-d H:i:s");
         $view->save();
+?>
+
 
 
 

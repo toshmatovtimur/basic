@@ -24,7 +24,6 @@ use yii\web\UploadedFile;
  */
 class AdminController extends Controller
 {
-
     /**
      * Правила для Контроллера
      */
@@ -263,7 +262,6 @@ class AdminController extends Controller
 	    $transaction = $db->beginTransaction();
 
 	    try {
-
 		    $this->findModel($id)->delete();
 
 		    // Удаляю директорию со старым фото на чистом PHP
@@ -347,6 +345,10 @@ class AdminController extends Controller
 //								      ->limit(10),
 //		]);
 
+
+
+
+
 		return $this->render('statistics', [
 			'topProvider' => $topProvider,
 			'lastCreateProvider' => $lastCreateProvider,
@@ -366,5 +368,4 @@ class AdminController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
 }
