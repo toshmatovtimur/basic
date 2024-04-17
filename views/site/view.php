@@ -67,38 +67,6 @@
     }
 </style>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-info">
-                <div class="panel-body comments">
-                    <ul class="media-list">
-                            <div class="comment">
-                                <a href="#" class="pull-left">
-                                    <img src="https://bootstraptema.ru/snippets/element/2016/comments/com-3.jpg" alt="" class="img-circle">
-                                </a>
-                                <div class="media-body">
-                                    <strong class="text-success">Пользователь 3</strong>
-                                    <span class="text-muted">
-                                        <small class="text-muted">2016-02-09</small>
-                                    </span>
-                                    <span class="text-muted pull-right">
-                                        <small class="btn btn-success"><i>&#9998</i></small>
-                                    </span>
-                                    <p>
-                                        Здесь текст комментария
-                                    </p>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!-- Раздел комментарии -->
 <?php if (!empty($commentContent)): ?>
     <?php foreach ($commentContent as $item): ?>
@@ -117,10 +85,6 @@
                                             <strong class="text-success">Пользователь 3</strong>
                                             <span class="text-muted">
                                         <small class="text-muted">2016-02-09</small>
-                                    </span>
-                                            <span class="text-muted pull-right">
-                                        <small class="btn btn-success"><i>&#9998</i></small>
-                                    </span>
                                             <p>
                                                 Здесь текст комментария
                                             </p>
@@ -136,6 +100,7 @@
         </div>
     <?php endforeach; ?>
 <?php endif; ?>
+
 
 
 <?php
