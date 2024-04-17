@@ -11,16 +11,23 @@
 	 $this->title = 'Корпоративный сайт';
 ?>
 
-    <div style="right: auto">
-	    <?php if (!empty($posts)): ?>
-		    <?php foreach ($posts as $post): ?>
-					    <?= Html::img('@web/' . $post->mainImage, ['alt' => 'фотка', 'width' => 600, 'class' => 'img-responsive']);?>
-                            <h4><a href="<?= Url::to(['view', 'id' => $post->id]) ?>"><?= $post->header ?></a></h4>
-                            <p><?= $post->text_short ?></p>
-                </div>
-                <br><br>
-		    <?php endforeach; ?>
-	    <?php endif; ?>
+ <?php if (!empty($posts)): ?>
+    <?php foreach ($posts as $post): ?>
+        <?= Html::img('@web/' . $post->mainImage, ['alt' => 'фотка', 'width' => 600, 'height' => 410,'class' => 'img-responsive']);?>
+         <h4><a href="<?= Url::to(['view', 'id' => $post->id]) ?>"><?= $post->header ?></a></h4>
+        <p><?= $post->text_short ?></p><br>
+    <?php endforeach; ?>
+ <?php endif; ?>
+
+
+
+
+
+
+
+
+
+
     <?php
  // Создание ссылок для пагинации
  if ($pages->getPageCount() >= 1) {

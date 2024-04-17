@@ -301,6 +301,10 @@ class PostController extends Controller
 		        $content->save();
 
 		        $transaction->commit();
+
+                // Добавление сообщения уведомления
+                Yii::$app->session->setFlash('success', 'Пост успешно добавлен.');
+
 		        return $this->redirect(['site/posts']);
 	        }
 			catch (\Exception $e)

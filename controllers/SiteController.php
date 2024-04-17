@@ -180,11 +180,6 @@ class SiteController extends Controller
 					   ->limit($pages->limit)
 			           ->all();
 
-
-
-
-		// Добавление сообщения уведомления
-		Yii::$app->session->setFlash('success', 'Комментарий успешно добавлен.');
 		return $this->render('index', [
 			'posts' => $posts,
 			'pages' => $pages,
