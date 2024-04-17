@@ -165,13 +165,6 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-//		$posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])->groupBy(["id"])->all();
-////		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
-//
-//		return $this->render('index', [
-//			'posts' => $posts,
-//		]);
-
 		$query = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage']);
 		//		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
 
@@ -199,42 +192,11 @@ class SiteController extends Controller
 		$commentContent = Comment::find()->where(['fk_content' => $id])->all();
 
 		$images = Foto::find()->select(['path_to_foto'])
-			->innerJoinWith('contentandfoto')
-			->where(['contentandfoto.fk_content' => $id])
-			->all();
+							  ->innerJoinWith('contentandfoto')
+							  ->where(['contentandfoto.fk_content' => $id])
+							  ->all();
 
-		$commentForm  = new CommentForm();
-
-		if($commentForm->load(Yii::$app->request->post()) && $commentForm->validate()) {
-
-			$comment = new Comment();
-			$comment->fk_user = Yii::$app->user->id;
-			$comment->fk_content = $id;
-			$comment->date_write_comment = date("d-m-Y H:i:s");
-			$comment->comment = $commentForm->comment;
-
-			$db = Yii::$app->db;
-			$transaction = $db->beginTransaction();
-
-			try {
-				$comment->save();
-				$transaction->commit();
-				Yii::$app->session->setFlash('success', "Комментарий успешно добавился");
-
-			} catch(\Exception $e) {
-				$transaction->rollBack();
-				throw $e;
-			} catch(\Throwable $e) {
-				$transaction->rollBack();
-			}
-
-			return $this->render('view', [
-				'images' => $images,
-				'model' => $model,
-				'commentForm' => $commentForm,
-				'commentContent' => $commentContent,
-			]);
-		}
+		$commentForm = new CommentForm();
 
 		return $this->render('view', [
 			'images' => $images,
@@ -284,7 +246,6 @@ class SiteController extends Controller
 	}
 
 	#endregion
-
 	#region Личный кабинет
 
 	/**
@@ -446,11 +407,37 @@ class SiteController extends Controller
 	}
 
 	#endregion
-
 	#region Комментарии
 
 	public function actionAddComment($id)
 	{
+		$commentForm  = new CommentForm();
+
+		if($commentForm->load(Yii::$app->request->post()) && $commentForm->validate()) {
+
+			$comment = new Comment();
+			$comment->fk_user = Yii::$app->user->id;
+			$comment->fk_content = $id;
+			$comment->date_write_comment = date("d-m-Y H:i:s");
+			$comment->comment = $commentForm->comment;
+
+			$db = Yii::$app->db;
+			$transaction = $db->beginTransaction();
+
+			try {
+				$comment->save();
+				$transaction->commit();
+				Yii::$app->session->setFlash('success', "Комментарий успешно добавился");
+
+			} catch(\Exception $e) {
+				$transaction->rollBack();
+				throw $e;
+			} catch(\Throwable $e) {
+				$transaction->rollBack();
+			}
+		}
+
+
 
 //		return $this->render('index', [
 //			'models' => $models,

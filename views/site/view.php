@@ -31,7 +31,7 @@
 <br><br><br>
 <?php $commentForm->comment = null ?>
 <!-- Комментарии -->
-<?php $form= ActiveForm::begin(); ?>
+<?php $form= ActiveForm::begin(['action' => ['site/add-comment']]); ?>
 <?= $form->field($commentForm, 'comment')->widget(TinyMce::class, [
 	'options' => ['rows' => 1, 'width' => 400],
 	'language' => 'ru',
@@ -79,14 +79,18 @@
                                 <ul class="media-list">
                                     <div class="comment">
                                         <a href="#" class="pull-left">
-                                            <img src="https://bootstraptema.ru/snippets/element/2016/comments/com-3.jpg" alt="" class="img-circle">
+	                                        <?= Html::img('@web/' . $item->user->avatar, ['alt' => '', 'width' => 60, 'height' => 60,'class' => 'img-circle']);?>
                                         </a>
                                         <div class="media-body">
-                                            <strong class="text-success">Пользователь 3</strong>
+                                            <?php // Беру инициалы
+                                                $a = mb_strtoupper(mb_substr($item->user->middlename, 0, 1));
+	                                            $b = mb_strtoupper(mb_substr($item->user->lastname, 0, 1));
+                                            ?>
+                                            <strong class="text-success"><?= "{$item->user->firstname} {$a}. {$b}." ?></strong>
                                             <span class="text-muted">
-                                        <small class="text-muted">2016-02-09</small>
+                                                <small class="text-muted"><?=$item->date_write_comment;?></small>
                                             <p>
-                                                Здесь текст комментария
+                                                <?=$item->comment;?>
                                             </p>
                                         </div>
                                         <div class="clearfix"></div>
