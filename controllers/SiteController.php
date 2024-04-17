@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Comment;
 use app\models\CommentForm;
 use app\models\Content;
 use app\models\Contentandfoto;
@@ -192,7 +193,10 @@ class SiteController extends Controller
 	 */
 	public function actionView($id)
 	{
+
 		$model = Content::find()->where(['id' => $id])->one();
+
+		$commentContent = Comment::find()->where(['fk_content' => $id])->all();
 
 		$images = Foto::find()->select(['path_to_foto'])
 			->innerJoinWith('contentandfoto')
@@ -201,10 +205,40 @@ class SiteController extends Controller
 
 		$commentForm  = new CommentForm();
 
+		if($commentForm->load(Yii::$app->request->post()) && $commentForm->validate()) {
+
+			$comment = new Comment();
+			$comment->fk_user = Yii::$app->user->id;
+			$comment->fk_content = $id;
+			$comment->date_write_comment = date("d-m-Y H:i:s");
+			$comment->comment = $commentForm->comment;
+
+			$db = Yii::$app->db;
+			$transaction = $db->beginTransaction();
+
+			try {
+				$comment->save();
+				$transaction->commit();
+			} catch(\Exception $e) {
+				$transaction->rollBack();
+				throw $e;
+			} catch(\Throwable $e) {
+				$transaction->rollBack();
+			}
+
+			return $this->render('view', [
+				'images' => $images,
+				'model' => $model,
+				'commentForm' => $commentForm,
+				'commentContent' => $commentContent,
+			]);
+		}
+
 		return $this->render('view', [
 			'images' => $images,
 			'model' => $model,
 			'commentForm' => $commentForm,
+			'commentContent' => $commentContent,
 		]);
 	}
 
@@ -248,6 +282,7 @@ class SiteController extends Controller
 	}
 
 	#endregion
+
 	#region Личный кабинет
 
 	/**
@@ -409,6 +444,7 @@ class SiteController extends Controller
 	}
 
 	#endregion
+
 	#region Комментарии
 
 	public function actionAddComment($id)

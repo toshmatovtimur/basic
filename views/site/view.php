@@ -34,6 +34,7 @@
 
 ?>
 <br><br><br>
+<?php $commentForm->comment = "" ?>
 <!-- Комментарии -->
 <?php $form= ActiveForm::begin(); ?>
 <?= $form->field($commentForm, 'comment')->widget(TinyMce::class, [
@@ -55,11 +56,11 @@
 
 
 
-<?php //foreach ($post->comments as $comment): ?>
-<!--    <div class="comment">-->
-<!--        <p>--><?php //= $comment->text ?><!--</p>-->
-<!--    </div>-->
-<?php //endforeach; ?>
+<?php foreach ($commentContent as $item): ?>
+    <div class="comment">
+        <p><?= $item->comment ?></p>
+    </div>
+<?php endforeach; ?>
 
 
 

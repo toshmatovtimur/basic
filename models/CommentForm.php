@@ -19,7 +19,9 @@
 		{
 			return [
 				[['comment'], 'required'],
-				['comment', 'safe'],
+				[['comment', 'fk_user', 'fk_content'], 'safe'],
+				['date_write_comment', 'date', 'format' => 'php:Y-m-d H:i:s'],
+
 			];
 		}
 
@@ -29,7 +31,8 @@
 		public function attributeLabels()
 		{
 			return [
-				'comment' => 'Комментарий',
+				'date_write_comment' => 'Дата написания комментария',
+				'comment' => 'Комментарии',
 			];
 		}
 	}
