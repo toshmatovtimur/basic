@@ -219,6 +219,8 @@ class SiteController extends Controller
 			try {
 				$comment->save();
 				$transaction->commit();
+				Yii::$app->session->setFlash('success', "Комментарий успешно добавился");
+
 			} catch(\Exception $e) {
 				$transaction->rollBack();
 				throw $e;

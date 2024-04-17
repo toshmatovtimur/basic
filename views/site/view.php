@@ -1,15 +1,10 @@
 <?php
-
 	/** @var yii\web\View $this */
-
 	use app\models\Content;
 	use app\models\View;
 	use dosamigos\tinymce\TinyMce;
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
-	use yii\captcha\Captcha;
-	use yii\widgets\DetailView;
-
 ?>
 
 <h1><?= $model->header; ?> </h1>
@@ -34,7 +29,7 @@
 
 ?>
 <br><br><br>
-<?php $commentForm->comment = "" ?>
+<?php $commentForm->comment = null ?>
 <!-- Комментарии -->
 <?php $form= ActiveForm::begin(); ?>
 <?= $form->field($commentForm, 'comment')->widget(TinyMce::class, [
@@ -51,17 +46,96 @@
 ]);?>
     <div class="form-group">
     	<?= Html::submitButton('Добавить комментарий', ['class' => 'btn btn-primary']) ?>
-    </div>
+    </div><br>
 <?php ActiveForm::end(); ?>
 
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
-<?php foreach ($commentContent as $item): ?>
-    <div class="comment">
-        <p><?= $item->comment ?></p>
+<style>
+    .comments ul ul {
+        margin-left: 60px;
+    }
+    .comments .comment img {
+        margin-right: 20px;
+    }
+    .comments .comment {
+        padding: 6px;
+    }
+    .comments .comment:hover {
+        background: #eee;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-body comments">
+                    <ul class="media-list">
+                            <div class="comment">
+                                <a href="#" class="pull-left">
+                                    <img src="https://bootstraptema.ru/snippets/element/2016/comments/com-3.jpg" alt="" class="img-circle">
+                                </a>
+                                <div class="media-body">
+                                    <strong class="text-success">Пользователь 3</strong>
+                                    <span class="text-muted">
+                                        <small class="text-muted">2016-02-09</small>
+                                    </span>
+                                    <span class="text-muted pull-right">
+                                        <small class="btn btn-success"><i>&#9998</i></small>
+                                    </span>
+                                    <p>
+                                        Здесь текст комментария
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-<?php endforeach; ?>
+</div>
 
+
+<!-- Раздел комментарии -->
+<?php if (!empty($commentContent)): ?>
+    <?php foreach ($commentContent as $item): ?>
+        <div class="comment">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-info">
+                            <div class="panel-body comments">
+                                <ul class="media-list">
+                                    <div class="comment">
+                                        <a href="#" class="pull-left">
+                                            <img src="https://bootstraptema.ru/snippets/element/2016/comments/com-3.jpg" alt="" class="img-circle">
+                                        </a>
+                                        <div class="media-body">
+                                            <strong class="text-success">Пользователь 3</strong>
+                                            <span class="text-muted">
+                                        <small class="text-muted">2016-02-09</small>
+                                    </span>
+                                            <span class="text-muted pull-right">
+                                        <small class="btn btn-success"><i>&#9998</i></small>
+                                    </span>
+                                            <p>
+                                                Здесь текст комментария
+                                            </p>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 
 <?php
