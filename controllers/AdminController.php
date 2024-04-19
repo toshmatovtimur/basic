@@ -11,6 +11,7 @@ use app\models\UserSearch;
 use app\models\View;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
@@ -325,25 +326,24 @@ class AdminController extends Controller
 									  ->limit(10),
 		]);
 
-		// Вычитание дат
-//		$dateNow = new DateTime();
-//		$date2 = new DateTime("2009-06-26");
-//		$interval = $date1->diff($date2);
-//		echo "days difference ".$interval->d." days ";
-//
-//		$subQuery = Content::find()->select('id')->where(['date_update_content' < date('d-m-Y H:i:s')]);
-//		$query = BaseTwitter::find()->where(['not in', 'id', $subQuery]);
-//		$models = $query->all();
+		// Заданная дата, например, 30 дней назад от текущей даты
+		$thirtyDaysAgo = date('Y-m-d', strtotime('-30 days'));
+
+		//топ-10 страниц, текст которых обновлялся более 1-месяца назад
+		$subQuery = Content::find()->select('id')->where(['<', 'date_update_content', $thirtyDaysAgo]);
+
+		$mouthUpdateProvider = new ActiveDataProvider([
+			'query' => View::find()->select(['fk_content', 'COUNT(fk_content) as counts'])
+				->where(['in', 'fk_content', $subQuery])
+				->groupBy(['fk_content'])
+				->orderBy( ['counts' => SORT_DESC])
+				->limit(10),
+		]);
 
 
-		// Топ-10 страниц, текст которых обновлялся более 1-месяца назад
-//		$mouthUpdateProvider = new ActiveDataProvider([
-//			'query' => Content::find()->select(['header', 'date_create', 'COUNT(fk_content) as counts',])
-//								      ->where('dateup' != null)
-//								      ->groupBy(['fk_content'])
-//								      ->orderBy( ['counts' => SORT_DESC])
-//								      ->limit(10),
-//		]);
+
+		//топ-10 активных пользователей (больше всего комментариев за последнюю неделю)
+
 
 
 
@@ -352,7 +352,7 @@ class AdminController extends Controller
 		return $this->render('statistics', [
 			'topProvider' => $topProvider,
 			'lastCreateProvider' => $lastCreateProvider,
-//			'mouthUpdateProvider' => $mouthUpdateProvider,
+			'mouthUpdateProvider' => $mouthUpdateProvider,
 		]);
 
 	}

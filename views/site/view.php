@@ -29,9 +29,9 @@
 
 ?>
 <br><br><br>
-<?php $commentForm->comment = null ?>
+
 <!-- Комментарии -->
-<?php $form= ActiveForm::begin(['action' => ['site/add-comment']]); ?>
+<?php $form= ActiveForm::begin(); ?>
 <?= $form->field($commentForm, 'comment')->widget(TinyMce::class, [
 	'options' => ['rows' => 1, 'width' => 400],
 	'language' => 'ru',

@@ -7,7 +7,7 @@
 	use yii\grid\GridView;
 
 
-    echo '<h3>Топ 10 проматриваемых страниц</h3>';
+    echo '<h3>Топ 10 просматриваемых страниц</h3>';
     // Топ 10 проматриваемых страниц
 	echo GridView::widget([
 		'dataProvider' => $topProvider,
@@ -33,16 +33,17 @@
 
 	echo '<br><br>';
 
-//	echo '<h3>Топ-10 страниц, текст которых обновлялся более 1-месяца назад</h3>';
-//	// Топ 10 проматриваемых страниц
-//	echo GridView::widget([
-//		'dataProvider' => $mouthUpdateProvider,
-//		'columns' => [
-//			['class' => 'yii\grid\SerialColumn'],
-//			'header',
-//			'date_create',
-//		],
-//	]);
+	echo '<h3>Топ-10 страниц, текст которых обновлялся более 1-месяца назад</h3>';
+	// Топ 10 проматриваемых страниц
+	echo GridView::widget([
+		'dataProvider' => $mouthUpdateProvider,
+		'columns' => [
+			['class' => 'yii\grid\SerialColumn'],
+			'content.header',
+			'content.date_update_content',
+			'counts',
+		],
+	]);
 
 
 

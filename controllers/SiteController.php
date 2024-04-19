@@ -16,6 +16,7 @@ use yii\data\Pagination;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
+use yii\helpers\Url;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
@@ -186,6 +187,32 @@ class SiteController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$commentForm = new CommentForm();
+
+		if(Yii::$app->request->isPost && $commentForm->load(Yii::$app->request->post()) && $commentForm->validate()) {
+			$comment = new Comment();
+			$comment->fk_user = Yii::$app->user->id;
+			$comment->fk_content = $id;
+			$comment->date_write_comment = date("d-m-Y H:i:s");
+			$comment->comment = $commentForm->comment;
+
+			$db = Yii::$app->db;
+			$transaction = $db->beginTransaction();
+
+			try {
+				$comment->save();
+				$transaction->commit();
+				Yii::$app->session->setFlash('success', "Комментарий успешно добавился");
+
+			} catch(\Exception $e) {
+				$transaction->rollBack();
+				throw $e;
+			} catch(\Throwable $e) {
+				$transaction->rollBack();
+			}
+			
+			return $this->redirect(['site/hello', 'id' => $id]);
+		}
 
 		$model = Content::find()->where(['id' => $id])->one();
 
@@ -196,13 +223,13 @@ class SiteController extends Controller
 							  ->where(['contentandfoto.fk_content' => $id])
 							  ->all();
 
-		$commentForm = new CommentForm();
+
 
 		return $this->render('view', [
-			'images' => $images,
-			'model' => $model,
-			'commentForm' => $commentForm,
-			'commentContent' => $commentContent,
+					 'images' => $images,
+					 'model' => $model,
+					 'commentForm' => $commentForm,
+					 'commentContent' => $commentContent,
 		]);
 	}
 
@@ -245,6 +272,13 @@ class SiteController extends Controller
 		]);
 	}
 
+	/***
+	 * Метод нужен чтоб не было глюков при добавлении комментария
+	 */
+	public function actionHello($id)
+	{
+		return $this->redirect(['site/view', 'id' => $id]);
+	}
 	#endregion
 	#region Личный кабинет
 
@@ -407,43 +441,5 @@ class SiteController extends Controller
 	}
 
 	#endregion
-	#region Комментарии
 
-	public function actionAddComment($id)
-	{
-		$commentForm  = new CommentForm();
-
-		if($commentForm->load(Yii::$app->request->post()) && $commentForm->validate()) {
-
-			$comment = new Comment();
-			$comment->fk_user = Yii::$app->user->id;
-			$comment->fk_content = $id;
-			$comment->date_write_comment = date("d-m-Y H:i:s");
-			$comment->comment = $commentForm->comment;
-
-			$db = Yii::$app->db;
-			$transaction = $db->beginTransaction();
-
-			try {
-				$comment->save();
-				$transaction->commit();
-				Yii::$app->session->setFlash('success', "Комментарий успешно добавился");
-
-			} catch(\Exception $e) {
-				$transaction->rollBack();
-				throw $e;
-			} catch(\Throwable $e) {
-				$transaction->rollBack();
-			}
-		}
-
-
-
-//		return $this->render('index', [
-//			'models' => $models,
-//		]);
-		return $this->render('index');
-	}
-
-	#endregion
 }
