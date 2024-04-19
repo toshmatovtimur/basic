@@ -348,17 +348,13 @@ class AdminController extends Controller
 
 		//топ-10 активных пользователей (больше всего комментариев за последнюю неделю)
 		$topActiveUsers = new ActiveDataProvider([
-			'query' => Comment::find()->select(['fk_user', 'COUNT(comment) as counts'])
+			'query' => Comment::find()->select(['fk_user', 'COUNT(comment) as counts',])
 				->where(['>=', 'date_write_comment', $weekStart])
 				->andWhere(['<=', 'date_write_comment', $weekEnd])
 				->groupBy(['fk_user'])
 				->orderBy( ['counts' => SORT_DESC])
 				->limit(10),
 		]);
-
-
-
-
 
 		return $this->render('statistics', [
 			'topProvider' => $topProvider,
