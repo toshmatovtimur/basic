@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Comment;
 use app\models\Content;
 use app\models\PostForm;
 use app\models\Role;
@@ -340,10 +341,20 @@ class AdminController extends Controller
 				->limit(10),
 		]);
 
-
+		// Определение дат начала и конца недели
+		$currentDate = new Expression('NOW()');
+		$weekStart = new Expression("DATE_TRUNC('week', NOW())");
+		$weekEnd = new Expression("DATE_TRUNC('week', NOW()) + INTERVAL '1 week' - INTERVAL '1 day'");
 
 		//топ-10 активных пользователей (больше всего комментариев за последнюю неделю)
-
+		$topActiveUsers = new ActiveDataProvider([
+			'query' => Comment::find()->select(['fk_user', 'COUNT(comment) as counts'])
+				->where(['>=', 'date_write_comment', $weekStart])
+				->andWhere(['<=', 'date_write_comment', $weekEnd])
+				->groupBy(['fk_user'])
+				->orderBy( ['counts' => SORT_DESC])
+				->limit(10),
+		]);
 
 
 
@@ -353,6 +364,7 @@ class AdminController extends Controller
 			'topProvider' => $topProvider,
 			'lastCreateProvider' => $lastCreateProvider,
 			'mouthUpdateProvider' => $mouthUpdateProvider,
+			'topActiveUsers' => $topActiveUsers,
 		]);
 
 	}

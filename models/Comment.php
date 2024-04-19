@@ -18,6 +18,7 @@ use Yii;
  */
 class Comment extends \yii\db\ActiveRecord
 {
+	public $counts;
     public static function tableName()
     {
         return 'comment';
@@ -49,6 +50,7 @@ class Comment extends \yii\db\ActiveRecord
             'fk_user' => 'Fk User',
             'date_write_comment' => 'Date Write Comment',
             'comment' => 'Comment',
+            'counts' => 'Количество комментариев',
         ];
     }
 

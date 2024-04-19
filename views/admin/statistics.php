@@ -8,7 +8,6 @@
 
 
     echo '<h3>Топ 10 просматриваемых страниц</h3>';
-    // Топ 10 проматриваемых страниц
 	echo GridView::widget([
 		'dataProvider' => $topProvider,
 		'columns' => [
@@ -21,7 +20,6 @@
     echo '<br><br>';
 
 	echo '<h3>10 последних созданных страниц</h3>';
-	// Топ 10 проматриваемых страниц
 	echo GridView::widget([
 		'dataProvider' => $lastCreateProvider,
 		'columns' => [
@@ -34,7 +32,6 @@
 	echo '<br><br>';
 
 	echo '<h3>Топ-10 страниц, текст которых обновлялся более 1-месяца назад</h3>';
-	// Топ 10 проматриваемых страниц
 	echo GridView::widget([
 		'dataProvider' => $mouthUpdateProvider,
 		'columns' => [
@@ -45,19 +42,14 @@
 		],
 	]);
 
+	echo '<br><br>';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	echo '<h3>Топ-10 активных пользователей (больше всего комментариев за последнюю неделю)</h3>';
+	echo GridView::widget([
+		'dataProvider' => $topActiveUsers,
+		'columns' => [
+			['class' => 'yii\grid\SerialColumn'],
+            'user.firstname',
+			'counts',
+		],
+	]);
