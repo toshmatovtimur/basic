@@ -125,6 +125,14 @@ class Content extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'fk_user_create']);
     }
 
+	/**
+	 * Gets query for [[category_fk]].
+	 */
+	public function getCategory()
+	{
+		return $this->hasOne(Category::class, ['id' => 'category_fk']);
+	}
+
     /**
      * Gets query for [[Views]].
      *

@@ -46,7 +46,7 @@ class Role extends \yii\db\ActiveRecord
      */
     public function getContent()
     {
-        return $this->hasMany(Content::className(), ['fk_status' => 'id']);
+        return $this->hasMany(Content::class, ['fk_status' => 'id']);
     }
 
     /**
@@ -54,6 +54,6 @@ class Role extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasMany(User::className(), ['fk_role' => 'id']);
+        return $this->hasMany(User::class, ['fk_role' => 'id']);
     }
 }

@@ -95,6 +95,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/kartik-v/yii2-widget-typeahead" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/pozitronik/yii2-searchwidget" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/yiisoft/yii2-elasticsearch" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/matejch/yii2-sidebar-collapsible" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

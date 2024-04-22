@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Comment;
 use app\models\Content;
 use app\models\Contentandfoto;
 use app\models\ContentSearch;
@@ -338,6 +339,7 @@ class PostController extends Controller
                 ->all();
 
             Contentandfoto::deleteAll(['fk_content' => $id]);
+			Comment::deleteAll(['fk_content' => $id]);
 			View::deleteAll(['fk_content' => $id]);
 
             foreach ($foto as $item) {

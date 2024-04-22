@@ -224,7 +224,6 @@ class SiteController extends Controller
 							  ->all();
 
 
-
 		return $this->render('view', [
 					 'images' => $images,
 					 'model' => $model,

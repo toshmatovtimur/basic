@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "199f75ecfee96bbfab58b6111900a117",
+    "content-hash": "a89d1303d6ef5d95901fe2bc7941bd56",
     "packages": [
         {
             "name": "2amigos/yii2-tinymce-widget",
@@ -661,6 +661,54 @@
                 "source": "https://github.com/kartik-v/yii2-widget-typeahead/tree/master"
             },
             "time": "2019-05-29T12:06:56+00:00"
+        },
+        {
+            "name": "matejch/yii2-sidebar-collapsible",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Matej-ch/yii2-sidebar-collapsible.git",
+                "reference": "76b1e4f31b0db7403401a43ee81f40c318e76cb5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Matej-ch/yii2-sidebar-collapsible/zipball/76b1e4f31b0db7403401a43ee81f40c318e76cb5",
+                "reference": "76b1e4f31b0db7403401a43ee81f40c318e76cb5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.0",
+                "yiisoft/yii2": "~2.0.42"
+            },
+            "type": "yii2-widget",
+            "autoload": {
+                "psr-4": {
+                    "matejch\\yii2sidebar\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matej Chalachan",
+                    "email": "matejCH.work@gmail.com"
+                }
+            ],
+            "description": "Add sidebar that can be collapsed to smaller version",
+            "keywords": [
+                "collapsible",
+                "extension",
+                "sidebar",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/Matej-ch/yii2-sidebar-collapsible/issues",
+                "source": "https://github.com/Matej-ch/yii2-sidebar-collapsible/tree/1.0.5"
+            },
+            "time": "2022-06-11T16:22:46+00:00"
         },
         {
             "name": "paragonie/random_compat",

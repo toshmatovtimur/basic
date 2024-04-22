@@ -6,7 +6,8 @@
 use app\assets\AppAsset;
 use app\models\UserIdentity;
 use app\widgets\Alert;
-use yii\bootstrap5\Breadcrumbs;
+	use matejch\yii2sidebar\Sidebar;
+	use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
@@ -34,6 +35,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <header id="header">
     <?php
+
     NavBar::begin([
 //        'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -72,6 +74,43 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     NavBar::end();
     ?>
 </header>
+
+<div class="sidebar">
+	<?php Sidebar::begin([
+
+		'collapseText' => 'Скрыть боковую панель', // Optional text in button, defaults to Collapse
+		'top' => '75px', //Optional Fixed top, where sidebar begins, defaults to 0px
+		'left' => '0px', //Optional Fixed left, where sidebar begins on letf side, defaults to 0px
+		'widthOpen' => '256px', //Optional size when sidebar is opened
+		'widthCollapsed' => '70px', //Optional size when sidebar is colapsed
+		'topMobile' => '0px', //Optional
+		'leftMobile' => '0px', //Optional
+		'position' => 'fixed', //Optional
+		'positionMobile' => 'fixed' //Optional
+	]) ?>
+    <h4 class="">Категории</h4>
+    <br>
+    <?php
+	    $posts = [
+                'категория 1',
+                'категория 2',
+                'категория 3',
+                'категория 4',
+                'категория 5',
+                'категория 6',
+        ];
+
+    ?>
+
+	<?php foreach ($posts as $key => $post): ?>
+        <div>
+			<?= Html::a('<i class="fas fa-eye"></i> <span data-sidebar-hide="1">text will hide on collapse</span>', Url::to(['site/index', 'id' => $key]), ['class' => "btn btn-success"]) ?>
+        </div>
+        <br>
+	<?php endforeach; ?>
+    <br>
+	<?php Sidebar::end() ?>
+</div>
 
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">
