@@ -242,6 +242,7 @@ class PostController extends Controller
 	        $content->tags = Yii::$app->request->post("PostForm")["tags"];
 	        $content->fk_status = 1; // Загружен
 	        $content->fk_user_create = Yii::$app->user->id;
+	        $content->fk_category =
 
 
 	        $db = Yii::$app->getDb();

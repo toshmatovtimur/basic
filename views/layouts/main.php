@@ -4,10 +4,11 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
+use app\models\Category;
 use app\models\UserIdentity;
 use app\widgets\Alert;
-	use matejch\yii2sidebar\Sidebar;
-	use yii\bootstrap5\Breadcrumbs;
+use matejch\yii2sidebar\Sidebar;
+use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
@@ -91,24 +92,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <h4 class="">Категории</h4>
     <br>
     <?php
-	    $posts = [
-                'категория 1',
-                'категория 2',
-                'категория 3',
-                'категория 4',
-                'категория 5',
-                'категория 6',
-        ];
-
+	    $categories = Category::find()->orderBy(['category' => SORT_DESC]) ->all();
     ?>
 
-	<?php foreach ($posts as $key => $post): ?>
+	<?php foreach ($categories as $value): ?>
         <div>
-			<?= Html::a('<i class="fas fa-eye"></i> <span data-sidebar-hide="1">text will hide on collapse</span>', Url::to(['site/index', 'id' => $key]), ['class' => "btn btn-success"]) ?>
+			<?php echo Html::a("<i class='fas fa-eye'></i> <span data-sidebar-hide='1'>$value->category</span>", Url::to(['site/index', 'id' => $value->id]), ['class' => "btn btn-success"]) ?>
         </div>
         <br>
 	<?php endforeach; ?>
     <br>
+
 	<?php Sidebar::end() ?>
 </div>
 

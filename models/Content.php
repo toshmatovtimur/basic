@@ -23,12 +23,14 @@ use yii\web\UploadedFile;
  * @property string|null $tags
  * @property string|null $mainImage
  * @property int|null $fk_status
+ * @property int|null $fk_category
  * @property int|null $fk_user_create
  *
  * @property Comment[] $comments
  * @property Contentandfoto[] $contentandfotos
  * @property Role $fkStatus
  * @property Status $fkUserCreate
+ * @property Category $fkCategory
  * @property View[] $views
  */
 class Content extends ActiveRecord

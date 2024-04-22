@@ -24,6 +24,7 @@ class PostForm extends Model
 
     public $fk_status; // Автомат
     public $fk_user_create;
+    public $fk_category;
     public $nameImage;
 
 	/**
@@ -63,6 +64,7 @@ class PostForm extends Model
                 'status' => 'Статус',
                 'user_create' => 'Создатель',
                 'image' => 'Картинка',
+                'fk_category' => 'Категория',
             ];
     }
 
