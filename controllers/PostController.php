@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Category;
+use app\models\CategoryForm;
 use app\models\Comment;
 use app\models\Content;
 use app\models\Contentandfoto;
@@ -359,6 +361,31 @@ class PostController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    /***
+     * Добавить категорию
+     */
+    public function actionAddCategory()
+    {
+        $model = new CategoryForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $check = Category::find()->where(['category' => $model->category])->one();
+            if($check != null) {
+                Yii::$app->session->setFlash('error', 'Категория с таким названием уже существует!');
+            } elseif ($check == null) {
+                $category = new Category();
+                $category->category = $model->category;
+                $category->save();
+                Yii::$app->session->setFlash('success', 'Успешно');
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->render('addCategory', [
+            'model' => $model,
+        ]);
     }
 
 	/**

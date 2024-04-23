@@ -17,12 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Добавить Пост', ['post/upload'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?= Html::beginTag('div', ['class' => 'btn-group']) ?>
+        <?= Html::a('Добавить пост', ['post/upload'], ['class' => 'btn btn-success']) ?> &nbsp&nbsp
+        <?= Html::a('Добавить категорию', ['post/add-category'], ['class' => 'btn btn-success']) ?>
+    <?= Html::endTag('div') ?>
+
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <br>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
