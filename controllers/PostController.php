@@ -26,7 +26,6 @@ use yii\web\UploadedFile;
  */
 class PostController extends Controller
 {
-
 	/***
 	 * Правила
 	 */
@@ -105,6 +104,7 @@ class PostController extends Controller
 	 */
     public function actionUpdate($id)
     {
+	    $files = [];
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
@@ -116,93 +116,138 @@ class PostController extends Controller
 	        try
 	        {
 				$model->date_update_content = date("d-m-Y H:i:s");
-				$model->imageContent = null;
+				//$model->imageContent = null;
 
-	            if(!$model->save())
-				{
+	            if(!$model->save()) {
 					$error = VarDumper::dumpAsString($model->getErrors());
 					return $this->render('update', compact('model', 'error',));
 				}
 
-		        // Загружаю картинку(и)
-		            $model->imageContent = UploadedFile::getInstances($model, 'imageContent');
+				// Загружаю картинку(и)
+		        $model->imageContent = UploadedFile::getInstances($model, 'imageContent');
 
-					#region Удаление фоток из БД
-		            $files = [];
-		            $foto = Contentandfoto::find()
-			                ->select(['fk_foto'])
-			                ->where(['contentandfoto.fk_content' => $model->id])
-			                ->all();
+				// Проверка, существует ли фото у этой модели
+				$checkFoto = Contentandfoto::find()->where(['fk_content' => $model->id])->all();
 
-		            Contentandfoto::deleteAll(['fk_content' => $model->id]);
+				// Если загружена картинка и существует старая фотка
+		        if($model->imageContent !== null && $checkFoto != null) {
 
+			        #region Удаление фоток из БД
+			        $foto = Contentandfoto::find()
+				        ->select(['fk_foto'])
+				        ->where(['contentandfoto.fk_content' => $model->id])
+				        ->all();
 
-					foreach ($foto as $item)
-					{
-						$fotka = Foto::findOne($item->fk_foto);
-						$files[] = $fotka->path_to_foto;
-						$fotka->delete();
-					}
+			        Contentandfoto::deleteAll(['fk_content' => $model->id]);
 
-		            // Удаляю директорию со старыми фото на чистом PHP
-		            $path = "img/post-{$model->id}";
-		            if(count(scandir($path)) !== 2) {
-			            if($files != null) {
-				            foreach ($files as $item) {
-					            unlink($item);
-				            }
-			            }
-		            }
+			        foreach ($foto as $item) {
+				        $fotka = Foto::findOne($item->fk_foto);
+				        $files[] = $fotka->path_to_foto;
+				        $fotka->delete();
+			        }
 
-					if (is_dir($path)) {
-			             rmdir($path);
-					}
+			        // Удаляю директорию со старыми фото на чистом PHP
+			        $path = "img/post-{$model->id}";
+			        if(count(scandir($path)) !== 2) {
+				        if($files != null) {
+					        foreach ($files as $item) {
+						        unlink($item);
+					        }
+				        }
+			        }
 
-					#endregion
+			        if (is_dir($path)) {
+				        rmdir($path);
+			        }
 
+			        // Сохраняю фотки физически в новую старую папку
+			        // Создаю директорию и физически сохраняю файл
+			        FileHelper::createDirectory("img/post-{$model->id}");
 
-					// Сохраняю фотки физически в новую старую папку
-					// Создаю директорию и физически сохраняю файл
-					FileHelper::createDirectory("img/post-{$model->id}");
+			        foreach ($model->imageContent as $file) {
+				        $path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
+				        $file->saveAs($path);
+			        }
 
-					foreach ($model->imageContent as $file) {
-						$path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
-						$file->saveAs($path);
-					}
+			        $query=new Query();
 
-					$query=new Query();
+			        // Вставка в таблицу Foto
+			        foreach ($model->imageContent as $file) {
+				        $path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
+				        $foto = new Foto();
+				        $foto->name_f = "{$file->baseName}.{$file->extension}";
+				        $foto->path_to_foto = $path;
+				        if (!$foto->save())
+				        {
+					        $error = '';
+					        return $this->render('upload', compact('model', 'error',));
+				        }
+				        else
+				        {
+					        $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
 
-					// Вставка в таблицу Foto
-					foreach ($model->imageContent as $file) {
-						$path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
-						$foto = new Foto();
-						$foto->name_f = "{$file->baseName}.{$file->extension}";
-						$foto->path_to_foto = $path;
-						if (!$foto->save())
-						{
-							$error = '';
-							return $this->render('upload', compact('model', 'error',));
-						}
-						else
-						{
-							$idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
+					        // Вставка в таблицу Contentandfoto
+					        $contentFoto = new Contentandfoto(); // id-шники сохранять
+					        $contentFoto->fk_foto = $idFoto['id'];
+					        $contentFoto->fk_content = $model->id;
 
-							// Вставка в таблицу Contentandfoto
-							$contentFoto = new Contentandfoto(); // id-шники сохранять
-							$contentFoto->fk_foto = $idFoto['id'];
-							$contentFoto->fk_content = $model->id;
+					        if (!$contentFoto->save()) {
+						        $error = VarDumper::dumpAsString($contentFoto->getErrors());
+						        return $this->render('upload', compact('model', 'error',));
+					        }
+				        }
+			        }
 
-							if (!$contentFoto->save()) {
-								$error = VarDumper::dumpAsString($contentFoto->getErrors());
-								return $this->render('upload', compact('model', 'error',));
-							}
-						}
-					}
+			        // Добавление главной фотки в Content
+			        $model = $this->findModel($id);
+			        $model->mainImage = $files[0];
+			        $model->save();
 
-					// Добавление главной фотки в Content
-		            $model = $this->findModel($id);
-		            $model->mainImage = $files[0];
-					$model->save();
+			        #endregion
+		        } elseif ($model->imageContent !== null && $checkFoto == null) {
+			        // Сохраняю фотки физически в новую старую папку
+			        // Создаю директорию и физически сохраняю файл
+			        FileHelper::createDirectory("img/post-{$model->id}");
+
+			        foreach ($model->imageContent as $file) {
+				        $path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
+				        $file->saveAs($path);
+			        }
+
+			        $query=new Query();
+
+			        // Вставка в таблицу Foto
+			        foreach ($model->imageContent as $file) {
+				        $path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
+				        $foto = new Foto();
+				        $foto->name_f = "{$file->baseName}.{$file->extension}";
+				        $foto->path_to_foto = $path;
+
+						$files[0] = $path;
+
+				        if (!$foto->save()) {
+					        $error = '';
+					        return $this->render('upload', compact('model', 'error',));
+				        } else {
+					        $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
+
+					        // Вставка в таблицу Contentandfoto
+					        $contentFoto = new Contentandfoto(); // id-шники сохранять
+					        $contentFoto->fk_foto = $idFoto['id'];
+					        $contentFoto->fk_content = $model->id;
+
+					        if (!$contentFoto->save()) {
+						        $error = VarDumper::dumpAsString($contentFoto->getErrors());
+						        return $this->render('upload', compact('model', 'error',));
+					        }
+				        }
+			        }
+
+			        // Добавление главной фотки в Content
+			        $model = $this->findModel($id);
+			        $model->mainImage = $files[0];
+			        $model->save();
+		        }
 
 		        $transaction->commit();
 	        }
@@ -231,21 +276,19 @@ class PostController extends Controller
         $model = new PostForm();
 
         // Получаю post запрос, если он есть
-        if (Yii::$app->request->isPost) {
-	        $model->load(Yii::$app->request->post());
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
 
 	        // Вставка в таблицу Content
 	        $content = new Content();
-	        $content->header = Yii::$app->request->post("PostForm")["header"];
-	        $content->alias = Yii::$app->request->post("PostForm")["alias"];
+	        $content->header = $model->header;
+	        $content->alias = $model->alias;
 	        $content->date_create = date("d-m-Y H:i:s");
-	        $content->text_short = Yii::$app->request->post("PostForm")["text_short"];
-	        $content->text_full = Yii::$app->request->post("PostForm")["text_full"];
-	        $content->tags = Yii::$app->request->post("PostForm")["tags"];
+	        $content->text_short = $model->text_short;
+	        $content->text_full = $model->text_full;
+	        $content->tags = $model->tags;
 	        $content->fk_status = 1; // Загружен
 	        $content->fk_user_create = Yii::$app->user->id;
-	        $content->fk_category =
-
+	        $content->category_fk = $model->category_fk;
 
 	        $db = Yii::$app->getDb();
 
@@ -253,7 +296,6 @@ class PostController extends Controller
 
 	        try
 	        {
-
 		        if (!$content->save()) {
 			        $error = VarDumper::dumpAsString($content->getErrors());
 			        return $this->render('upload', compact('model', 'error'));
@@ -316,7 +358,6 @@ class PostController extends Controller
 			{
 		        $transaction->rollBack();
 	        }
-
         }
 
         $error = '';
@@ -361,6 +402,7 @@ class PostController extends Controller
     }
 
     /***
+     *
      * Добавить категорию
      */
     public function actionAddCategory()

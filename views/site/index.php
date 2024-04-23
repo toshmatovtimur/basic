@@ -18,6 +18,9 @@
         <p><?= $post->text_short ?></p><br>
     <?php endforeach; ?>
  <?php endif; ?>
+ <?php if (empty($posts)): ?>
+     <h4>По вашему запросу не найдено записей</h4>
+ <?php endif; ?>
 
 
     <?php

@@ -183,6 +183,27 @@ class SiteController extends Controller
 	}
 
 	/***
+	 *  Главное окно по категориям
+	 */
+	public function actionGetCategory($id)
+	{
+		$query = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])
+				                               ->where(['category_fk' => $id]);
+
+		$countQuery = clone $query;
+		$pages = new Pagination(['totalCount' => $countQuery->count()]);
+		$posts = $query->offset($pages->offset)
+			->limit($pages->limit)
+			->all();
+
+		return $this->render('index', [
+			'posts' => $posts,
+			'pages' => $pages,
+		]);
+
+	}
+
+	/***
 	 * Просмотр поста
 	 */
 	public function actionView($id)

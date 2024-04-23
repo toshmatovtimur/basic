@@ -24,7 +24,7 @@ class PostForm extends Model
 
     public $fk_status; // Автомат
     public $fk_user_create;
-    public $fk_category;
+    public $category_fk;
     public $nameImage;
 
 	/**
@@ -40,7 +40,7 @@ class PostForm extends Model
         return
         [
              [['header', 'text_short', 'text_full', 'nameImage'], 'required' ],
-             [['tags'], 'safe' ],
+             [['tags', 'category_fk'], 'safe' ],
              [['text_full', 'header', 'text_short', 'nameImage'], 'trim' ],
 	         [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 10],
         ];
@@ -64,7 +64,7 @@ class PostForm extends Model
                 'status' => 'Статус',
                 'user_create' => 'Создатель',
                 'image' => 'Картинка',
-                'fk_category' => 'Категория',
+                'category_fk' => 'Категория',
             ];
     }
 
@@ -85,5 +85,4 @@ class PostForm extends Model
 			}
 
 	}
-
 }

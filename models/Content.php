@@ -23,19 +23,18 @@ use yii\web\UploadedFile;
  * @property string|null $tags
  * @property string|null $mainImage
  * @property int|null $fk_status
- * @property int|null $fk_category
+ * @property int|null $category_fk
  * @property int|null $fk_user_create
  *
  * @property Comment[] $comments
  * @property Contentandfoto[] $contentandfotos
  * @property Role $fkStatus
  * @property Status $fkUserCreate
- * @property Category $fkCategory
+ * @property Category $categoryFk
  * @property View[] $views
  */
 class Content extends ActiveRecord
 {
-
 
 	/**
 	 * @var UploadedFile[]
@@ -55,7 +54,7 @@ class Content extends ActiveRecord
     public function rules()
     {
         return [
-            [['date_create', 'date_publication', 'date_update_content', 'mainImage'], 'safe'],
+            [['date_create', 'date_publication', 'date_update_content', 'mainImage', 'category_fk'], 'safe'],
             [['text_full'], 'string'],
             [['fk_status', 'fk_user_create'], 'default', 'value' => null],
             [['fk_status', 'fk_user_create'], 'integer'],
@@ -90,6 +89,7 @@ class Content extends ActiveRecord
             'user.username' => 'Создатель',
             'user' => 'Создатель',
             'mainImage' => 'Картинка',
+            'category_fk' => 'Категория',
         ];
     }
 

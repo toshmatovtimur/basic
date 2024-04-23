@@ -43,5 +43,4 @@
 		{
 			return $this->hasMany(Content::class, ['category_fk' => 'id']);
 		}
-
 	}

@@ -4,7 +4,7 @@
 	use dosamigos\tinymce\TinyMce;
 	use yii\helpers\ArrayHelper;
 	use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+    use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\PostForm $model */
@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
 	    $items = ArrayHelper::map(Category::find()->all(), 'id', 'category'); // Получите список объектов и сопоставьте их с полями 'id' и 'name'
     ?>
 
-    <?= $form->field($model, 'fk_category')->dropDownList($items) ?>
+    <?= $form->field($model, 'category_fk')->dropDownList($items) ?>
 
     <?= $form->field($model, 'image[]')->fileInput(['multiple' => true, 'accept' => '@web/img/*']) ?>
 

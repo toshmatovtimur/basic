@@ -97,7 +97,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 	<?php foreach ($categories as $value): ?>
         <div>
-			<?php echo Html::a("<i class='fas fa-eye'></i> <span data-sidebar-hide='1'>$value->category</span>", Url::to(['site/index', 'id' => $value->id]), ['class' => "btn btn-success"]) ?>
+			<?php echo Html::a("<i class='fas fa-eye'></i> <span data-sidebar-hide='1'>$value->category</span>",
+                                        Url::to(['site/get-category', 'id' => $value->id]), ['class' => "btn btn-success"]) ?>
         </div>
         <br>
 	<?php endforeach; ?>

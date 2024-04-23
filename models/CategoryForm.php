@@ -7,6 +7,7 @@ use yii\base\Model;
 class CategoryForm extends Model
 {
     public $category;
+
     public function rules()
     {
         return [

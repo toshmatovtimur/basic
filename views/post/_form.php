@@ -1,7 +1,9 @@
 <?php
 
-use app\models\Foto;
+	use app\models\Category;
+	use app\models\Foto;
 use dosamigos\tinymce\TinyMce;
+	use yii\helpers\ArrayHelper;
 	use yii\helpers\Html;
     use yii\widgets\ActiveForm;
 
@@ -34,6 +36,12 @@ use dosamigos\tinymce\TinyMce;
 	]);?>
 
     <?= $form->field($model, 'tags')->textInput(['maxlength' => true]) ?>
+
+	<?php
+		$items = ArrayHelper::map(Category::find()->all(), 'id', 'category'); // Получите список объектов и сопоставьте их с полями 'id' и 'name'
+	?>
+
+	<?= $form->field($model, 'category_fk')->dropDownList($items) ?>
 
     <?= $form->field($model, 'fk_status')->dropDownList(['1' => 'Создан', '2' => 'Опубликован', '3' => 'Архивирован',]) ?>
 
