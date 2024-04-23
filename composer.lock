@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a89d1303d6ef5d95901fe2bc7941bd56",
+    "content-hash": "4d5ded4ae2355f202bedf1e0aaacf084",
     "packages": [
         {
             "name": "2amigos/yii2-tinymce-widget",
@@ -6299,5 +6299,5 @@
         "php": ">=7.4.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }
