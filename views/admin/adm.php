@@ -47,6 +47,17 @@
                     <p>Статистика постов может помочь вам понять, какой контент наиболее эффективен для вашей аудитории. </p>
                 </div>
             </div>
+            <div class="col d-flex align-items-start">
+                <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
+                    <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"></use></svg>
+                </div>
+                <div>
+                    <a href="../admin/category">
+                        <h2>Модуль категории</h2>
+                    </a>
+                    <p>Модуль категории страниц (пополняемый справочник). </p>
+                </div>
+            </div>
         </div>
     </div>
 </main>

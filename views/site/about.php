@@ -86,9 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h3 class="title">Редактировать профиль</h3>
                             <p class="post">Редактирование или удаление своего профиля</p>
                         </div>
-
                     </a>
-
                 </div>
             </div>
 

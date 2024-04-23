@@ -36,17 +36,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
         [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => "{view} <br><br> {post/update}",
-            'buttons' =>
-            [
-                'post/update' => function ($url, $model, $key) {
-                    return Html::a('Редактировать', $url);
-                },
-                'view' => function ($url, $model, $key) {
-                    return Html::a('Просмотр', $url);
-                },
-            ]
+                'class' => 'yii\grid\ActionColumn',
+                'template' => "{view} <br><br> {post/update}",
+                'buttons' =>
+                    [
+                        'post/update' => function ($url, $model, $key) {
+                            return Html::a('Редактировать', $url);
+                        },
+                        'view' => function ($url, $model, $key) {
+                            return Html::a('Просмотр', $url);
+                        },
+                    ]
 
         ],
     ],

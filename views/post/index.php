@@ -18,13 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= Html::beginTag('div', ['class' => 'btn-group']) ?>
-        <?= Html::a('Добавить пост', ['post/upload'], ['class' => 'btn btn-success']) ?> &nbsp&nbsp
-        <?= Html::a('Добавить категорию', ['post/add-category'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить пост', ['post/upload'], ['class' => 'btn btn-success']) ?>
     <?= Html::endTag('div') ?>
 
-
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <br>
 
@@ -34,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-	        //  'id',
             'header',
             'text_short',
             'date_create',
@@ -53,13 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
 		        },
 
 	        ],
-            //  'alias',
-            // 'date_publication',
-            //'text_full:ntext',
-            //'date_update_content',
-            //'tags',
-            //'fk_status',
-            //'fk_user_create',
             [
                 'class' => ActionColumn::class,
                 'urlCreator' => function ($action, Content $model, $key, $index, $column)
@@ -69,7 +58,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
     <?php Pjax::end(); ?>
-
 </div>

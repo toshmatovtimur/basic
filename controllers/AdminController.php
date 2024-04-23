@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Category;
 use app\models\Comment;
 use app\models\Content;
 use app\models\PostForm;
@@ -364,6 +365,31 @@ class AdminController extends Controller
 		]);
 
 	}
+
+    /***
+     * Модуль категории
+     */
+    public function actionCategory()
+    {
+        $model = new ActiveDataProvider([
+            'query' => Category::find()->orderBy( ['id' => SORT_DESC])
+        ]);
+
+        return $this->render('category', [
+            'model' => $model,
+        ]);
+    }
+
+    /***
+     * @param $id
+     * Удалить категорию
+     */
+    public function actionDeleteCategory($id)
+    {
+        Category::deleteAll(['id' => $id]);
+        Yii::$app->session->setFlash('success', 'Запись успешно удалена.');
+        return $this->actionCategory();
+    }
 
     /**
      *  Запрос на получение записи по id
