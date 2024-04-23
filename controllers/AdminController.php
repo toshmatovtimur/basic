@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Category;
+use app\models\CategoryForm;
 use app\models\Comment;
 use app\models\Content;
 use app\models\PostForm;
@@ -372,7 +373,7 @@ class AdminController extends Controller
     public function actionCategory()
     {
         $model = new ActiveDataProvider([
-            'query' => Category::find()->orderBy( ['id' => SORT_DESC])
+            'query' => Category::find()->orderBy( ['id' => SORT_ASC])
         ]);
 
         return $this->render('category', [
@@ -390,6 +391,33 @@ class AdminController extends Controller
         Yii::$app->session->setFlash('success', 'Запись успешно удалена.');
         return $this->actionCategory();
     }
+
+	/***
+	 * @return string
+	 * Обновить категорию
+	 */
+	public function actionCategoryUpdate($id)
+	{
+		$model = Category::findOne(['id' => $id]);
+
+		if ($model->load(Yii::$app->request->post())) {
+			$check = Category::find()->where(['id' => $id])->one();
+
+			if (!preg_match('/^[\s\t]*$/', $model->category)) {
+				$category = new Category();
+				$category->category = trim($model->category);
+				$category->save();
+				Yii::$app->session->setFlash('success', 'Успешно');
+				return $this->redirect(['admin/category']);
+			} elseif (preg_match('/^[\s\t]*$/', $model->category)) {
+				Yii::$app->session->setFlash('error', 'Пустое поле недопустимо!');
+			}
+		}
+
+		return $this->render('categoryUpdate', [
+			'model' => $model
+		]);
+	}
 
     /**
      *  Запрос на получение записи по id

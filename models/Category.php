@@ -29,6 +29,13 @@
 			];
 		}
 
+		public function attributeLabels()
+		{
+			return [
+				'category' => 'Категория',
+			];
+		}
+
 		/**
 		 * Gets query for [[Contents]].
 		 */

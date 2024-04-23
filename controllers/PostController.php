@@ -294,9 +294,6 @@ class PostController extends Controller
 					        $error = VarDumper::dumpAsString($contentFoto->getErrors());
 					        return $this->render('upload', compact('model', 'error'));
 				        }
-
-
-
 			        }
 		        }
 
@@ -374,12 +371,14 @@ class PostController extends Controller
             $check = Category::find()->where(['category' => $model->category])->one();
             if($check != null) {
                 Yii::$app->session->setFlash('error', 'Категория с таким названием уже существует!');
-            } elseif ($check == null) {
+            } elseif ($check == null && !preg_match('/^[\s\t]*$/', $model->category)) {
                 $category = new Category();
-                $category->category = $model->category;
+                $category->category = trim($model->category);
                 $category->save();
                 Yii::$app->session->setFlash('success', 'Успешно');
-                return $this->redirect(['index']);
+                return $this->redirect(['admin/category']);
+            } elseif (preg_match('/^[\s\t]*$/', $model->category)) {
+	            Yii::$app->session->setFlash('error', 'Пустое поле недопустимо!');
             }
         }
 

@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Добавить категорию', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить категорию', ['post/add-category'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -29,10 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'category',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => "{post/update} <br> {delete-category}",
+                'template' => "{category-update} <br> {delete-category}",
                 'buttons' =>
                     [
-                        'post/update' => function ($url, $model, $key) {
+                        'category-update' => function ($url, $model, $key) {
                             return Html::a('Редактировать', $url);
                         },
                         'delete-category' => function ($url, $model, $key) {
