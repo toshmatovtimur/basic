@@ -5,9 +5,8 @@
     use yii\bootstrap5\ActiveForm;
     use yii\helpers\Html;
     use yii\helpers\Url;
-	 use yii\widgets\LinkPager;
-
-
+    use yii\widgets\LinkPager;
+    
 	 $this->title = 'Корпоративный сайт';
 ?>
 
