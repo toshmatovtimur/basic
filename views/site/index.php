@@ -7,7 +7,7 @@
     use yii\helpers\Url;
     use yii\widgets\LinkPager;
     
-	 $this->title = 'Корпоративный сайт';
+    $this->title = 'Корпоративный сайт';
 ?>
 
  <?php if (!empty($posts)): ?>

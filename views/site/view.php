@@ -3,8 +3,11 @@
 	use app\models\Content;
 	use app\models\View;
 	use dosamigos\tinymce\TinyMce;
+	use himiklab\yii2\recaptcha\ReCaptcha;
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
+	use yii\captcha\Captcha;
+
 ?>
 
 <h1><?= $model->header; ?> </h1>
@@ -44,6 +47,9 @@
 		'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
 	]
 ]);?>
+
+<?= $form->field($commentForm, 'captcha')->widget(Captcha::class) ?>
+
     <div class="form-group">
     	<?= Html::submitButton('Добавить комментарий', ['class' => 'btn btn-primary']) ?>
     </div><br>

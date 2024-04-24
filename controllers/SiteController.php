@@ -210,7 +210,8 @@ class SiteController extends Controller
 	{
 		$commentForm = new CommentForm();
 
-		if(Yii::$app->request->isPost && $commentForm->load(Yii::$app->request->post()) && $commentForm->validate()) {
+		if(Yii::$app->request->isPost && $commentForm->load(Yii::$app->request->post())
+									  && $commentForm->validate()) {
 			$comment = new Comment();
 			$comment->fk_user = Yii::$app->user->id;
 			$comment->fk_content = $id;
@@ -243,7 +244,6 @@ class SiteController extends Controller
 							  ->innerJoinWith('contentandfoto')
 							  ->where(['contentandfoto.fk_content' => $id])
 							  ->all();
-
 
 		return $this->render('view', [
 					 'images' => $images,

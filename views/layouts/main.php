@@ -81,11 +81,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 		'collapseText' => 'Скрыть боковую панель', // Optional text in button, defaults to Collapse
 		'top' => '75px', //Optional Fixed top, where sidebar begins, defaults to 0px
-		'left' => '0px', //Optional Fixed left, where sidebar begins on letf side, defaults to 0px
-		'widthOpen' => '256px', //Optional size when sidebar is opened
-		'widthCollapsed' => '70px', //Optional size when sidebar is colapsed
-		'topMobile' => '0px', //Optional
-		'leftMobile' => '0px', //Optional
+		'left' => '5px', //Optional Fixed left, where sidebar begins on letf side, defaults to 0px
+		'widthOpen' => '270px', //Optional size when sidebar is opened
+		'widthCollapsed' => '90px', //Optional size when sidebar is colapsed
+		'topMobile' => '10px', //Optional
+		'leftMobile' => '10px', //Optional
 		'position' => 'fixed', //Optional
 		'positionMobile' => 'fixed' //Optional
 	]) ?>

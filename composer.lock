@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d5ded4ae2355f202bedf1e0aaacf084",
+    "content-hash": "65408a14aa424029f57a546d676f7652",
     "packages": [
         {
             "name": "2amigos/yii2-tinymce-widget",

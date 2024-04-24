@@ -1,6 +1,7 @@
 <?php
 
-use yii\symfonymailer\Mailer;
+	use himiklab\yii2\recaptcha\ReCaptchaConfig;
+	use yii\symfonymailer\Mailer;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
