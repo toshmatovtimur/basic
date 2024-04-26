@@ -28,6 +28,7 @@ class Foto extends \yii\db\ActiveRecord
         return [
             [['name_f'], 'string', 'max' => 120],
             [['path_to_foto'], 'string', 'max' => 200],
+            [['path_to_foto'], 'safe'],
         ];
     }
 

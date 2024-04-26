@@ -7,20 +7,39 @@
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
 	use yii\captcha\Captcha;
+	use yii\bootstrap5\Carousel;
 
 ?>
-
+<head>
+    <style>
+        .carousel-inner > .item > img {
+            width: 100%; /* Задать фиксированную ширину */
+            height: 50%; /* Задать фиксированную высоту */
+            object-fit: cover; /* Установить, чтобы изображение полностью заполняло размер контейнера */
+        }
+    </style>
+</head>
 <h1><?= $model->header; ?> </h1>
 <br>
 <?= $model->text_full ?>
 
 <?php
-    if ($images) {
-        foreach ($images as $item) {
-            echo Html::img('@web/' . $item['path_to_foto'], ['alt' => 'фотка', 'height' => 180, 'width' => 200, 'class' => 'img-responsive']) . '&nbsp&nbsp&nbsp&nbsp&nbsp';
-        }
-    } else {
-        echo 'Картинок нету';
+
+	if ($images) {
+		// Генерация элементов карусели на основе массива данных
+		$carouselItemsHtml = [];
+		foreach ($images as $item) {
+			$carouselItemsHtml[] = [
+				'content' => Html::img('@web/' . $item['path_to_foto']),
+				'options' => ['style' => 'width: auto; height: auto; object-fit: cover; '], // Задаем размеры виджета Carousel
+			];
+		}
+		// Вывод виджета карусели с сгенерированными элементами
+		echo Carousel::widget([
+			'items' => $carouselItemsHtml,
+		]);
+    } elseif($images == null) {
+	        echo 'Картинок нету';
     }
 
     echo '<br><br><br>';

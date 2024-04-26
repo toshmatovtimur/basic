@@ -39,7 +39,7 @@ class PostForm extends Model
     {
         return
         [
-             [['header', 'text_short', 'text_full', 'nameImage'], 'required' ],
+             [['header', 'text_short', 'text_full', 'nameImage', 'image'], 'required' ],
              [['tags', 'category_fk'], 'safe' ],
              [['text_full', 'header', 'text_short', 'nameImage'], 'trim' ],
 	         [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 10],
