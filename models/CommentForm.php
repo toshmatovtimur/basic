@@ -23,7 +23,6 @@
 				[['comment', 'fk_user', 'fk_content'], 'safe'],
 				['date_write_comment', 'date', 'format' => 'php:Y-m-d H:i:s'],
 				['captcha', 'captcha'],
-				['captcha', 'captcha', 'message' => 'Неправильно введена капча.'],
 			];
 		}
 
