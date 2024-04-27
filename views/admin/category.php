@@ -11,6 +11,9 @@ use yii\widgets\Pjax;
 
 $this->title = 'Категории';
 $this->params['breadcrumbs'][] = $this->title;
+
+	Pjax::begin();
+
 ?>
 <div class="user-index">
 
@@ -20,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Добавить категорию', ['post/add-category'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php Pjax::begin(); ?>
+
 
     <?= GridView::widget([
         'dataProvider' => $model,

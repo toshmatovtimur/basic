@@ -69,7 +69,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Lists all User models.
+     * Список всех пользователей
      */
     public function actionIndex()
     {
@@ -83,7 +83,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Displays a single User model.
+     * Просмотр профиля пользователя
      */
     public function actionView($id)
     {
@@ -104,19 +104,20 @@ class AdminController extends Controller
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
 
-            try
-            {
-
+            try {
+				// Дата создания
 	            $model->created_at = date("Y-m-d");
 
-	            // Подключаю файл php с массивом
-	            $params = require '../config/params.php';
-	            $model->password = md5($model->password) . $params['sol'];
+				// Пароль и соль в MD5
+	            $model->password = md5($model->password.Yii::$app->params['sol']);
 
+				// Загрузка аватарки
 	            $model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
 
+				// Сохранение изменений
                 $model->save();
 
+				// Получаю id последнего usera
                 $query=new Query();
                 $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
                 $int = $idUser['id'];
@@ -124,23 +125,27 @@ class AdminController extends Controller
                 // Создаю директорию и физически сохраняю файл
                 FileHelper::createDirectory( "avatar/user-{$int}");
 
+				// Если аватарка не выбрана, то будет установлена аватарка по умолчанию
                 if($model->avatarImage === null) {
-
+					// Аватарка по умолчанию
                     $file = 'avatar/default1.png';
+
+	                // Аватарка по умолчанию в новом пути
                     $newfile = "avatar/user-{$int}/default1.png";
 
+					// Копирование аватарки по умолчанию в новый путь (новую папку)
                     if (!copy($file, $newfile)) {
                         echo "failed to copy $file...\n";
                     }
 
+					// Добавляю аватарку в профиль
                     $image = User::findOne(['id' => $int]);
                     $image->avatar = $newfile;
                     $image->save();
 
-
-                }
-                else
-                {
+					// Иначе, если аватарка новая выбрана
+                } else {
+	                // Добавляю аватарку в профиль
                     $image = User::findOne(['id' => $int]);
                     $path = "avatar/user-{$int}/{$model->avatarImage->baseName}.{$model->avatarImage->extension}";
                     $model->avatarImage->saveAs($path, false);
@@ -172,11 +177,12 @@ class AdminController extends Controller
     }
 
     /**
-     *  Обновление пользователя
+     *  Обновление данных пользователя
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
         if ($this->request->isPost && $model->load($this->request->post())) {
 
 	        $db = Yii::$app->db;
@@ -187,13 +193,10 @@ class AdminController extends Controller
 		        // Обновить дату обновления аккаунта
 		        $model->updated_at = date("Y-m-d");
 
-		        // Зашифровать пароль
-		        $md5 = md5($model->password);
+		        // Обновить пароль
+		        $model->password = md5($model->password.Yii::$app->params['sol']);
 
-		        // Подключаю файл php с массивом
-		        $params = require '../config/params.php';
-		        $model->password = $md5 . $params['sol'];
-
+				// Загрузка картинки
 		        $model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
 
 				// Если загружена картинка
@@ -202,11 +205,15 @@ class AdminController extends Controller
 					// Удаляю директорию со старым фото на чистом PHP
 					$path = "avatar/user-{$model->id}";
 
+					// Если папка существует
 					if (is_dir($path)) {
+						// Если папка не пустая
 						if(count(scandir($path)) !== 2) {
+							// Удаляю старую аватарку
 							unlink($model->avatar);
 						}
 
+						// Удаляю папку
 						rmdir($path);
 					}
 
@@ -217,30 +224,44 @@ class AdminController extends Controller
 
 					$model->avatarImage->saveAs($path, false);
 					$model->avatar = $path;
+
+					// Иначе если, картинка не загружена и аватарки вдруг нету
 				} elseif ($model->avatarImage === null && $model->avatar == null) {
+
+					// Вставляю аватарку по умолчанию
                     $file = 'avatar/default1.png';
                     $newfile = "avatar/user-{$model->id}/default1.png";
 
-                    // Создаю директорию и физически сохраняю файл
+                    // Создаю директорию
                     FileHelper::createDirectory( "avatar/user-{$model->id}");
 
+					// Копирую аватарку в новую папку
                     if (!copy($file, $newfile)) {
                         echo "failed to copy $file...\n";
                     }
 
                     $model->avatar = $newfile;
-                } elseif ($model->avatarImage === null && $model->avatar != null) {
+
+					// Иначе если, картинка не загружена, а аватарка старая есть
+                } elseif ($model->avatarImage == null && $model->avatar != null) {
+
+					// Сохранить изменения
 					$model->save();
 
+					// Завершить транзакцию
 					$transaction->commit();
 
+					// Редирект на страницу просмотра профиля usera
 					return $this->redirect(['view', 'id' => $model->id]);
 				}
 
-
+		        // Сохранить изменения
 		        $model->save();
+
+		        // Завершить транзакцию
 		        $transaction->commit();
 
+		        // Редирект на страницу просмотра профиля usera
 		        return $this->redirect(['view', 'id' => $model->id]);
 
 	        } catch(\Exception $e) {
@@ -249,7 +270,6 @@ class AdminController extends Controller
 	        } catch(\Throwable $e) {
 		        $transaction->rollBack();
 	        }
-
         }
 
         return $this->render('update', [
@@ -271,11 +291,15 @@ class AdminController extends Controller
 		    // Удаляю директорию со старым фото на чистом PHP
 		    $path = "avatar/user-{$this->id}";
 
+			// Если сущ дир по данному пути
 		    if (is_dir($path)) {
+				// Если дир не пустая
 			    if(count(scandir($path)) !== 2) {
+					// Кдаляю файл
 				    unlink($this->avatar);
 			    }
 
+				// После удаляю папку
 			    rmdir($path);
 		    }
 
@@ -344,7 +368,6 @@ class AdminController extends Controller
 		]);
 
 		// Определение дат начала и конца недели
-		$currentDate = new Expression('NOW()');
 		$weekStart = new Expression("DATE_TRUNC('week', NOW())");
 		$weekEnd = new Expression("DATE_TRUNC('week', NOW()) + INTERVAL '1 week' - INTERVAL '1 day'");
 
@@ -364,7 +387,6 @@ class AdminController extends Controller
 			'mouthUpdateProvider' => $mouthUpdateProvider,
 			'topActiveUsers' => $topActiveUsers,
 		]);
-
 	}
 
     /***
@@ -387,29 +409,42 @@ class AdminController extends Controller
      */
     public function actionDeleteCategory($id)
     {
+		// Удалить категорию по $id
         Category::deleteAll(['id' => $id]);
-        Yii::$app->session->setFlash('success', 'Запись успешно удалена.');
-        return $this->actionCategory();
+
+		// Вывожу флеш сообщение
+	    Yii::$app->session->setFlash('success', 'Запись успешно удалена.');
+		return $this->actionCategory();
     }
 
 	/***
-	 * @return string
 	 * Обновить категорию
 	 */
 	public function actionCategoryUpdate($id)
 	{
+		// Получаю id категории
 		$model = Category::findOne(['id' => $id]);
 
 		if ($model->load(Yii::$app->request->post())) {
-			$check = Category::find()->where(['id' => $id])->one();
 
+			// Если поле не пустое
 			if (!preg_match('/^[\s\t]*$/', $model->category)) {
+
+				// Обновляю категорию
 				$category = new Category();
 				$category->category = trim($model->category);
 				$category->save();
+
+				// Вывожу сообщение о успехе!
 				Yii::$app->session->setFlash('success', 'Успешно');
+
+				// Редирект на список категорий
 				return $this->redirect(['admin/category']);
+
+				// Иначе если поле пустое или содержит пробелы, табы
 			} elseif (preg_match('/^[\s\t]*$/', $model->category)) {
+
+				// Вывожу сообщение о ошибке
 				Yii::$app->session->setFlash('error', 'Пустое поле недопустимо!');
 			}
 		}
