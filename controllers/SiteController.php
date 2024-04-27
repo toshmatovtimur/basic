@@ -167,10 +167,11 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
 		$query = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage']);
-		//		                               ->where(['fk_status' => 2]) // Опубликован (Активен)
 
-		$countQuery = clone $query;
-		$pages = new Pagination(['totalCount' => $countQuery->count()]);
+		$pages = new Pagination([
+			'totalCount' => $query->count(),
+			'defaultPageSize' => 5, // количество элементов на странице
+		]);
 		$posts = $query->offset($pages->offset)
 					   ->limit($pages->limit)
 			           ->all();

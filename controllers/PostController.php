@@ -104,24 +104,23 @@ class PostController extends Controller
 	 */
     public function actionUpdate($id)
     {
+		// Массив картинок
 	    $files = [];
+
+		// Непосредственно модель
         $model = $this->findModel($id);
 
+		// Если пришел Post запрос и данные в модель загружены
         if ($this->request->isPost && $model->load($this->request->post())) {
 
+			// Запускаю транзакцию
 	        $db = Yii::$app->getDb();
-
 	        $transaction = $db->beginTransaction();
 
-	        try
-	        {
+	        try {
+				// Обновляю запись контент
 				$model->date_update_content = date("d-m-Y H:i:s");
-				//$model->imageContent = null;
-
-	            if(!$model->save()) {
-					$error = VarDumper::dumpAsString($model->getErrors());
-					return $this->render('update', compact('model', 'error',));
-				}
+	            $model->save();
 
 				// Загружаю картинку(и)
 		        $model->imageContent = UploadedFile::getInstances($model, 'imageContent');
@@ -129,8 +128,8 @@ class PostController extends Controller
 				// Проверка, существует ли фото у этой модели
 				$checkFoto = Contentandfoto::find()->where(['fk_content' => $model->id])->all();
 
-				// Если загружена картинка и существует старая фотка
-		        if($model->imageContent !== null && $checkFoto != null) {
+				// Если загружены картинки и существует хотя бы одна фотка (нужно чтобы удалить старые фотки, папку и пересоздать)
+		        if($model->imageContent != null && $checkFoto != null) {
 
 			        #region Удаление фоток из БД
 			        $foto = Contentandfoto::find()
@@ -148,7 +147,10 @@ class PostController extends Controller
 
 			        // Удаляю директорию со старыми фото на чистом PHP
 			        $path = "img/post-{$model->id}";
+
+					// Если папка не пустая
 			        if(count(scandir($path)) !== 2) {
+						// И файл существует или это файл, тогда удаляю
 				        if($files != null) {
 					        foreach ($files as $item) {
 						        unlink($item);
@@ -156,34 +158,40 @@ class PostController extends Controller
 				        }
 			        }
 
+					// Если папка существует, то удаляю
 			        if (is_dir($path)) {
 				        rmdir($path);
 			        }
 
-			        // Сохраняю фотки физически в новую старую папку
-			        // Создаю директорию и физически сохраняю файл
+
+			        // Создаю директорию
 			        FileHelper::createDirectory("img/post-{$model->id}");
 
+			        // Сохраняю фотки физически в новую старую папку
 			        foreach ($model->imageContent as $file) {
 				        $path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
 				        $file->saveAs($path);
 			        }
 
+					// Объект Query нужен для быстрых запросов
 			        $query=new Query();
 
-			        // Вставка в таблицу Foto
+			        // Вставка в таблицу Foto и сохранение
 			        foreach ($model->imageContent as $file) {
 				        $path = "img/post-{$model->id}/{$file->baseName}.{$file->extension}";
 				        $foto = new Foto();
 				        $foto->name_f = "{$file->baseName}.{$file->extension}";
 				        $foto->path_to_foto = $path;
-				        if (!$foto->save())
-				        {
+
+						// Если не сохранилось фото, то выкидываю ошибку
+				        if (!$foto->save()) {
 					        $error = '';
 					        return $this->render('upload', compact('model', 'error',));
-				        }
-				        else
-				        {
+
+							// Иначе, если фото инсертнулось, то делаю инсерт в Contentandfoto
+				        } else {
+
+							// Получаю последний id фотки
 					        $idFoto= $query->from('foto')->orderBy(['id' => SORT_DESC])->one();
 
 					        // Вставка в таблицу Contentandfoto
@@ -204,6 +212,7 @@ class PostController extends Controller
 			        $model->save();
 
 			        #endregion
+
 		        } elseif ($model->imageContent !== null && $checkFoto == null) {
 			        // Сохраняю фотки физически в новую старую папку
 			        // Создаю директорию и физически сохраняю файл
@@ -246,6 +255,12 @@ class PostController extends Controller
 			        // Добавление главной фотки в Content
 			        $model = $this->findModel($id);
 			        $model->mainImage = $files[0];
+			        $model->save();
+
+		        }  elseif ($model->imageContent == null && $checkFoto != null) {
+
+			        // Обновляю запись контент
+			        $model->date_update_content = date("d-m-Y H:i:s");
 			        $model->save();
 		        }
                 

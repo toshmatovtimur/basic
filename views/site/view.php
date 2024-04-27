@@ -8,7 +8,16 @@
 	use yii\captcha\Captcha;
 	use yii\bootstrap5\Carousel;
 
+	// Статистика просмотра поста
+	$view = new View();
+	$view->fk_content = $model->id;
+	$view->fk_user = Yii::$app->user->id;
+	$view->date_view = date("Y-m-d H:i:s");
+	$view->save();
 ?>
+
+
+
 <head>
     <style>
         .carousel-inner > .item > img {
@@ -143,13 +152,4 @@
 if(empty($commentContent)) {
     echo '<br>Комментариев к данному посту нет';
 }
-?>
-
-<?php
-    // Статистика просмотра поста
-        $view = new View();
-        $view->fk_content = $model->id;
-        $view->fk_user = Yii::$app->user->id;
-        $view->date_view = date("Y-m-d H:i:s");
-        $view->save();
 ?>
