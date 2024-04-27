@@ -34,6 +34,7 @@
 				'options' => ['style' => 'width: auto; height: auto; object-fit: cover; '], // Задаем размеры виджета Carousel
 			];
 		}
+
 		// Вывод виджета карусели с сгенерированными элементами
 		echo Carousel::widget([
 			'items' => $carouselItemsHtml,
@@ -47,33 +48,42 @@
     // Запрос на получение количества просмотров данного поста
     $count = View::find()->select(['COUNT(fk_content) as counts'])->where(['fk_content' => $model->id])->one();
     echo 'Количество просмотров поста: ' . $count->counts;
-    echo "<br>Дата публикации: " . $model->date_publication;
+    echo "<br>Дата публикации: " . date('d.m.Y' , strtotime($model->date_create));
 
 ?>
 <br><br><br>
 
+
+
 <!-- Комментарии -->
-<?php $form= ActiveForm::begin(); ?>
-<?= $form->field($commentForm, 'comment')->widget(TinyMce::class, [
-	'options' => ['rows' => 1, 'width' => 400],
-	'language' => 'ru',
-	'clientOptions' => [
-		'plugins' => [
-			"advlist autolink lists link charmap print preview anchor",
-			"searchreplace visualblocks code fullscreen",
-			"insertdatetime media table contextmenu paste"
-		],
-		'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-	]
-]);?>
+<?php if (!Yii::$app->user->isGuest):?>
+    <?php $form= ActiveForm::begin(); ?>
+        <?= $form->field($commentForm, 'comment')->widget(TinyMce::class, [
+    	    'options' => ['rows' => 1, 'width' => 400],
+    	    'language' => 'ru',
+	        'clientOptions' => [
+	    	    'plugins' => [
+			    "advlist autolink lists link charmap print preview anchor",
+			    "searchreplace visualblocks code fullscreen",
+			    "insertdatetime media table contextmenu paste"
+		    ],
+		    'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+	    ]
+     ]);?>
 
-<?= $form->field($commentForm, 'captcha')->widget(Captcha::class) ?>
+    <?= $form->field($commentForm, 'captcha')->widget(Captcha::class) ?>
 
-    <div class="form-group">
-    	<?= Html::submitButton('Добавить комментарий', ['class' => 'btn btn-primary']) ?>
-    </div><br>
-<?php ActiveForm::end(); ?>
+     <div class="form-group">
+        	<?= Html::submitButton('Добавить комментарий', ['class' => 'btn btn-primary']) ?>
+     </div><br>
+    <?php ActiveForm::end(); ?>
+<?php endif; ?>
 
+<?php
+    if(Yii::$app->user->isGuest) {
+        echo '<br>Возможность комментирования доступна только авторизированным пользователям<br>';
+    }
+?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
@@ -130,7 +140,11 @@
     <?php endforeach; ?>
 <?php endif; ?>
 
-
+<?php
+if(empty($commentContent)) {
+    echo '<br>Комментариев к данному посту нет';
+}
+?>
 
 <?php
     // Статистика просмотра поста
