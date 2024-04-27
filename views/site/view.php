@@ -3,7 +3,6 @@
 	use app\models\Content;
 	use app\models\View;
 	use dosamigos\tinymce\TinyMce;
-	use himiklab\yii2\recaptcha\ReCaptcha;
 	use yii\bootstrap5\ActiveForm;
 	use yii\bootstrap5\Html;
 	use yii\captcha\Captcha;
