@@ -445,8 +445,6 @@ class PostController extends Controller
 
 	/**
 	 * @param $id
-	 * @return Content|null
-	 * @throws NotFoundHttpException
 	 */
     protected function findModel($id)
     {
