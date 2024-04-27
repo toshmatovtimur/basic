@@ -248,7 +248,7 @@ class PostController extends Controller
 			        $model->mainImage = $files[0];
 			        $model->save();
 		        }
-
+                
 		        $transaction->commit();
 	        }
 	        catch (\Exception $e)
@@ -262,7 +262,6 @@ class PostController extends Controller
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
 
 		$error = '';
         return $this->render('update', compact('model', 'error',));
