@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "view".
@@ -15,7 +16,7 @@ use Yii;
  * @property Content $fkContent
  * @property User $fkUser
  */
-class View extends \yii\db\ActiveRecord
+class View extends ActiveRecord
 {
 	public $counts;
 
@@ -57,7 +58,7 @@ class View extends \yii\db\ActiveRecord
      */
     public function getContent()
     {
-        return $this->hasOne(Content::className(), ['id' => 'fk_content']);
+        return $this->hasOne(Content::class, ['id' => 'fk_content']);
     }
 
     /**
@@ -65,6 +66,6 @@ class View extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'fk_user']);
+        return $this->hasOne(User::class, ['id' => 'fk_user']);
     }
 }

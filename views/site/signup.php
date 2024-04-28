@@ -48,7 +48,7 @@
 
 			<?= $form->field($model, 'confirm')->passwordInput() ?>
 
-			<?= $form->field($model, 'verifyCode')->widget(Captcha::className(),['template' => '{input}{image}']) ?>
+			<?= $form->field($model, 'verifyCode')->widget(Captcha::class,['template' => '{input}{image}']) ?>
 
             <div class="form-group">
                 <div>

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "status".
@@ -12,7 +13,7 @@ use Yii;
  *
  * @property Content[] $contents
  */
-class Status extends \yii\db\ActiveRecord
+class Status extends ActiveRecord
 {
     public static function tableName()
     {

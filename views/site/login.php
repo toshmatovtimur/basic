@@ -49,7 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <p>Еще нет аккаунта?  <a href="signup"> Зарегистрируйтесь</a></p>
             </div>
 
-
             <?php ActiveForm::end(); ?>
 
         </div>

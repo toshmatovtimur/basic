@@ -45,12 +45,9 @@ class UserSearch extends User
 		    'desc' => ['role_user' => SORT_DESC],
 	    ];
 
-
-
         $this->load($params);
 
-        if (!$this->validate())
-        {
+        if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
@@ -79,5 +76,4 @@ class UserSearch extends User
 
         return $dataProvider;
     }
-    
 }

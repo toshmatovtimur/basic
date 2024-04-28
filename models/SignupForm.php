@@ -33,8 +33,7 @@
 		 */
 		public function rules()
 		{
-			return
-			[
+			return [
 				[['password', 'username', 'firstname', 'middlename'], 'required' ],
 				[['password', 'username', 'firstname', 'middlename', 'birthday', 'confirm'], 'trim' ],
 				['password', 'string', 'min' => 6],
@@ -49,8 +48,7 @@
 		 */
 		public function attributeLabels()
 		{
-			return
-			[
+			return [
 				'firstname' => 'Фамилия',
 				'middlename' => 'Имя',
 				'lastname' => 'Отчество',
@@ -62,5 +60,4 @@
 				'verifyCode' => 'Напечатайте слово',
 			];
 		}
-
 	}

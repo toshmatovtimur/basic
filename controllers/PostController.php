@@ -77,29 +77,6 @@ class PostController extends Controller
     }
 
 	/**
-	 * Создание поста
-	 */
-    public function actionCreate()
-    {
-        $model = new Content();
-
-        if ($this->request->isPost)
-		{
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
-		else
-		{
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-	/**
 	 * Обновление поста
 	 */
     public function actionUpdate($id)

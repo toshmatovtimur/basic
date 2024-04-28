@@ -75,8 +75,6 @@ class SiteController extends Controller
         ];
     }
 
-	#region Авторизация Регистрация Выход и прочее связанное
-
 	/**
 	 * Авторизация
 	 */
@@ -84,14 +82,12 @@ class SiteController extends Controller
 	{
 
 		// Если пользователь не гость, то отправляю на главную страницу
-		if (!Yii::$app->user->isGuest)
-		{
+		if (!Yii::$app->user->isGuest) {
 			return $this->goHome();
 		}
 
 		$model = new LoginForm();
-		if ($model->load(Yii::$app->request->post()) && $model->login())
-		{
+		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 			// Обновляю пользователю последнюю дату входа
 			$username = Yii::$app->request->post("LoginForm")["username"];
 			$user = User::findOne(['username' => $username]);
@@ -124,41 +120,31 @@ class SiteController extends Controller
 	{
 		$model = new SignupForm();
 
-		if ($model->load(Yii::$app->request->post()))
-		{
+		if ($model->load(Yii::$app->request->post())) {
+            // Создаю новый объект User
 			$user = new User();
-			$user->firstname = Yii::$app->request->post("SignupForm")["firstname"];
-			$user->middlename = Yii::$app->request->post("SignupForm")["middlename"];
-			$user->lastname = Yii::$app->request->post("SignupForm")["lastname"];
-			$user->birthday = Yii::$app->request->post("SignupForm")["birthday"];
-			$user->sex = Yii::$app->request->post("SignupForm")["sex"];
-			$user->username = Yii::$app->request->post("SignupForm")["username"];
-
-			// Подключаю файл php с массивом
-			$params = require '../config/params.php';
-
-			$user->password = md5(Yii::$app->request->post('SignupForm')["password"]) . $params['sol'];
+			$user->firstname = $model->firstname;
+			$user->middlename = $model->middlename;
+			$user->lastname = $model->lastname;
+			$user->birthday = $model->birthday;
+			$user->sex = $model->sex;
+			$user->username = $model->username;
+			$user->password = md5($model->password . Yii::$app->params['sol']);
 			$user->created_at = date("Y-m-d");
 			$user->fk_role = 1;
 			$user->status = 10;
 
-			if (!$user->save())
-			{
+			if (!$user->save()) {
 				$error = VarDumper::dumpAsString($user->getErrors());
 				return $this->render('signup', compact('model', 'error'));
-			}
-			else
-			{
+			} else {
 				return $this->goBack();
 			}
-
 		}
 
 		$error = '';
 		return $this->render('signup', compact('model', 'error'));
 	}
-
-	#endregion
 	#region Главное окно, просмотр постов и прочее
 
 	/**
@@ -180,7 +166,6 @@ class SiteController extends Controller
 			'posts' => $posts,
 			'pages' => $pages,
 		]);
-
 	}
 
 	/***
@@ -189,10 +174,13 @@ class SiteController extends Controller
 	public function actionGetCategory($id)
 	{
 		$query = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])
-				                               ->where(['category_fk' => $id]);
+				                ->where(['category_fk' => $id]);
 
 		$countQuery = clone $query;
-		$pages = new Pagination(['totalCount' => $countQuery->count()]);
+		$pages = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'defaultPageSize' => 5, // количество элементов на странице
+        ]);
 		$posts = $query->offset($pages->offset)
 			->limit($pages->limit)
 			->all();
@@ -201,7 +189,6 @@ class SiteController extends Controller
 			'posts' => $posts,
 			'pages' => $pages,
 		]);
-
 	}
 
 	/***
@@ -212,7 +199,8 @@ class SiteController extends Controller
 		$commentForm = new CommentForm();
 
 		if(Yii::$app->request->isPost && $commentForm->load(Yii::$app->request->post())
-									  && $commentForm->validate()) {
+			                          && $commentForm->validate())
+        {
 			$comment = new Comment();
 			$comment->fk_user = Yii::$app->user->id;
 			$comment->fk_content = $id;
@@ -259,22 +247,29 @@ class SiteController extends Controller
 	 */
 	public function actionSearch()
 	{
-
-		$posts = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])
+        $query = Content::find()->select(['id', 'header', 'alias', 'text_short', 'fk_status', 'mainImage'])
 			//->where(['fk_status' => 2])// Опубликован (Активен)
 			->orFilterWhere(['like', 'header', '%'.$_POST['search'].'%', false])
 			->orFilterWhere(['like', 'text_short', '%'.$_POST['search'].'%', false])
 			->orFilterWhere(['like', 'text_full', '%'.$_POST['search'].'%', false])
-			->groupBy(["id"])
-			->all();
+			->groupBy(["id"]);
+
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'defaultPageSize' => 5, // количество элементов на странице
+        ]);
+        $posts = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
 		if($posts != null) {
 			return $this->render('index', [
 				'posts' => $posts,
+				'pages' => $pages,
 			]);
 		}
 
-		$this->actionIndex();
+		return $this->actionIndex();
 	}
 
 	/**
@@ -301,7 +296,6 @@ class SiteController extends Controller
 		return $this->redirect(['site/view', 'id' => $id]);
 	}
 	#endregion
-	#region Личный кабинет
 
 	/**
 	 * Личный кабинет
@@ -335,14 +329,12 @@ class SiteController extends Controller
 	{
 		$model = User::findOne(['id' => Yii::$app->user->id]);
 
-		if ($this->request->isPost && $model->load($this->request->post()))
-		{
+		if ($this->request->isPost && $model->load($this->request->post())) {
 
 			$db = Yii::$app->db;
 			$transaction = $db->beginTransaction();
 
-			try
-			{
+			try {
 				// Обновить дату обновления аккаунта
 				$model->updated_at = date("Y-m-d");
 
@@ -356,15 +348,12 @@ class SiteController extends Controller
 				$model->avatarImage = UploadedFile::getInstance($model, 'avatarImage');
 
 				// Если загружена картинка
-				if($model->avatarImage !== null)
-				{
+				if($model->avatarImage !== null) {
 					// Удаляю директорию со старым фото на чистом PHP
 					$path = "avatar/user-{$model->id}";
 
-					if (is_dir($path))
-					{
-						if(count(scandir($path)) !== 2)
-						{
+					if (is_dir($path)) {
+						if(count(scandir($path)) !== 2) {
 							unlink($model->avatar);
 						}
 
@@ -378,24 +367,20 @@ class SiteController extends Controller
 
 					$model->avatarImage->saveAs($path, false);
 					$model->avatar = $path;
-				}
-				elseif ($model->avatarImage === null && $model->avatar == null)
-				{
+
+				} elseif ($model->avatarImage === null && $model->avatar == null) {
 					$file = 'avatar/default1.png';
 					$newfile = "avatar/user-{$model->id}/default1.png";
 
 					// Создаю директорию и физически сохраняю файл
 					FileHelper::createDirectory( "avatar/user-{$model->id}");
 
-					if (!copy($file, $newfile))
-					{
+					if (!copy($file, $newfile)) {
 						echo "failed to copy $file...\n";
 					}
 
 					$model->avatar = $newfile;
-				}
-				elseif ($model->avatarImage === null && $model->avatar != null)
-				{
+				} elseif ($model->avatarImage === null && $model->avatar != null) {
 					$model->save();
 
 					$transaction->commit();
@@ -407,9 +392,7 @@ class SiteController extends Controller
 				$transaction->commit();
 				return $this->redirect(['about']);
 
-			}
-			catch(\Exception $e)
-			{
+			} catch(\Exception $e) {
 				$transaction->rollBack();
 				throw $e;
 			}
@@ -458,9 +441,5 @@ class SiteController extends Controller
 		} catch(\Throwable $e) {
 			$transaction->rollBack();
 		}
-
 	}
-
-	#endregion
-
 }

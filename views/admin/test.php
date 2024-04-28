@@ -5,11 +5,12 @@
 	use app\models\Foto;
 	use yii\helpers\Html;
 
+//
+//	$datetime = new DateTime();
+//
+//	var_dump($datetime);
 
-	$datetime = new DateTime();
-
-	var_dump($datetime);
-
+echo md5('admin' . Yii::$app->params['sol']);
 
 //	$foto = Contentandfoto::find()
 //		->select(['fk_foto'])

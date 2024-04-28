@@ -10,16 +10,13 @@ use yii\web\UploadedFile;
 
 class PostForm extends Model
 {
-
     public $header; // Заголовок
-
     public $alias; // Алиас - запоминающееся короткое имя
     public $date_create; // Дата создания - автомат
     public $date_publication; // Дата публикации - автомат
     public $text_short; // короткий текст отражающий суть поста
     public $text_full; // Полный текст поста
     public $date_update_content; // Дата обновления поста - автомат
-
     public $tags; // Посты на определенные темы
 
     public $fk_status; // Автомат
@@ -51,8 +48,7 @@ class PostForm extends Model
      */
     public function attributeLabels()
     {
-        return
-            [
+        return [
                 'header' => 'Заголовок',
                 'alias' => 'Алиас',
                 'date_create' => 'Дата создания',

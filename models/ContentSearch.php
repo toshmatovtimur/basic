@@ -37,11 +37,6 @@ class ContentSearch extends Content
     {
         $query = Content::find();
 	    $query->joinWith(['user']);
-        // Сюда еще таблицы
-        // Сюда еще таблицы
-
-
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -49,7 +44,6 @@ class ContentSearch extends Content
 		        'pageSize' => 7,
 	        ],
         ]);
-
 
 	    $dataProvider->sort->attributes['user'] = [
 		    // The tables are the ones our relation are configured to
@@ -61,8 +55,6 @@ class ContentSearch extends Content
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 

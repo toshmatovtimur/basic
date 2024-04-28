@@ -13,10 +13,10 @@
 	$model->password = null;
 ?>
 <br><br>
+
     <p>
 	    <?= Html::a('Удалить профиль', ['delete'], ['class' => 'btn btn-success']) ?>
     </p>
-
 
 	<?php $form = ActiveForm::begin(); ?>
 
@@ -39,5 +39,3 @@
 	</div>
 
 	<?php ActiveForm::end(); ?>
-
-
