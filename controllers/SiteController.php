@@ -122,7 +122,8 @@ class SiteController extends Controller
 
 	public function actionIdentity()
 	{
-		
+		// Еще один редирект нужно получить token
+		// А потом получу json
 		return $this->render('signup');
 		return $this->render('signup', compact('model', 'error'));
 	}
