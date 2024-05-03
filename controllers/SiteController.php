@@ -80,27 +80,51 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
-
 		// Если пользователь не гость, то отправляю на главную страницу
 		if (!Yii::$app->user->isGuest) {
 			return $this->goHome();
 		}
 
-		$model = new LoginForm();
-		if ($model->load(Yii::$app->request->post()) && $model->login()) {
-			// Обновляю пользователю последнюю дату входа
-			$username = Yii::$app->request->post("LoginForm")["username"];
-			$user = User::findOne(['username' => $username]);
-			$user->date_last_login = date("d-m-Y H:i:s");
-			$user->save();
+		// Формирую URL строку
+		$url = 'https://oauth.tpu.ru/authorize?' . http_build_query(['client_id' => 58, 'redirect_uri' => 'http://basic.loc/site/token', 'client_secret' => 'rFt1B5i1', 'response_type' => 'code', 'state' => 'jndfgnkldjfghajskfgjlaskgj@']);
+		return $this->redirect($url);
 
-			return $this->goBack();
+
+
+//		$model = new LoginForm();
+//		if ($model->load(Yii::$app->request->post()) && $model->login()) {
+//			// Обновляю пользователю последнюю дату входа
+//			$username = Yii::$app->request->post("LoginForm")["username"];
+//			$user = User::findOne(['username' => $username]);
+//			$user->date_last_login = date("d-m-Y H:i:s");
+//			$user->save();
+//
+//			return $this->goBack();
+//		}
+//
+//		$model->password = '';
+//		return $this->render('login', [
+//			'model' => $model,
+//		]);
+	}
+
+	public function actionToken()
+	{
+		if(Yii::$app->request->isGet()) {
+			'https://oauth.tpu.ru/authorize?client_id=1&redirect_uri=http://example.com/callback&response_type=code&state=bdc1c79ecb83c00122d24a77e06aa5dc16c8280f7541e89a32108659c353f5'
+			// Формирую URL строку
+			//$url = 'https://oauth.tpu.ru/authorize?' . http_build_query(['client_id' => 58, 'redirect_uri' => 'http://basic.loc/site/token', 'client_secret' => 'rFt1B5i1', 'response_type' => 'code', 'state' => 'jndfgnkldjfghajskfgjlaskgj@']);
+			$state = Yii::$app->request->post(['state']);
+			$url = "https://oauth.tpu.ru/authorize?client_id=58&redirect_uri=http://example.com/callback&response_type=code&state={$state}";
+			return $this->redirect($url);
 		}
+	}
 
-		$model->password = '';
-		return $this->render('login', [
-			'model' => $model,
-		]);
+	public function actionIdentity()
+	{
+		
+		return $this->render('signup');
+		return $this->render('signup', compact('model', 'error'));
 	}
 
 	/**
@@ -442,4 +466,5 @@ class SiteController extends Controller
 			$transaction->rollBack();
 		}
 	}
+
 }

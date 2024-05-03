@@ -24,7 +24,8 @@
         "reketaka/yii2-comments": "*",
         "pozitronik/yii2-searchwidget": "dev-master",
         "yiisoft/yii2-elasticsearch": "^2.1",
-        "matejch/yii2-sidebar-collapsible": "^1.0.1"
+        "matejch/yii2-sidebar-collapsible": "^1.0.1",
+      "ext-oauth": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
