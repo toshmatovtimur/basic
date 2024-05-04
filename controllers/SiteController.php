@@ -130,9 +130,9 @@ class SiteController extends Controller
 
                         $id = $responseUser['user_id'];
                         $email = $responseUser['email'];
-//                        $family = $responseUser['lichnost']['familiya'];
-//                        $name = $responseUser['lichnost']['imya'];
-//                        $lastname = $responseUser['lichnost']['otchestvo'];
+                        $family = $responseUser['lichnost']['familiya'];
+                        $name = $responseUser['lichnost']['imya'];
+                        $lastname = $responseUser['lichnost']['otchestvo'];
 
                         $user = User::findOne(['tpuId'=> $id]);
                         if($user != null) {
@@ -148,7 +148,38 @@ class SiteController extends Controller
 
                         } elseif($user == null) {
                             // Иначе, если в базе нет такого usera то регистрирую его
+                            // Создаю новый объект User
+                            $user = new User();
+                            $user->firstname = $family;
+                            $user->middlename = $name;
+                            $user->lastname = $lastname;
+                            $user->tpuId = $id;
+                            $user->birthday = null;
+                            $user->sex = null;
+                            $user->username = $email;
+                            $user->password = md5($email . Yii::$app->params['sol']);
+                            $user->created_at = date("Y-m-d");
+                            $user->fk_role = 1;
+                            $user->status = 10;
 
+                            if($user->save()) {
+                                // Получаю id последнего пользователя
+                                $query=new Query();
+                                $idUser= $query->from('user')->orderBy(['id' => SORT_DESC])->one();
+
+                                $user = User::findOne(['id'=> $idUser['id']]);
+                                if($user != null) {
+                                    // Если такой пользователь в моей локальной базе существует, то логиню его
+                                    $model = new LoginForm();
+                                    $model->username = $user->username;
+                                    $model->password = $user->password;
+                                    $model->login();
+
+                                    $user->date_last_login = date("d-m-Y H:i:s");
+                                    $user->save();
+                                    return $this->goHome();
+                                }
+                            }
                         }
                     }
             }

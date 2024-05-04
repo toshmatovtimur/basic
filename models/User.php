@@ -21,6 +21,7 @@ use yii\web\UploadedFile;
  * @property string|null $password
  * @property string|null $date_last_login
  * @property int|null $fk_role
+ * @property int|null $tpuId
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property int $status
@@ -48,7 +49,7 @@ class User extends ActiveRecord
     public function rules()
     {
         return [
-            [['birthday', 'date_last_login', 'created_at', 'updated_at'], 'safe'],
+            [['birthday', 'date_last_login', 'created_at', 'updated_at', 'tpuId'], 'safe'],
             [['sex', 'auth_key', 'avatar'], 'string'],
 	        [['avatarImage'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
             [['fk_role', 'status'], 'default', 'value' => null],
