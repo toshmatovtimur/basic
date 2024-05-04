@@ -24,7 +24,7 @@ class LoginForm extends Model
         return [
             [['username', 'password'], 'required'], // Обязательные поля
             ['rememberMe', 'boolean'],
-            ['password', 'validatePassword'], // Вызывается метод validatePassword
+           // ['password', 'validatePassword'], // Вызывается метод validatePassword
         ];
     }
 

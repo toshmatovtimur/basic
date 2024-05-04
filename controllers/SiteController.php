@@ -89,22 +89,7 @@ class SiteController extends Controller
 		// Формирую URL строку
 		$url = 'https://oauth.tpu.ru/authorize?' . http_build_query(['client_id' => 58, 'redirect_uri' => 'http://basic.loc/site/token', 'client_secret' => 'rFt1B5i1', 'response_type' => 'code', 'state' => '1234']);
 		return $this->redirect($url);
-        //		$model = new LoginForm();
-//		if ($model->load(Yii::$app->request->post()) && $model->login()) {
-//			// Обновляю пользователю последнюю дату входа
-//			$username = Yii::$app->request->post("LoginForm")["username"];
-//			$user = User::findOne(['username' => $username]);
-//			$user->date_last_login = date("d-m-Y H:i:s");
-//			$user->save();
-//
-//			return $this->goBack();
-//		}
-//
-//		$model->password = '';
-//		return $this->render('login', [
-//			'model' => $model,
-//		]);
-	}
+    }
 
 	public function actionToken()
 	{
@@ -127,33 +112,48 @@ class SiteController extends Controller
             $response = $client->createRequest()
                 ->setMethod('POST')
                 ->setUrl('https://oauth.tpu.ru/access_token')
-                ->setData(['client_id' => 58, 'client_secret' => 'rFt1B5i1', 'code' => $code, 'grant_type' => 'authorization_code']) // данные, которые вы хотите отправить
+                ->setData(['client_id' => 58, 'client_secret' => 'rFt1B5i1', 'code' => $code, 'grant_type' => 'authorization_code'])
                 ->send();
 
             if ($response->isOk) {
                 // успешный запрос
                 $responseData = $response->data;
-                debug($responseData);
+
+                $responseInfo = $client->createRequest()
+                    ->setMethod('GET')
+                    ->setUrl('https://api.tpu.ru/v2/auth/user')
+                    ->setData(['apiKey' => '567ed07468465ffea45ce4916f8ac9be', 'access_token' => $responseData['access_token']])
+                    ->send();
+
+                    if($responseInfo->isOk) {
+                        $responseUser = $responseInfo->data;
+
+                        $id = $responseUser['user_id'];
+                        $email = $responseUser['email'];
+//                        $family = $responseUser['lichnost']['familiya'];
+//                        $name = $responseUser['lichnost']['imya'];
+//                        $lastname = $responseUser['lichnost']['otchestvo'];
+
+                        $user = User::findOne(['tpuId'=> $id]);
+                        if($user != null) {
+                            // Если такой пользователь в моей локальной базе существует, то логиню его
+                            $model = new LoginForm();
+                            $model->username = $user->username;
+                            $model->password = $user->password;
+                            $model->login();
+
+                            $user->date_last_login = date("d-m-Y H:i:s");
+                            $user->save();
+                            return $this->goHome();
+
+                        } elseif($user == null) {
+                            // Иначе, если в базе нет такого usera то регистрирую его
+
+                        }
+                    }
             }
         }
 	}
-
-    public function actionIdentity2()
-    {
-        // Еще один редирект нужно получить token
-        // А потом получу json
-        if(Yii::$app->request->isPost) {
-            debug(Yii::$app->request->post());
-        }
-    }
-
-
-
-
-
-
-
-
 
 	/**
 	 * Выход
