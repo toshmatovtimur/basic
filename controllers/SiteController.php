@@ -18,6 +18,7 @@ use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 use yii\helpers\VarDumper;
+use yii\httpclient\Client;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -36,15 +37,15 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'index', 'about'],
+                'only' => ['logout', 'index', 'about', 'identity'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index', 'about'],
+                        'actions' => ['logout', 'index', 'about', 'identity'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
 	                [
-		                'actions' => ['index'],
+		                'actions' => ['index', 'identity'],
 		                'allow' => true,
 		                'roles' => ['?'],
 	                ],
@@ -86,12 +87,9 @@ class SiteController extends Controller
 		}
 
 		// Формирую URL строку
-		$url = 'https://oauth.tpu.ru/authorize?' . http_build_query(['client_id' => 58, 'redirect_uri' => 'http://basic.loc/site/token', 'client_secret' => 'rFt1B5i1', 'response_type' => 'code', 'state' => 'jndfgnkldjfghajskfgjlaskgj@']);
+		$url = 'https://oauth.tpu.ru/authorize?' . http_build_query(['client_id' => 58, 'redirect_uri' => 'http://basic.loc/site/token', 'client_secret' => 'rFt1B5i1', 'response_type' => 'code', 'state' => '1234']);
 		return $this->redirect($url);
-
-
-
-//		$model = new LoginForm();
+        //		$model = new LoginForm();
 //		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 //			// Обновляю пользователю последнюю дату входа
 //			$username = Yii::$app->request->post("LoginForm")["username"];
@@ -110,12 +108,10 @@ class SiteController extends Controller
 
 	public function actionToken()
 	{
-		if(Yii::$app->request->isGet()) {
-			'https://oauth.tpu.ru/authorize?client_id=1&redirect_uri=http://example.com/callback&response_type=code&state=bdc1c79ecb83c00122d24a77e06aa5dc16c8280f7541e89a32108659c353f5'
-			// Формирую URL строку
-			//$url = 'https://oauth.tpu.ru/authorize?' . http_build_query(['client_id' => 58, 'redirect_uri' => 'http://basic.loc/site/token', 'client_secret' => 'rFt1B5i1', 'response_type' => 'code', 'state' => 'jndfgnkldjfghajskfgjlaskgj@']);
-			$state = Yii::$app->request->post(['state']);
-			$url = "https://oauth.tpu.ru/authorize?client_id=58&redirect_uri=http://example.com/callback&response_type=code&state={$state}";
+		if(Yii::$app->request->isGet) {
+            // Формирую URL строку
+			$state = Yii::$app->request->get('state');
+            $url = "https://oauth.tpu.ru/authorize?client_id=58&redirect_uri=http://basic.loc/site/identity&response_type=code&state={$state}";
 			return $this->redirect($url);
 		}
 	}
@@ -124,9 +120,40 @@ class SiteController extends Controller
 	{
 		// Еще один редирект нужно получить token
 		// А потом получу json
-		return $this->render('signup');
-		return $this->render('signup', compact('model', 'error'));
+        if(Yii::$app->request->isGet) {
+            $code = Yii::$app->request->get('code');
+
+            $client = new Client();
+            $response = $client->createRequest()
+                ->setMethod('POST')
+                ->setUrl('https://oauth.tpu.ru/access_token')
+                ->setData(['client_id' => 58, 'client_secret' => 'rFt1B5i1', 'code' => $code, 'grant_type' => 'authorization_code']) // данные, которые вы хотите отправить
+                ->send();
+
+            if ($response->isOk) {
+                // успешный запрос
+                $responseData = $response->data;
+                debug($responseData);
+            }
+        }
 	}
+
+    public function actionIdentity2()
+    {
+        // Еще один редирект нужно получить token
+        // А потом получу json
+        if(Yii::$app->request->isPost) {
+            debug(Yii::$app->request->post());
+        }
+    }
+
+
+
+
+
+
+
+
 
 	/**
 	 * Выход
